@@ -1,0 +1,251 @@
+%% ************************************************************************
+% Quantitative Dynamic Macroeconomics
+% Project: New-Keynesian (NK) Model with Capital and Fiscal Policy
+% Konstantin Gantert
+% 12/04/2026
+% *************************************************************************
+% ------------------------------------------------------------------------------
+% I) Define Variables and Parameters
+% ------------------------------------------------------------------------------
+
+var
+    // Observable Variables
+    Y           ${Y}$           (long_name='Real Output')
+    L           ${L}$           (long_name='Total Hours')
+    K           ${K}$           (long_name='Capital Stock')
+    X           ${X}$           (long_name='Capital Investment')
+    C           ${C}$           (long_name='Real Consumption')
+    w           ${w}$           (long_name='Real Wage')
+    rK          ${r_K}$         (long_name='Real Rental Rate')
+    rB          ${r_B}$         (long_name='Nominal Bond Interest Rate')
+    mc          ${mc}$          (long_name='Real Marginal Costs')
+    pii         ${\pi}$         (long_name='Price Inflation')
+    m           ${m}$           (long_name='Money supply')
+
+    // Marginal Utility & Penalty Prices
+    muc         ${muc}$         (long_name='Marginal Utility out of Consumption')
+    muu         ${\mu}$         (long_name='Budget Constraint Penalty Price')
+    tet         ${\theta}$      (long_name='Capital Law of Motion Penalty Price')
+
+    // Adjustment Cost Functions
+    cp          ${c_P}$         (long_name='Price Adjustment Cost')
+    cpp         ${c^\prime_P}$  (long_name='Marginal Price Adjustment Cost')
+    ci          ${c_I}$         (long_name='Investment Adjustment Cost')
+    cii         ${c^\prime_I}$  (long_name='Marginal Investment Adjustment Cost')
+    
+    // AR(1) Shock Processes - Exogenous Shocks
+    sM          ${s_M}$         (long_name='Monetary policy shock process')
+    sZ          ${s_Z}$         (long_name='TFP shock process')
+    ;
+
+predetermined_variables     
+K, muu                      // Here we we set our control variables with time indext "t+1" that are set in "t"!
+    ;
+
+varexo          // Here we set our exogenous variables. 
+                // Note: AR(1) processes are endogenous to the model, only the shock is exogenous.
+    eM          ${\varepsilon_M}$   (long_name='Monetary policy shock')
+    eZ          ${\varepsilon_Z}$   (long_name='TFP shock')
+    ;   
+
+parameters
+    // Deep parameters
+    betta       ${\beta}$           (long_name='Period discount factor')
+    sig         ${\sigma}$          (long_name='Intertemporal elasticity of substitution')
+    gam         ${\gamma}$          (long_name='Inverse Frisch labor supply elasticity')
+    vphi        ${\varphi}$         (long_name='Labor disutility level parameter')
+    nuu         ${\nu}$             (long_name='Inverse money velocity')
+    delK        ${\delta}$          (long_name='Private capital depreciation rate')
+    alp         ${\alpha}$          (long_name='Capital elasticity w.r.t. output')
+    rhoo        ${\rho}$            (long_name='Elasticity of substitution between differentiated goods')
+    kap         ${\kappa}$          (long_name='Price adjustment cost parameter')
+    phiX        ${\phi_X}$          (long_name='Investment adjustment cost')
+
+    // Fiscal policy and taxes
+    tauL        ${\tau_L}$          (long_name='Labor income tax')
+    tauK        ${\tau_K}$          (long_name='Capital income tax')
+    tauC        ${\tau_C}$          (long_name='Consumption tax')
+
+    // Monetary policy
+    tetR        ${\theta_{R}}$      (long_name='Interest Rate Smoothing')
+    tetPi       ${\theta_{\pi}}$    (long_name='Taylor Coefficient w.r.t. Inflation')
+    tetY        ${\theta_{Y}}$      (long_name='Taylor Coefficient w.r.t. Real GDP')
+
+    // Shock standard deviations
+    stdM        ${\sigma_M}$        (long_name='Standard deviation monetary policy shock')
+    stdZ        ${\sigma_Z}$        (long_name='Standard deviation TFP shock')
+
+    // Shock autocorrelations
+    rhoM        ${\rho_M}$          (long_name='Autocorrelation monetary policy shock')
+    rhoZ        ${\rho_Z}$          (long_name='Autocorrelation TFP shock')
+    ;
+    
+% Assigning values from Matlab workspace to the parameters
+% ------------------------------------------------------------------------------
+% Deep parameters - Households
+set_param_value('betta',par.betta);
+set_param_value('sig',par.sig);
+set_param_value('nuu',par.nuu);
+set_param_value('gam',par.gam);
+set_param_value('delK',par.delK);
+set_param_value('phiX',par.phiX);
+
+% Deep parameters - Firms
+set_param_value('alp',par.alp);
+set_param_value('rhoo',par.rhoo);
+set_param_value('kap',par.kap);
+
+% Fiscal policy and taxes
+set_param_value('tauL',par.tauL);
+set_param_value('tauK',par.tauK);
+set_param_value('tauC',par.tauC);
+
+% Monetary policy
+set_param_value('tetR',par.tetR);
+set_param_value('tetPi',par.tetPi);
+set_param_value('tetY',par.tetY);
+
+% Shock standard deviations
+set_param_value('stdM',par.stdM);
+set_param_value('stdZ',par.stdZ);
+
+% Shock autocorrelations
+set_param_value('rhoM',par.rhoM);
+set_param_value('rhoZ',par.rhoZ);
+
+%-------------------------------------------------------------------------------
+% II) Model Block
+%-------------------------------------------------------------------------------
+
+model;
+
+%-------------------------------------------------------------------------------
+% Sticky price economy
+%-------------------------------------------------------------------------------
+
+% Household
+% ---------------------------------
+
+[name='Marginal utility out of consumption']
+muc     = C^(-sig);
+
+[name='Labor supply']
+w       = (1+tauC)/(1-tauL) * (vphi*L^gam) / (muu*muc);
+
+[name='Money demand']
+muu*nuu     = betta*muc(+1)/muc * 1/(1+pii(+1)) * ( 1-muu(+1)*(1-nuu) );
+
+[name='Euler equation (bond prices)']
+muc     = betta* muu(+1)/muu * (1+rB)/(1+pii(+1)) * muc(+1);
+
+[name='Capital allocation (Tobins Q/Euler equation)']
+tet     = betta*muc(+1)/muc
+            * ( tet(+1)*(1-delK) + muu(+1)*(rK(+1)*(1-tauK)) );
+
+[name='Optimal capital investment']
+muu     = ( 1 - ci - cii ) * tet
+            + betta*muc(+1)/muc * cii(+1) * (X(+1)/X) * tet(+1);
+
+% Intermediate good firm
+% ---------------------------------
+
+[name='Labor demand']
+w       = (1-alp)*mc*Y/L;
+
+[name='Capital demand']
+rK      = alp*mc*Y/K;
+
+[name='NK Phillips curve']
+cpp/(1-cp) = (1-rhoo/mc)/(1-rhoo)
+                + (1+pii(+1))/(1+rB) *Y(+1)/Y*mc(+1)/mc * cpp(+1)/(1-cp(+1));
+
+% Constraints
+% ---------------------------------
+
+[name='Resource constraint']
+Y       = C + X;
+
+[name='Production function']
+Y       = (1-cp) * (exp(sZ)*L)^(1-alp)*K^alp;
+
+[name='Capital law of motion']
+K(+1)   = (1-delK)*K + (1-ci)*X;
+
+[name='Cash-in-advance constraint']
+m       = (nuu)*(1+tauC)*C;
+
+% Adjustment cost functions
+% ---------------------------------
+
+[name='Price adjustment cost']
+cp      = kap/2*pii^2;
+
+[name='Marginal price adjustment cost']
+cpp     = kap*pii*(1+pii);
+
+[name='Investment adjustment cost']
+ci      = phiX/2 * ( X/X(-1) - 1 )^2;
+
+[name='Marginal investment adjustment cost']
+cii     = phiX * ( X/X(-1) - 1 ) * X/X(-1);
+
+% Policy rules
+% ---------------------------------
+
+[name='Interest rate rule']
+((1+rB)/(1+steady_state(rB))) = ((1+rB(-1))/(1+steady_state(rB)))^tetR
+                                * ((1+pii)/(1+steady_state(pii)))^((1-tetR)*tetPi)
+                                * (Y/steady_state(Y))^((1-tetR)*tetY)
+                                * exp(sM);
+
+%-------------------------------------------------------------------------------
+% Exogenous processes
+%-------------------------------------------------------------------------------
+
+[name='Monetary policy shock process']
+sM      = rhoM*sM(-1) + eM;
+
+[name='TFP shock process']
+sZ      = rhoZ*sZ(-1) + eZ;
+
+end;
+
+%-------------------------------------------------------------------------------
+% III) Steady-State Calculations
+%-------------------------------------------------------------------------------
+
+steady;
+
+//resid;
+//check;
+
+%--------------------------------------------------------------------------
+% IV) Shock processes
+%--------------------------------------------------------------------------
+
+shocks;
+    var eM  = stdM^2;
+    var eZ  = stdZ^2;
+end;
+
+%--------------------------------------------------------------------------
+% VI) Simulation
+%--------------------------------------------------------------------------
+
+stoch_simul(order=@{approx_order},
+            nodisplay,
+            nograph,
+            noprint,
+            pruning,
+            irf=@{irf_periods},
+            periods=@{sim_periods},
+            replic=@{replic_number},
+            simul_replic=@{simul_replic_number},
+            drop=@{drop_number}
+            );
+
+send_endogenous_variables_to_workspace ;
+send_exogenous_variables_to_workspace ;
+send_irfs_to_workspace ;
+
+%----------------------------- End of File --------------------------------

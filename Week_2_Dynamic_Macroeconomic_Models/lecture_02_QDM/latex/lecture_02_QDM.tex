@@ -1,0 +1,1018 @@
+\documentclass[10pt,c,aspectratio=1610,handout]{beamer}
+\usetheme[block=fill,numbering=fraction,progressbar=frametitle]{metropolis}
+%\usecolortheme{beaver}
+\usepackage{textpos}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{appendixnumberbeamer}
+
+\setbeamercovered{transparent}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\renewcommand{\baselinestretch}{1.25}
+% Colour theme
+\definecolor{QDMblue}{rgb}{0.00, 0.1882, 0.3608}
+\definecolor{QDMgold}{rgb}{0.9098, 0.6510, 0.0000}
+\definecolor{QDMgreen}{rgb}{0.3098, 0.5490, 0.0510}
+\setbeamercolor{normal text}{ fg= QDMblue , bg= white }
+\setbeamercolor{alerted text}{ fg= QDMgold }
+\setbeamercolor{example text}{ fg= QDMgreen }
+
+\begin{document}
+
+% Personal Info
+\title{Lecture 02: Cash-In-Advance Fully Dynamic Model}
+\author[Konstantin Gantert]{\begin{large} Konstantin Gantert \end{large} \\ \textbf{Quantitative Dynamic Macroeconomics}}
+\date{\textit{this version:} \today}
+
+% Eliminates Navigation Bar on every Frame
+\beamertemplatenavigationsymbolsempty
+
+%-------------------------------------------------------------------------
+% Titlepage
+{\setbeamertemplate{footline}{}%
+\frame{\titlepage}}%
+ \addtocounter{framenumber}{-1}%
+%-------------------------------------------------------------------------
+% Outline for this Lecture
+\begin{frame}{Outline for this Lecture}%
+  \onslide<1->{%
+  \begin{minipage}{0.48\textwidth}%
+    \textbf{What have we seen so far}%
+    \begin{small}%
+      \begin{enumerate}%
+        \item Macro data \& AS-AD short-comings {\tiny[CG 1]}%
+        \item Macro policy in practice {\tiny[CG 6]}%
+        \item Discussion of assignment 0 {\tiny[CG 1, 5]}%
+        \item Static CiA macroeconomic model {\tiny[CG 1, 5]}%
+      \end{enumerate}%
+      \end{small}%
+  \end{minipage}}%
+  \onslide<3->{%
+  \hfill%
+  \begin{minipage}{0.48\textwidth}%
+    \textbf{What we will see today}%
+    \begin{small}%
+    \begin{enumerate}%
+      \item Fully Dynamic CiA Model {\tiny [CG 1, 4, 5]}%
+      \item Optimal Intertemporal Allocation {\tiny [CG 1, 3, 4]}%
+      \item Steady-State Analysis {\tiny [CG 3, 4]}%
+      \item Growth, Welfare, and Optimal Policy {\tiny [CG 4, 5, 6]}%
+      \item Varying Money Velocity {\tiny(if time permits) [CG 1, 4, 5]}%
+    \end{enumerate}%
+  \end{small}%
+  \end{minipage}}%
+  \onslide<2->{%
+  \vspace*{0.25in}%
+  \begin{block}{Big Picture of the Lecture:}%
+    \begin{enumerate}%
+      \item How do households optimally consume and allocate resources across time?%
+      \item What role does money (optimally) play in resource allocation in the model?%
+    \end{enumerate}%
+  \end{block}}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% BLOCK 1: Dynamic Cash-in-Advance Model Setup
+%-------------------------------------------------------------------------
+\section{Dynamic Cash-in-Advance Model\\\small{Model Setup - Cole (2020) chapter 3}}%
+%-------------------------------------------------------------------------
+% Expanding the Time Horizon of our CiA Model
+\begin{frame}{Expanding the Time Horizon of our CiA Model}%
+  We now extend our model by creating a \textbf{genuine dynamic model!}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] We simply push out time by one period to the point at which we use a continuation payoff function, $V(M,B)$, to characterize outcomes.%
+    \pause%
+    \item[$\blacktriangleright$] The household takes as given%
+    \begin{small}%
+      \begin{itemize}%
+        \item[$\rightarrow$] the price in the first and second periods, $P_{1}$ and $P_{2}$,%
+        \item[$\rightarrow$] and the productivity levels, $Z_{1}$ and $Z_{2}$,%
+        \item[$\rightarrow$] its initial money position $M_{1}$ and bond position $B_{1}$,%
+        \item[$\rightarrow$] the payoff from money and bonds going into the third period $V(M_{3},B_{3})$.%
+      \end{itemize}%
+    \end{small}%
+    \pause%
+    \item[$\blacktriangleright$] The household is choosing%
+    \begin{small}%
+      \begin{itemize}%
+        \item[$\rightarrow$] consumptions $C_{1}$ and $C_{2}$,%
+        \item[$\rightarrow$] labor $L_{1}$ and $L_{2}$,%
+        \item[$\rightarrow$] money holdings $M_{2}$ and $M_{3}$,%
+        \item[$\rightarrow$] bond holdings $B_{2}$ and $B_{3}$.%
+      \end{itemize}%
+    \end{small}%
+    \pause%
+    \item[$\blacktriangleright$] The government changes overall money supply through taxes and transfers of money in the asset market at the end of the period.%
+    \begin{small}%
+      \begin{itemize}%
+        \item[$\rightarrow$] When net transfers, $T_{t}>0$, the household is receiving cash, and when the reverse is true, it is making a cash payment to the government.%
+      \end{itemize}%
+    \end{small}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Intertemporal Utility Maximization and the Continuation Function
+\begin{frame}{Intertemporal Utility Maximization and the Continuation Function}%
+  The \textbf{household optimization problem} can be written as%
+  \begin{align*}%
+    \max_{\left\{ C_{t},L_{t},M_{t+1},B_{t+1}\right\} _{t=1,2}}\ u(C_{1})-v(L_{1})+\beta \left[ u(C_{2})-v(L_{2})\right] +\beta^{2}V(M_{3},B_{3})%
+  \end{align*}%
+  \pause%
+  subject to%
+  \begin{align*}%
+    M_{t} \; & \geq \; P_{t} C_{t} \quad \text{ and }\\%
+    P_{t} Z_{t} L_{t} + \left[ M_{t} - P_{t}C_{t} \right] + B_{t} + T_{t} \; & \geq\;  M_{t+1}+ q_{t} B_{t+1} \quad \text{ for }t=1,2.%
+  \end{align*}%
+  \pause%
+  \begin{block}{Difference to static model}%
+    The \emph{real difference} in this version of the household's problem has to do with the impact of choosing $M_{2}$ and $B_{2}$.%
+  \end{block}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% The Intertemporal Lagrange Equation
+\begin{frame}{The Intertemporal Lagrange Equation}%
+  The \textbf{household Lagrangian} is now given by%
+  \begin{align}%
+    \begin{split}%
+      \mathcal{L} \; = & \; \max_{\left\{ C_{t},L_{t},M_{t+1},B_{t+1}\right\}_{t=1,2}}\min_{\left\{ \lambda _{t},\mu _{t}\right\} _{t=1,2}}\ \\%
+      & \; u(C_{1})-v(L_{1})+\beta \left[ u(C_{2})-v(L_{2})\right] +\beta^{2}V(M_{3},B_{3}) \\%
+      & \; +\sum_{t=1,2}\lambda _{t}\left\{ M_{t}-P_{t}C_{t}\right\} \\%
+      & \; +\sum_{t=1,2}\mu _{t}\left\{P_{t}Z_{t}L_{t}+M_{t}-P_{t}C_{t}+B_{t}+T_{t}-M_{t+1}-q_{t}B_{t+1}\right\}.%
+    \end{split}%
+  \end{align}\\%
+  \vspace*{0.2in}%
+  \pause%
+  \textbf{Intertemporal Discounting:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Assume discounting of future utils by multiplying the next period's payoff by $\beta <1$.%
+    \item[$\blacktriangleright$] Subsequently, we discount the payoff two periods ahead by $\beta ^{2}$.%
+    \item[$\blacktriangleright$] This intertemporal problem can readily be pushed out to arbitrary $T$.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% BLOCK 2: Dynamic Cash-in-Advance First-Order Conditions
+%-------------------------------------------------------------------------
+\section{Dynamic Cash-in-Advance Model\\\small{First-Order Conditions - Cole (2020) chapter 3}}%
+%-------------------------------------------------------------------------
+% Consumption and Labor FOCs
+\begin{frame}{Consumption and Labor FOCs}%
+  The \textbf{first-order conditions} (FOCs) for consumption and labor are still given by%
+  \begin{align}%
+    \beta^{t-1} u^{\prime}(C_{t}) - \left[ \lambda_{t} + \mu_{t} \right] P_{t} \; \overset{!}{=} \; 0,\label{foc 2 C}%
+  \end{align}%
+  and% 
+  \begin{align}%
+    \beta^{t-1}v^{\prime}(L_{t}) - \mu_{t} P_{t} Z_{t} \; \overset{!}{=} \; 0. \label{foc 2 L}%
+  \end{align}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Both FOCs are \emph{''intra-temporal''} which means they describe behavior within a period.%
+    \item[$\blacktriangleright$] The intra-temporal FOCs are symmetric across all $t \in T$.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% The Money FOC
+\begin{frame}{The Money FOC}%
+  \textbf{Approach of deriving the money FOC:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] To derive the first-order condition for $M_{2}$ note that it shows up%
+    \begin{itemize}%
+      \item[$\rightarrow$] in the date $t=1$ budget constraint as $M_{t+1},$, and%
+      \item[$\rightarrow$] in the date $t=2$ cash-in-advance and budget constraints as $M_{t}$.%
+    \end{itemize}%
+    \pause%
+    \item[$\blacktriangleright$] Doing the differentiation correctly leads to%
+    \begin{align}%
+      -\mu_{t} + \lambda_{t+1} + \mu_{t+1} \; \overset{!}{=} \; 0.%
+    \end{align}%
+  \end{itemize}%
+  \pause%
+  \textbf{Interpretation of the money FOC:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Cost of increasing money, $M_{t+1}$, is shadow price of the first period budget constraint, $\mu _{t}$.%
+    \item[$\blacktriangleright$] The gain of increasing money holdings, $M_{t+1}$, is the sum of ...%
+    \begin{itemize}%
+      \item[$\rightarrow$] the shadow price of the second period cash-in-advance (CiA) constraint, $\lambda_{t+1}$,%
+      \item[$\rightarrow$] and the shadow price of the second period budget constraint, $\mu_{t+1} $.%
+    \end{itemize}%
+    \item[$\blacktriangleright$] This condition now makes clear what stood behind the mystery term $V_{1}(M^{\prime },B^{\prime })$ in our static model of the previous chapter.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% The Bond FOC
+\begin{frame}{The Bond FOC}%
+  \textbf{Approach of deriving the bond FOC:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] To derive the first-order condition for $B_2$ note that it shows up%
+    \begin{itemize}%
+      \item[$\rightarrow$] in the $t=1$ budget constraint as $B_{t+1}$, and%
+      \item[$\rightarrow$] in the $t=2$ budget constraint as $B_t$.%
+    \end{itemize}%
+    \pause%
+    \item[$\blacktriangleright$] When we differentiate correctly, we get the following expression%
+    \begin{align}%
+      -\mu_{t} q_{t} + \mu_{t+1} \; \overset{!}{=} \; 0.%
+    \end{align}%
+  \end{itemize}%
+  \pause%
+  \textbf{Interpretation of bond FOC:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] This expression highlights the difference between buying bonds vs. holding money:%
+    \begin{itemize}%
+      \item[$\rightarrow$] With bonds we get a price break to the extent that $q_{t}<1$.%
+      \item[$\rightarrow$] But we don't get future service yield, $\lambda _{t+1}$, just future benefit of having more wealth, $\mu _{t+1}.$%
+    \end{itemize}%
+    \item[$\blacktriangleright$] This condition now makes clear what stood behind the mystery term $V_{2}(M^{\prime },B^{\prime })$ in our static model of the previous chapter.%
+    \pause%
+    \item[$\blacktriangleright$] Note that $V_{1}(M^{\prime}, B^{\prime}) - V_{2}(M^{\prime}, B^{\prime}) = \lambda_{t+1} \geq 0$%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Question on Dynamic Optimization
+% \begin{frame}{Question on Dynamic Optimization}%
+%   \begin{center}%
+%     \begin{large}%
+%       Why does it suffice to derive optimal consumption and labor for today and optimal money and bond holdings for the next period, instead of deriving them for all future periods?%
+%     \end{large}%
+%   \end{center}%
+% \end{frame}%
+%-------------------------------------------------------------------------
+% A Tradeoff between Cash and Interest
+\begin{frame}{A Tradeoff between Cash and Interest}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] To get more insight into the gain from having more money in period $2,$ use the FOC for $C_{2}$:%
+    \begin{align*}%
+      \beta u^{\prime} (C_{2}) \; = \; (\lambda_{2} + \mu_{2}) P_{2}%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] Note that the cost of second period consumption is the combination of the shadow prices of the cash-in-advance (CiA) and budget (BC) constraints.%
+    \item[$\blacktriangleright$] Using this expression we can rewrite the first-order condition for money:%
+    \begin{align*}%
+      \mu_{1} \; = \; \frac{\beta u^{\prime} (C_{2})}{P_{2}}%
+    \end{align*}%
+  \end{itemize}%
+  \pause%
+  \begin{block}{Trade-Off between Money and Bonds}%
+    The household is trading off the benefit of being able to buy consumption tomorrow vs. the lower return on savings offered by money (again to the extent that $q_{1}<1).$%
+  \end{block}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% A Tradeoff between Consumption and Labor
+\begin{frame}{A Tradeoff between Consumption and Labor}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Starting from the FOC for $L_{1}$, we use the FOC for $M_{2}$ to replace $\mu_{1}$, and then the FOC for $C_{2}$ to derive the \textbf{optimal labor-consumption condition:}%
+    \begin{align*}%
+      v^{\prime} (L_{1}) \; = & \; \mu_{1} P_{1} Z_{1} \; = \; \left[ \mu_{2} + \lambda_{2} \right] P_{1} Z_{1}\\%
+      \\%
+      = & \; \left[ \frac{\beta u^{\prime} (C_{2})}{P_{2}} \right] P_{1} Z_{1} \; = \; \frac{P_{1}}{P_{2}} Z_{1} \beta u^{\prime}(C_{2}).%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] If money is a bad asset, $\frac{P_2}{P_1} > q$, people will be discouraged from working.%
+    \pause%
+    \item[$\Rightarrow$] This is one of the key inefficiency wedges that money has created in our model.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Money and the Intertemporal Tradeoff (1/2)
+\begin{frame}{Money and the Intertemporal Tradeoff (1/2)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] The FOCs for $C_{1}$ and $C_2$ are given by%
+    \begin{align*}
+      u^{\prime}(C_{1}) \; = & \; \left[ \mu_{1} + \lambda_{1} \right] P_{1},\\%
+      \beta u^{\prime}(C_{2}) \; = & \; \left[ \mu_{2} + \lambda_{2} \right] P_{2}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] The FOC for money says that $\mu_{1}=\mu _{2}+\lambda _{2}.$ Making the substitution and rearranging:%
+    \begin{align}
+      \frac{u^{\prime}(C_{1})}{P_{1}} \; = & \; \left[ \mu_{2} + \lambda_{2} + \lambda_{1} \right],\label{eq:FOCmoneyc1}\\%
+      \frac{\beta u^{\prime}(C_{2})}{P_{2}} \; = & \; \left[ \mu_{2} + \lambda_{2} \right].\label{eq:FOCmoneyc2}%
+    \end{align}%
+    \pause%
+    \item[$\blacktriangleright$]For the right-hand-side (rhs) of (\ref{eq:FOCmoneyc1}) and (\ref{eq:FOCmoneyc2}) to be equal, we need $\lambda_{1}=0$ or the shadow price of the CiA constraint to be 0.%
+    \pause%
+    \item[$\blacktriangleright$] If $\lambda_1 \neq 0$, we strictly prefer to spend our money in the first period.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Money and the Intertemporal Tradeoff (2/2)
+\begin{frame}{Money and the Intertemporal Tradeoff (2/2)}%
+  When will the shadow price of money be 0?%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Note that from our money and bond conditions%
+    \begin{align*}%
+      \mu_{1} \; = & \; \mu_{2} + \lambda_{2} \text{ and } \\%
+      \mu_{1} q_{1} \; = & \; \mu_{2}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] So, if $q_{1}<1$, these conditions say that $\lambda_{2}>0.$%
+  \end{itemize}%
+  \pause%
+  \begin{block}{Interpretation}%
+    The household will adjust the composition of its savings between money and bonds to ensure that the cash-in-advance constraint binds enough to offset the extra interest return that they get from holding bonds.%
+  \end{block}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% An Overview of the Model FOCs
+\begin{frame}{An Overview of the Model FOCs}%
+  \begin{block}{Recursive structure of the model}%
+    So far, we only have modeled two periods. But if we extended the modeling out to an arbitrary period $T$, then we would get similar conditions.%
+  \end{block}%
+  \vspace*{0.15in}%
+  \pause%
+  \textbf{First-order conditions} (for any $t \in T$):%
+  \begin{align*}%
+    \text{Consumption:} \quad & \beta^{t-1} u^{\prime} (C_{t}) \; = \; \left[ \lambda_{t} + \mu_{t} \right] P_{t}\\%
+    \text{Labor:} \quad & \beta^{t-1} v^{\prime} (L_{t}) \; = \; \mu_{t} P_{t} Z_{t}\\%
+    \text{Money:} \quad & \mu_{t} \; = \; \mu_{t+1} + \lambda_{t+1}\\%
+    \text{Bonds:} \quad & \mu_{t} q_{t} \; = \; \mu_{t+1}%
+  \end{align*}%
+  When we solve for the steady state we will takes these as our conditions.%
+\end{frame}%
+%-------------------------------------------------------------------------
+% BLOCK 3: Dynamic Cash-in-Advance General Equilibrium
+%-------------------------------------------------------------------------
+\section{Dynamic Cash-in-Advance Model\\\small{General Equilibrium - Cole (2020) chapter 3}}%
+%-------------------------------------------------------------------------
+% Closing the Model - Market Equilibrium
+\begin{frame}{Closing the Model - Market Equilibrium}%
+  To \emph{close the model}, we want to think about aggregate equilibrium variables.%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] \textbf{Resource constraint:} Per capita output is equal to per capita consumption:%
+    \begin{align*}%
+      Z_{t} L_{t} \; = \; Y_{t} \; = \; C_{t}%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] \textbf{Per capita money supply, $\bar{M}_{t}$:} Evolves over time because of net transfers:
+    \begin{align*}%
+      \bar{M}_{t+1} \; = \; (1+\tau_{t}) \bar{M}_{t}%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] If we denote the \textbf{net growth rate of money} in period $t$ by $\tau _{t}$:%
+    \begin{align*}%
+      T_{t} \; = \; \tau_{t} \bar{M}_{t}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] \textbf{Money market clearing:} The amount of money with which the household leaves the asset market must equal the supply:%
+    \begin{align*}%
+      M_{t+1} \; = \; \bar{M}_{t+1}.%
+    \end{align*}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Assumption - A Binding CiA Constraint
+\begin{frame}{Assumption - A Binding CiA Constraint}%
+  \begin{block}{Assumption}%
+    In closing the model, let's assume that the cash-in-advance (CiA) constraint binds in any time period, $t \in T$.%
+  \end{block}%
+  \pause%
+  It follows:%
+  \begin{align}%
+    C_{t} \; = \; \frac{\bar{M}_{t}}{P_{t}}, \quad \text{ or } \quad P_{t} \; = \; \frac{\bar{M}_{t}}{Z_{t}L_{t}}.\label{bind cia}%
+  \end{align}%
+  \pause%
+  \textbf{Properties:}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$]  This is a simple velocity type equation, familiar from very old-school macro models.%
+    \item[$\blacktriangleright$] $M \ast v=P \ast Y$ where $v$ is the velocity of money {\footnotesize(here constant and equal to one)}.%
+    \item[$\blacktriangleright$] In our equations we can replace the price level with this simple relationship.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% First-Order Conditions in the Closed Model
+\begin{frame}{First-Order Conditions in the Closed Model}%
+  Next, we turn to our optimality conditions to finish closing the model.%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] The consumption condition and the labor condition imply that:%
+    \begin{align}%
+      \beta^{t-1} u^{\prime} (Z_{t}L_{t}) \; = & \; \left( \lambda_{t} + \mu_{t} \right) \frac{\bar{M}_{t}}{Z_{t}L_{t}}\label{eq:foc_consumption}\\%
+      \beta^{t-1} v^{\prime} (L_{t}) \; = & \; \mu_{t} Z_{t} \frac{\bar{M}_{t}}{Z_{t}L_{t}}\label{eq:foc_labor}%
+    \end{align}%
+    \vspace*{-0.1in}%
+    \begin{itemize}%
+      \item[$\rightarrow$] We have used the fact $C_{t}=Z_{t}L_{t}$ from our resource constraint, and replaced $P_t$ in both equations above with the cash-in-advance constraint.%
+    \end{itemize}%
+    \vspace*{0.1in}%
+    \pause%
+    \item[$\blacktriangleright$] The money condition and the bond condition imply that:%
+    \begin{align}%
+      \mu_{t} \; = & \; \mu_{t+1} + \lambda_{t+1}\label{eq:foc_money}\\%
+      \mu_{t} q_{t} \; = & \; \mu_{t+1}\label{eq:foc_bonds}%
+    \end{align}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% The Reduced Form Model (1/2)
+\begin{frame}{The Reduced Form Model (1/2)}%
+  We use the money condition along with our FOCs for consumption and labor to get that%
+  \begin{align}%
+    \beta^{t-1} v^{\prime} (L_{t}) \; = & \; \left[ \mu_{t+1} + \lambda_{t+1} \right] \frac{\bar{M}_{t}}{L_{t}} \notag\\%
+    = & \;\left[ \beta^t u^{\prime} (Z_{t+1}L_{t+1}) \frac{Z_{t+1}L_{t+1}}{\bar{M}_{t+1}} \right] \frac{\bar{M}_{t}}{L_{t}} \notag\\%
+    = & \; \frac{1}{(1+\tau_{t})} \frac{Z_{t+1}L_{t+1}}{L_{t}} \beta^{t} u^{\prime} (Z_{t+1}L_{t+1}). \label{eq:key_1}%
+  \end{align}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] This is our \textbf{key dynamic equation} and it involves both $L_{t}$ and $L_{t+1}.$%
+    \item[$\blacktriangleright$] However, these are the only endogenous variables in the equation.%
+    \item[$\blacktriangleright$] Hence, solving this equation will essentially solve our model.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% The Reduced Form Model (2/2)
+\begin{frame}{The Reduced Form Model (2/2)}%
+  Finally, we can determine the bond price off of the optimality conditions for labor and bonds%
+  \begin{align}%
+    \mu_{t} q_{t} \; = & \; \mu_{t+1} \notag\\%
+    \Leftrightarrow \frac{v^{\prime} (L_{t}) L_{t}}{\bar{M}_{t}} q_{t} \; = & \; \frac{\beta v^{\prime} (L_{t+1}) L_{t+1}}{\bar{M}_{t+1}} \notag\\%
+    \Leftrightarrow q_{t} \; = & \; \frac{\beta}{(1+\tau_{t})} \frac{v^{\prime} (L_{t+1}) L_{t+1}}{v^{\prime} (L_{t}) L_{t}}. \label{eq:key_2}%
+  \end{align}%
+  \begin{itemize}%
+    \item[$\Rightarrow$] The unusual aspect of this equation is that we are pinning down the interest rate through the intertemporal tradeoff of working more today vs. tomorrow rather than consuming more today vs. tomorrow.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% BLOCK 4: Dynamic CiA Model: Steady-State Analysis
+\section{Dynamic Cash-in-Advance Model\\\small{Steady-State Analysis - Cole (2020) chapter 3}}%
+%-------------------------------------------------------------------------
+% Definitions of the Steady-State
+\begin{frame}{Definitions of the Steady-State}%
+  \textbf{Deterministic Steady-State}%
+  \begin{small}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] The economy is not exposed to any stochastic shocks at the moment.%
+    \item[$\blacktriangleright$] The agents do not expect any stochastic shocks in the future (no uncertainty).%
+    \item[$\Rightarrow$] The \textbf{deterministic steady-state} is given by the static equilibrium of the model economy.%
+  \end{itemize}%
+  \end{small}%
+  \vspace*{0.25in}%
+  \pause%
+  \textbf{Risky Steady-State}%
+  \begin{small}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] The economy is not exposed to any stochastic shocks at the moment.%
+    \item[$\blacktriangleright$] Agents know about possible future shocks and take the uncertainty in their decisions into account.%
+    \item[$\Rightarrow$] The \textbf{risky steady-state} is given by the deterministic steady-state plus an uncertainty premium.%
+  \end{itemize}%
+  \end{small}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Calculating the Steady-State of the Dynamic CiA Model
+\begin{frame}{Calculating the Steady-State of the Dynamic CiA Model}%
+  We are going to shut down as much of the time variation as we can and solve for a \emph{deterministic} steady-state equilibrium of our model.%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Assume that productivity is constant; i.e., $Z_{t} = Z$.%
+    \item[$\blacktriangleright$] Assume money supply grows at a constant rate $\tau$.%
+    \pause%
+    \item[$\blacktriangleright$] Suppose that labor, and hence consumption, are constant.%
+    \item[$\blacktriangleright$] If $L_{t} = L$, then our key dynamic equation becomes:%
+    \begin{align*}%
+      v^{\prime} (L) \; = \; \frac{\beta}{(1+\tau)} \ast Z \ast u^{\prime}(Z L)%
+    \end{align*}%
+    \item[$\blacktriangleright$] One can see from inspection that this equation is going to admit a unique solution in $L$:%
+    \begin{itemize}%
+      \item[$\rightarrow$] The left-hand-side (lhs) is increasing in $L$ because $v^{\prime}(L)>0$ and $v^{\prime \prime}(L)>0$.%
+      \item[$\rightarrow$] The right-hand-side (rhs) is decreasing in $L$ because $u^{\prime}(C)>0$, but $u^{\prime\prime}(C)<0$.%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Utility Functional Forms for the Dynamic CiA Model
+\begin{frame}{Utility Functional Forms for the Dynamic CiA Model}%
+  Before solving our model, we have to be explicit on the function forms of our preferences.\\%
+  \vspace*{0.2in}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] A common assumption for consumption is that preferences are \emph{constant-relative-risk-averse} (CRRA):%
+    \begin{align}%
+      \begin{split}%
+        u(C) \; = \; \left\{% 
+        \begin{array}{c}%
+          \frac{C^{1-\alpha }-1}{1-\alpha }\quad \text{ if }\alpha \neq 1 \\%
+          \log(C) \quad \quad \text{ o.w.}%
+        \end{array}%
+        \right.%
+      \end{split}%
+    \end{align}%
+    \begin{itemize}%
+      \item[$\rightarrow$] The risk-aversion is defined by $\alpha$.%
+      \item[$\rightarrow$] Standard values for $\alpha$ are 1 or 2.%
+    \end{itemize}%
+    \vspace*{0.2in}%
+    \pause%
+    \item[$\blacktriangleright$] A common assumption for labor is to assume a power utility form:%
+    \begin{align}%
+      v(L) \; = \; \frac{L^{1+\gamma}}{1+\gamma}.\label{labor preferences}%
+    \end{align}%  
+  \end{itemize}%  
+\end{frame}%
+%-------------------------------------------------------------------------
+% Frisch Elasticity of Labor Supply in the Dynamic CiA Model
+\begin{frame}{Frisch Elasticity of Labor Supply in the Dynamic CiA Model}%
+  \begin{block}{Definition}%
+    The Frisch elasticity of labor asks how labor will change if we change the wage while holding fixed the marginal value of wealth {\footnotesize(the penalty price of the budget constraint)}.%
+  \end{block}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] From our first-order condition for labor, we get that%
+    \begin{align*}%
+      v^{\prime}(L) \; = \; V^{\prime}(W) P Z \quad \quad \text{or} \quad L^{\gamma} \; = \; V^{\prime}(W) w.%
+    \end{align*}%
+    where $P Z$ (marginal product of labor) is our stand-in for the nominal wage, $w$.%
+    \pause%
+    \item[$\blacktriangleright$] Taking logs, holding fixed the marginal utility of wealth, and differentiating yields%
+    \begin{align*}%
+      \gamma d \log(L) \; = \; \log \left[ V^{\prime}(W)\right] + d\log(w) \implies \left. \frac{d\log(L)}{d\log(w)} \right\vert_{V^{\prime}(W)} \; = \; \frac{1}{\gamma}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] The \textbf{Frisch elasticity} is therefore $1/\gamma$. These's a lot of debate about this elasticity:%
+    \begin{itemize}%
+      \begin{small}%
+        \item[$\rightarrow$] Micro studies estimate it to be quite low ($0$ to $0.5)$.%
+        \item[$\rightarrow$] Macro studies generally estimate a significantly higher value ($2$ to $4)$.%
+      \end{small}%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Steady-State Labor with Functional Forms
+\begin{frame}{Steady-State Labor with Functional Forms}%
+  Given our functional form assumption our steady state labor condition becomes:%
+  \begin{align*}%
+    L^{\gamma} \; = \; \frac{\beta}{(1+\tau)} \ast Z \ast (Z L)^{-\alpha}%
+  \end{align*}%
+  Which implies a very simple analytic solution:%
+  \begin{align*}%
+    L \; = \; \left[ \beta \frac{Z^{1-\alpha}}{(1+\tau)}\right]^{1/(\gamma+\alpha)}%
+  \end{align*}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] We can see how productivity $Z$ raises labor and money growth $\tau$ lowers it.%
+    \item[$\blacktriangleright$] We can also see that the impact depends upon our preference parameters.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Steady-State Interest Rate with Functional Forms
+\begin{frame}{Steady-State Interest Rate with Functional Forms}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] To fully solve the model steady-state, we have to derive the steady-state of $q_t$ using (\ref{eq:key_2}).
+    \item[$\blacktriangleright$] With the assumption that labor is constant in steady-state we get the following expression:%
+    \begin{align*}
+      q \; = \; \frac{\beta}{(1+\tau)},%
+    \end{align*}
+    \begin{itemize}%
+      \item[$\rightarrow$] Steady-state net growth rate of money, $\tau$, increases steady-state nominal interest rate, $\frac{1}{q}$.%
+      \item[$\rightarrow$] Here: $\tau$ also describes the inflation rate in the economy.%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Multipliers in the Steady State - Rendering the Model Stationary
+\begin{frame}{Multipliers in the Steady State - Rendering the Model Stationary}%
+  In the steady state we get that%
+  \begin{align}%
+    \beta^{t-1} v^{\prime}(L) \frac{L}{\bar M_1 (1+\tau)^{t-1}} \; = & \; \mu_{t},\label{eq:stst_mu}\\%
+    \beta^{t-1} u^{\prime}(Z L) \frac{Z L}{\bar M_1 (1+\tau)^{t-1}} \; = & \; \left( \lambda_{t} + \mu_{t} \right).\label{eq:stst_lambda}%
+  \end{align}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] (\ref{eq:stst_mu}) implies that $\mu_t$ is shrinking at the rate $\frac{\beta^{t-1}}{(1+\tau)^{t-1}}$.%
+    \pause%
+    \item[$\blacktriangleright$] It follows that (\ref{eq:stst_lambda}) implies that $\lambda_t$ is shrinking at the same rate.%
+    \pause%
+    \item[$\Rightarrow$] But the \textit{relative values} of the multipliers are staying constant.%
+  \end{itemize}%
+  \vspace*{0.1in}%
+  \pause%
+  Important insight for later: Our \textbf{multipliers are constant}, if we adjust them as follows:%
+  \begin{align*}%
+    \tilde{\mu}_t \; = & \; \mu_{t} \frac{(1+\tau)^{t-1}}{\beta^{t-1}}\\%
+    \tilde{\lambda}_t \; = & \; \lambda _{t} \frac{(1+\tau)^{t-1}}{\beta^{t-1}}%
+  \end{align*}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Questions on the Steady-State Section
+% \begin{frame}{Questions on the Steady-State Section}%
+%   \begin{center}%
+%     \begin{large}%
+%       How would you define the steady-state of an economy?\\%
+%       \vspace*{0.25in}%
+%       Why does inflation have an impact on labor supply, especially if the Frisch labor supply elasticity is high?%
+%     \end{large}%
+%   \end{center}%
+% \end{frame}%
+%-------------------------------------------------------------------------
+% BLOCK 5: Growth, Welfare, and Optimal Policy - Long-Run Analysis
+\section{Growth, Welfare,\\and Optimal Policy\\\small{Long-Run Analysis - Cole (2020) chapter 3}}%
+%-------------------------------------------------------------------------
+% Optimal Policy - Friedman Rule (1/2)
+\begin{frame}{Optimal Policy - Friedman Rule (1/2)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Consider a \emph{social planner} who can ignore the cash-in-advance constraint {\small (source of inefficiency)},%
+    \begin{align*}%
+      \max_{L_{1}} u(Z_{1} L_{1}) - v(L_{1}) + \beta V(\cdot),%
+    \end{align*}%
+    where $V$ is the continuation payoff to the social planner.%
+    \vspace*{0.2in}%
+    \pause%
+    \item[$\blacktriangleright$] The first-order condition for this problem is%
+    \begin{align*}%
+      u^{\prime} (Z_{1} L_{1}) Z_{1} - v^{\prime} (L_{1}) \; = \; 0.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] Comparing the social planner and (\ref{eq:foc_consumption})-(\ref{eq:foc_labor}), we see that they line up iff $\lambda _{1}=0.$%
+    \item[$\blacktriangleright$] If we look at the FOCs for money (\ref{eq:foc_money}) and bonds (\ref{eq:foc_bonds}), we see that $q = 1$.%
+    \vspace*{0.1in}%
+    \pause%
+    \item[$\Rightarrow$] \textbf{Friedman rule:} This means that the net nominal interest rate is being set to zero.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Optimal Policy - Friedman Rule (2/2)
+\begin{frame}{Optimal Policy - Friedman Rule (2/2)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] For $q=1,$ it must be the case that the steady-state is%
+    \begin{align*}%
+      q \; = & \; \frac{\beta}{(1+\tau)} \; = \; 1,\\%
+      \Leftrightarrow \quad \tau \; = & \; \beta - 1.%
+    \end{align*}%
+    \vspace*{-0.1in}%
+    \pause%
+    \item[$\blacktriangleright$] This condition implies that $\tau <0$: \textbf{Money supply must shrink!}%
+    \item[$\blacktriangleright$] But if the money supply is shrinking, prices will also be falling: \textbf{Deflation!}%
+    \item[$\blacktriangleright$] In fact, with $L$ constant, it follows that in the optimum $P_{t+1} = \beta P_{t}$.%
+    \begin{itemize}%
+      \begin{small}%
+        \item[$\rightarrow$] The discount factor sets the optimal level of deflation and the optimal rate at which money must shrink.%
+      \end{small}%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Optimal Policy - Question about the Friedman Rule
+% \begin{frame}{Optimal Policy - Question about the Friedman Rule}%
+%   \begin{center}%
+%     \begin{large}%
+%       Why does the Friedman rule imply that the nominal interest rate should be zero?\\%
+%       \vspace*{0.25in}%
+%       What is the underlying distortion in the model that creates this result?%
+%     \end{large}%
+%   \end{center}%
+% \end{frame}%
+%-------------------------------------------------------------------------
+% What is the Cost of Inflation? (1/2)
+\begin{frame}{What is the Cost of Inflation? (1/2)}%
+  \begin{block}{Definition: Consumption Equivalents}%
+    The fraction of lifetime consumption that we would have to add or take away to make you just as well off.%
+  \end{block}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Denote by $L(\tau)$ the solution for inflation rate, $\tau$. Then lifetime utility is given by%
+    \begin{align*}%
+      U (\tau) \; = \; \frac{1}{1-\beta} \left[ \frac{\left( Z L (\tau) \right)^{1-\alpha} - 1}{1-\alpha} - \frac{L(\tau)^{1+\gamma}}{1+\gamma} \right] .%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] If we fix some particular $\tau_{0}$ as our benchmark%
+    \begin{align*}%
+      U (\tau_{0}) \; = \; \frac{1}{1-\beta} \left[ \frac{\left( \phi (\tau) Z L (\tau) \right)^{1-\alpha} - 1}{1-\alpha}-\frac{L(\tau)^{1+\gamma}}{1+\gamma} \right]%
+    \end{align*}%
+    \begin{itemize}%
+      \item[$\rightarrow$] $\phi(\tau)$ indicates the difference in consumption goods between the actual inflation rate, $\tau$, and the benchmark case, $\tau_0$.%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% What is the Cost of Inflation? (2/2)
+\begin{frame}{What is the Cost of Inflation? (2/2)}%
+  Solving for $\phi\left(\tau\right)$ leads to\\%
+  \begin{align}%
+    \phi (\tau)^{1-\alpha} \; = \; \frac{\left\{ U(\tau_{0})(1-\beta) + \frac{L(\tau)^{1+\gamma}}{1+\gamma} \right\} (1-\alpha) + 1}{( Z L(\tau))^{1-\alpha}}. \label{eq:phi-consadj}%
+  \end{align}\\%
+  \vspace*{0.25in}%
+  \pause%
+  Once we compute $\phi(\tau)$ using this last expression, the consumption equivalent variation is just given by $\phi (\tau )-1.$%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Accounting for Growth (1/3)
+\begin{frame}{Accounting for Growth (1/3)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] So far, we have assumed that $Z_{t+1} = Z_t$, hence no growth in productivity.%
+    \pause%
+    \item[$\blacktriangleright$] Assume now, that $Z_{t+1}=(1+g)Z_{t}$, hence \emph{productivity grows} by $g$ percent per period.%
+    \pause%
+    \item[$\blacktriangleright$] Return to our fundamental equation (\ref{eq:key_1}) now modified to take account of growth in $Z$ and normalized $Z_{0}=1:$%
+    \begin{align*}
+      v^{\prime}(L_{t}) \; = & \; \frac{\beta}{(1+\tau_{t})} \frac{Z_{t+1} L_{t+1}}{L_{t}} u^{\prime} (Z_{t+1} L_{t+1}).\\%
+      \pause%
+      = & \; \frac{\beta}{(1+\tau_{t})} \frac{(1+g)^{t+1} L_{t+1}}{L_{t}} u^{\prime} ((1+g)^{t+1} L_{t+1}).%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] Unless the growth terms cancel on the rhs, the solution is not invariant to the level of $Z.$ So $L$ will be changing over time. \emph{This is an issue for our model!}%
+    \pause%
+    \item[$\blacktriangleright$] In order to have a steady state with $L$ constant we must assume that $u(C) = log(C)$!%
+    \begin{itemize}%
+      \item[$\rightarrow$] The substitution effect of intertemporal allocation is equal to the income effect.%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Accounting for Growth (2/3)
+\begin{frame}{Accounting for Growth (2/3)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] When we specialize our utility function for consumption as a log-utility function, our fundamental equation becomes%
+    \begin{align}%
+      \beta^{t-1} v^{\prime} (L_{t}) \; = \; \frac{1}{(1+\tau_{t})} \frac{Z_{t+1} L_{t+1}}{L_{t}} \beta^{t} \frac{1}{Z_{t+1} L_{t+1}}. \label{key 1b}%
+    \end{align}%
+    \pause%
+    \item[$\blacktriangleright$] This leads to a very simple expression for the equilibrium level of labor%
+    \begin{align*}%
+      L^{1+\gamma} \; = \; \frac{\beta}{1+\tau}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] The price level (from the CiA constraint) is given by%
+    \begin{align*}%
+      P_t \; = \; \frac{M_1 (1+\tau)^{t-1}}{Z_1 (1+g)^{t-1}} \; = \; \frac{M_1}{Z_1} \left( \frac{1+\tau}{1+g} \right)^{t-1}%
+    \end{align*}%
+    \begin{itemize}%
+      \item[$\rightarrow$] Inflation rate, $1+\pi = \frac{1+\tau}{1+g}$, depends on growth rate gap between money and output.%
+    \item[$\rightarrow$] This is essentially a velocity of money equation.%
+    \end{itemize}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Accounting for Growth (3/3)
+\begin{frame}{Accounting for Growth (3/3)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Since the labor condition is%
+    \begin{align*}%
+      \beta^{t-1} v^{\prime} (L_{t}) \; = \; \mu_{t} Z_{t} \frac{\bar{M}_{t}}{Z_{t} L_{t}},%
+    \end{align*}%
+    it follows that the steady-state interest rate is still%
+    \begin{align*}%
+      q \; = \; \frac{\beta}{1+\tau},%
+    \end{align*}%
+    as the productivity level drops out.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Consumption Equivalence with Growth (1/3)
+\begin{frame}{Consumption Equivalence with Growth (1/3)}%
+  \begin{itemize}%  
+    \item[$\blacktriangleright$] To see how adding growth changes our calculation of the consumption equivalent variation, let us focus on the consumption term in the payoff. This becomes%
+    \begin{align*}%
+      \sum_{t=1}^{\infty} \beta^{t-1} log \left( ZL(\tau)(1+g)^{t-1} \right) \; = \; \frac{log(ZL(\tau))}{1-\beta} + \sum_{t=1}^{\infty} \beta^{t-1}(t-1)log(1+g)%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] Then, note that%
+    \begin{align*}%
+      \frac{d}{d\beta} \sum_{t=1}^{\infty} \beta^{t-1} = \sum_{t=1}^{\infty} \frac{d}{d\beta} \beta^{t-1} \; = \; \sum_{t=1}^{\infty} (t-1) \beta^{t-2},%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] While at the same time%
+    \begin{align*}%
+      \frac{d}{d\beta} \sum_{t=1}^{\infty} \beta^{t-1} = \frac{d}{d\beta} \frac{1}{1-\beta} = \frac{1}{(1-\beta)^2}.%
+    \end{align*}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Consumption Equivalence with Growth (2/3)
+\begin{frame}{Consumption Equivalence with Growth (2/3)}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Hence, it follows that our consumption payoff is%
+    \begin{align*}%
+      U(\tau ) \; = \; \frac{log(ZL(\tau))}{1-\beta} + log(1+g) \frac{\beta}{(1-\beta)^2}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] It follows that our lifetime utility is given by%
+    \begin{align*}%
+      U(\tau) \; = \; \frac{1}{1-\beta }\left[ log(ZL(\tau )) -\frac{L(\tau )^{1+\gamma }}{1+\gamma }\right] + log(1+g) \frac{\beta}{(1-\beta)^2}.%
+    \end{align*}%
+    \pause%
+    \item[$\blacktriangleright$] This expression implies that the impact of money growth and productivity growth comes in through two completely separate terms.
+    \item[$\blacktriangleright$] Moreover, it means that our prior results on the cost of the money growth rate deviating from the optimal rate are unaffected by adding in productivity growth.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Consumption Equivalence with Growth (3/3)
+\begin{frame}{Consumption Equivalence with Growth (3/3)}%
+  \begin{align*}%
+    U(\tau ) \; = \; \frac{1}{1-\beta }\left[ log(ZL(\tau )) -\frac{L(\tau )^{1+\gamma }}{1+\gamma }\right]  + log(1+g) \frac{\beta}{(1-\beta)^2}.%
+  \end{align*}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] So how important can productivity growth be? Real risk-free interest rates are around 1-2 percent generally, so this suggests that an annual value for $\beta = 0.98$.%
+    \item[$\blacktriangleright$] Plugging everything in (accounting for the infinite future), we get that \[ \frac{\beta}{(1-\beta)^2} = \frac{0.98}{.02^2} = \frac{0.98}{.0004} = 2450\] which looks big.%
+    \item[$\blacktriangleright$] Productivity growth is an important determinant of welfare (compounding effect)!%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Varying Velocity (If time permits)
+%-------------------------------------------------------------------------
+\section{Varying Velocity {\small (If time permits)}\\\small{Model Extension - Cole (2020) chapter 4}}%
+%-------------------------------------------------------------------------
+% Setting up a Varying Velocity Model
+\begin{frame}{Setting up a Varying Velocity Model}%
+  The \textbf{velocity of money has been increasing} over time because of the increased sophistication in the payments system: Banks, electronic payments systems, FinTec, etc.%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Let's account for that in the model. Assume that the CiA constraint is given by%
+      \begin{align*}%
+        M_{t} \geq \kappa P_{t} C_{t}, \quad \kappa \in (0,1]%
+      \end{align*}%
+    \item[$\blacktriangleright$] $\kappa = 1$ is our old model.%
+    \item[$\blacktriangleright$] The amount $(1-\kappa) P_{t} C_{t} $ is settled up later in the asset market.%
+    \pause%
+    \item[$\blacktriangleright$] When the CiA binds, we now get that%
+      \begin{align*}%
+        P = \frac{M}{\kappa Z L}.%
+      \end{align*}%
+    \item[$\blacktriangleright$] So money velocity is given by%
+      \begin{align*}%
+        v = \frac{P Z L}{M}=\frac{M}{\kappa Z L}\frac{Z L}{M} = \frac{1}{\kappa}.%
+      \end{align*}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Optimization Problem of the Varying Velocity Model
+\begin{frame}{Optimization Problem of the Varying Velocity Model}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Here is our Lagrangian, adjusted for the change:%
+      \begin{eqnarray*}%
+        \mathcal{L} & = & \max_{\left\{ C_{t},L_{t},M_{t+1},B_{t+1}\right\}_{t=1,2}}\min_{\left\{ \lambda_{t},\mu_{t}\right\}_{t=1,2}}\ \notag \\%
+        && u(C_{1}) - v(L_{1}) + \beta \left[ u(C_{2}) - v(L_{2})\right] + \beta^{2} V(M_{3},B_{3}) \notag\\%
+        && + \sum_{t=1,2}\lambda_{t} \left\{ M_{t} - \kappa P_{t} C_{t}\right\} \notag \\%
+        && + \sum_{t=1,2} \mu_{t} \left\{ P_{t}Z_{t}L_{t}+M_{t}-P_{t}C_{t}+B_{t}+T_{t}-M_{t+1}-q_{t}B_{t+1}\right\}. \notag%
+      \end{eqnarray*}%
+    \pause%
+    \item[$\blacktriangleright$] The only change is w.r.t. the CiA constraint.%
+    \pause%
+    \item[$\blacktriangleright$] This changes the FOC for consumption, which becomes%
+      \begin{align*}%
+        \beta^{t-1} u^{\prime} (C_{t}) = \left[ \mu_{t} + \kappa \lambda_{t} \right] P_{t}.%
+      \end{align*}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% First-Order Conditions of the Varying Velocity Model
+\begin{frame}{First-Order Conditions of the Varying Velocity Model}%
+  We still get the following first-order conditions (FOCs) for labor, money and bonds:%
+  \begin{eqnarray*}%
+    \beta^{t-1} v^{\prime} (L_{t}) & = & \mu_{t} Z_{t} P_{t} \\%
+    \mu_{t} & = & \mu_{t+1} + \lambda_{t+1}, \\%
+    \mu_{t} q_{t} & = & \mu_{t+1},%
+  \end{eqnarray*}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Solving the Varying Velocity Model Further
+\begin{frame}{Solving the Varying Velocity Model Further}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Unfortunately, things don't reduce quite as neatly once we conjecture that $L$ is constant and use the fact that $M$ grows at a constant rate.
+    \pause%
+    \item[$\blacktriangleright$] To keep things simple assume that $Z$ is constant and $\bar{M}_0 = 1$, and hence we can rewrite these conditions as%
+      \begin{eqnarray*}%
+        \beta ^{t-1}u^{\prime }(ZL) &=&\left[ \mu _{t}+\kappa \lambda _{t}\right] \left( \frac{(1+\tau )^{t}}{\kappa ZL}\right) \\%
+        \beta ^{t-1}v^{\prime }(L_{t}) &=&\mu _{t}Z\left( \frac{(1+\tau )^{t}}{\kappa ZL}\right) , \\%
+        \mu _{t} &=&\mu _{t+1}+\lambda _{t+1}.%
+      \end{eqnarray*}%
+    and our modified pricing equation.%
+    \pause%
+    \bigskip%
+    \item[$\Rightarrow$] Note that here too our multipliers won't be constant over time.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Appying a Change-in-Variables
+\begin{frame}{Appying a Change-in-Variables}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Make a ''change in variables'', to rewrite our equations in terms of stationary variables.%
+    \pause%
+    \item[$\blacktriangleright$] Construct new multipliers%
+      \begin{eqnarray*}%
+        \tilde{\mu}_{t} & = & \mu_{t} \left( (1+\tau) \frac{1}{\beta} \right)^{t} \beta, \label{eq:changevars1}\\%
+        \tilde{\lambda}_{t} & = & \lambda_{t} \left( (1+\tau) \frac{1}{\beta} \right)^{t} \beta.%
+      \end{eqnarray*}%
+    \pause%
+    \item[$\blacktriangleright$] Using a change in variables along these lines will turn out to be a much more robust method of analyzing our models.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% A Non-Linear System of Equations
+\begin{frame}{A Non-Linear System of Equations}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Rewrite the equations in terms of the new variables and cancel anything out to get%
+      \begin{eqnarray}%
+        u^{\prime }(ZL) &=&\left[ \tilde{\mu}_{t}+\kappa \tilde{\lambda}_{t}\right] \left( \frac{1}{\kappa ZL}\right) \label{eq:Vel1} \\%
+        v^{\prime }(L) &=&\tilde{\mu}_{t}Z\left( \frac{1}{\kappa ZL}\right) , \label{eq:Vel2} \\%
+        \left( \frac{1+\tau }{\beta }\right) \tilde{\mu}_{t} &=&\tilde{\mu}_{t+1}+ \tilde{\lambda}_{t+1}. \label{eq:Vel3}%
+      \end{eqnarray}%
+    \pause%
+    \item[$\blacktriangleright$] We can guess that there is a constant solution where $\tilde{\mu}_{t}=\tilde{\mu}$ and $\tilde{\lambda}_{t}=\tilde{\lambda}.$%
+    \item[$\blacktriangleright$] However, system is too complicated to be solved directly (analytically).%
+    \pause%
+    \item[$\blacktriangleright$] Instead, we could use a nonlinear equation solver to solve 3 equations in 3 unknowns.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Solving the Model: Brute Force
+\begin{frame}{Solving the Model: Brute Force}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Can use a brute force method for the system of equations because of its block structure.%
+    \pause%
+    \item[$\blacktriangleright$] First, consider a grid on labor of $\mathbf{L} = [L_0, L_1,...,L_N]$ values. The highest level of labor is the efficient level and the lowest is so low that it is very likely not a solution.%
+    \pause%
+    \item[$\blacktriangleright$] Then use a for loop to sequentially compute the following:%
+      \begin{enumerate}%
+        \item Use (\ref{eq:Vel2}) to solve for $\tilde \mu_i$ given $L_i$.%
+        \item Use (\ref{eq:Vel1}) to solve for $\tilde \lambda_i$ given $\tilde \mu_i$ and $L_i$.%
+        \item Given this, construct the deviations \[ ERR(i) =  \left( \frac{1+\tau }{\beta }\right) \tilde{\mu}_{i} - \tilde{\mu}_{i} - \tilde{\lambda}_{i}. \]%
+        \item plot $ERR(i)$ and see where the zeros are.%
+      \end{enumerate}%
+    \item[$\blacktriangleright$] These are our solutions. If the plot is nice, there is only one solution.%
+    \pause%
+    \item[$\blacktriangleright$] Once we know where the solution is, make our grid finer in this region.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Solving the Model: Non-Linear (Numeric) Solver
+\begin{frame}{Solving the Model: Non-Linear (Numeric) Solver}%
+  We can also just use a nonlinear equation solver!%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Step 1: Define the function to be solved. It will take the form $F(x)$ or $F(x,p)$ where $p$ are some parameters we need to pass in too. {\scriptsize (If we need to pass parameters, say in a loop, then we should define the "new function" $G(x) = F(x,p)$. The function returns a vector of zeros when $x$ solves our equations.)}%
+    \pause%
+    \item[$\blacktriangleright$] Step 2: Come up with a good initial guess $x_0$ for $x$.%
+    \pause%
+    \item[$\blacktriangleright$] Step 3: Create a function handle: $fun = @(x) \; F(x,p)$%
+    \pause%
+    \item[$\blacktriangleright$] Step 4: $x = fsolve(fun,x_0)$ $\quad \rightarrow$ This solves for $x$ such that $fun(x)=0$%
+    \pause%
+    \item[$\blacktriangleright$] Step 5: disp(x)%
+  \end{itemize}%
+  See Matlab for an implementation of this procedure.%
+\end{frame}%
+%-------------------------------------------------------------------------
+% CONCLUSION, REFERENCES, AND APPENDIX
+%-------------------------------------------------------------------------
+\section{Conclusion}%
+%-------------------------------------------------------------------------
+% Summarizing the Lecture
+\begin{frame}{Summarizing the Lecture}%
+  \begin{center}%
+    \begin{large}%
+      Can you summarize the three main aspects of the lecture?%
+    \end{large}%
+  \end{center}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% CONCLUSION
+\begin{frame}{Concluding Remarks}%
+  \begin{block}{Big Picture of the Lecture:}%
+    \begin{enumerate}%
+      \item How do households optimally consume and allocate resoruce across time?%
+      \item What role does money (optimally) play in resource allocation in the model?%
+    \end{enumerate}%
+  \end{block}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] We have developed a \textbf{fully dynamic CiA model:}%
+    \begin{itemize}%
+      \begin{small}%
+        \item[$\rightarrow$] Bonds vs money: Bonds pay interest, but money is necessary to buy goods.%
+        \item[$\rightarrow$] Money supply grows over time, rendering exisiting money less valuable.%
+        \item[$\rightarrow$] Production becomes more efficient over time leading to higher output.%
+      \end{small}%
+    \end{itemize}%
+    \pause%
+    \item[$\blacktriangleright$] We have analyzed the \textbf{steady-state properties} of the model:%
+    \begin{itemize}%
+      \begin{small}%
+        \item[$\rightarrow$] CRRA utility functions and intertemporal elasticity of substitution.%
+        \item[$\rightarrow$] Labor supply depends on the \textbf{Frisch elasticity}.%
+      \end{small}%
+    \end{itemize}%
+    \pause%
+    \item[$\blacktriangleright$] We have analyzed \textbf{optimal policy} and how to measure it:%
+    \begin{itemize}%
+      \begin{small}%
+        \item[$\rightarrow$] The \textbf{Friedman rule} implies a optimal zero nominal interest rate and deflation.%
+        \item[$\rightarrow$] Inflation reduces labor supply and thereby creates a real cost.%
+        \item[$\rightarrow$] Growth in productivity lowers inflation, even with positive money supply growth.%
+      \end{small}%
+    \end{itemize}%
+  \end{itemize}%
+  \vspace*{-0.2in}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% REFERENCES
+\begin{frame}{References}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Harold L. Cole (2020). Monetary and Fiscal Policy through a DSGE Lens. Oxford University Press.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+\end{document}%

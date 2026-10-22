@@ -1,0 +1,359 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+% --- Hyperref setup ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+% --- Title ---
+\title{\textbf{Quantitative Dynamic Macroeconomics}\\[0.4em]
+\large Paper Summary: Clarida, Gal\'{i}, and Gertler (1999)}
+\author{Konstantin Gantert}
+\date{\today}
+
+% ---------------------------------------------------------------
+\begin{document}
+\maketitle
+
+\noindent Clarida, R., Gal\'{i}, J., and Gertler, M.\ (1999). The Science of
+Monetary Policy: A New Keynesian Perspective. \textit{Journal of Economic
+Literature}, 37(4), 1661--1707.
+
+\tableofcontents
+\bigskip
+
+% ---------------------------------------------------------------
+\section{Introduction}
+
+By the late 1980s there was broad agreement that monetary policy has important
+consequences for aggregate activity, and the theoretical frameworks available
+for policy analysis had improved considerably. CGG position their paper as a
+synthesis of what this progress produced.
+
+The central question is normative: what should a central bank do, and why?
+The goal is to derive principles that are \textbf{robust} --- holding across
+a wide range of model specifications within the New Keynesian class rather
+than depending on particular parameter choices. Results that are highly
+model-specific are of limited use for practical policy guidance. The paper's
+ambition is therefore to identify principles that survive across the NK class
+and to assess how well they square with actual central bank behaviour.
+
+The paper deliberately restricts its scope to models where nominal price
+rigidities are the key friction generating monetary non-neutrality. The
+principles CGG derive are valid within this class of models, and the project
+model belongs to exactly this class.
+
+% ---------------------------------------------------------------
+\section{A Baseline Framework}
+
+The model consists of two equations familiar from lecture.
+
+\textbf{The IS curve:}
+\begin{equation}
+    x_t = -\varphi[i_t - E_t\pi_{t+1}] + E_t x_{t+1} + g_t
+\end{equation}
+
+\textbf{The New Keynesian Phillips curve:}
+\begin{equation}
+    \pi_t = \lambda x_t + \beta E_t\pi_{t+1} + u_t
+\end{equation}
+
+The general equilibrium rests on Walrasian labor markets and monopolistically
+competitive goods markets. A key difference from the traditional IS/LM
+framework is that all behavioral relationships are derived from optimising
+households and firms. As a result, \textbf{beliefs about future policy
+directly affect current inflation and the output gap} through the
+forward-looking structure of both equations. Expected future interest rates
+matter as much as current interest rates.
+
+Both equations are written in terms of \textbf{gap variables}. The output
+gap $x_t = y_t - z_t$ measures actual output relative to the flexible-price
+benchmark $z_t$. Inflation is driven by this gap, not by the level of output.
+A boom driven by a genuine rise in potential output requires no policy
+response. A boom that opens a positive output gap does.
+
+The \textbf{policy objective} formalises this:
+\begin{equation}
+    \mathcal{L} = E_0 \sum_{t=0}^{\infty} \beta^t
+    \left[\alpha x_t^2 + \pi_t^2\right]
+\end{equation}
+
+The central bank minimises squared deviations of the output gap and inflation
+from target. The relative weight $\alpha$ on output gap variance is a
+structural parameter that depends on the degree of price stickiness: stickier
+prices imply a larger weight on output stabilisation. The monetary policy
+instrument is the nominal interest rate --- no LM curve is needed since money
+markets clear implicitly.
+
+% ---------------------------------------------------------------
+\section{Optimal Monetary Policy without Commitment}\label{sec:discretion}
+
+This section derives optimal policy under \textbf{discretion} --- the
+empirically relevant case since no major central bank makes binding
+commitments. Discretion is defined by two conditions: (a) future inflation
+and the output gap are not affected by today's central bank actions; and (b)
+the central bank cannot directly manipulate private sector expectations.
+
+\subsection*{The Output-Inflation Trade-Off}
+
+The central bank's optimality condition under discretion is:
+\begin{equation}
+    x_t = -\frac{\lambda}{\alpha}\pi_t
+\end{equation}
+
+This ``lean against the wind'' condition says the central bank should
+contract demand whenever inflation is above target. A trade-off between
+output and inflation variance exists \textbf{if and only if cost-push shocks
+are present}. Without cost-push shocks ($u_t = 0$), the central bank can
+simultaneously stabilise both inflation and the output gap --- the divine
+coincidence. With cost-push shocks, reducing inflation requires contracting
+demand below potential, making the trade-off unavoidable.
+
+\subsection*{Inflation Targeting is Generally Gradual}
+
+Returning inflation immediately to target --- extreme inflation targeting ---
+is only optimal in two limiting cases: when there are no cost-push shocks
+($\sigma_u = 0$), or when the central bank places zero weight on output
+($\alpha = 0$). In the general case with both cost-push shocks and
+$\alpha > 0$, gradual convergence of inflation to target is optimal. The
+efficient policy frontier in output-inflation volatility space is downward
+sloping and convex: moving toward lower inflation variance always comes at
+the cost of higher output gap variance when cost-push shocks are present.
+
+\subsection*{The Taylor Principle}
+
+The optimal interest rate rule takes the form:
+\begin{equation}
+    i_t = \gamma_\pi E_t\pi_{t+1} + \frac{1}{\varphi}\,g_t,
+    \qquad \gamma_\pi > 1
+\end{equation}
+
+where $g_t$ is the demand shock from the IS curve --- a function of expected
+changes in government purchases relative to expected changes in potential
+output. Since the optimal policy perfectly offsets demand shocks, $g_t$
+enters the interest rate rule directly. The key result is $\gamma_\pi > 1$:
+the nominal rate must respond more than one-for-one with expected inflation
+so that the \textit{real} interest rate rises when inflation rises. Violating
+this --- setting $\gamma_\pi \leq 1$ --- permits self-fulfilling inflationary
+spirals. CGG estimate this coefficient for the US Federal Reserve and find it
+was below one in the pre-Volcker era (1960--1979) and above one in the
+Volcker--Greenspan era (1979--1996), which is revisited in detail in
+Section~\ref{sec:simple_rules}.
+
+\subsection*{Demand versus Supply Shocks}
+
+The optimal policy response depends critically on the source of the shock:
+\begin{itemize}[noitemsep]
+    \item \textbf{Demand shocks:} fully offset. Raising rates closes the
+          output gap and simultaneously stabilises inflation --- no trade-off.
+    \item \textbf{Supply shocks to potential output:} fully accommodate.
+          A rise in potential output raises demand in an exactly offsetting
+          way, leaving the output gap unchanged. No rate response is needed.
+    \item \textbf{Cost-push shocks:} balance. These cannot be fully offset
+          without causing an output contraction. This is where the trade-off
+          bites.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Credibility and the Gains from Commitment}
+
+\subsection*{The Classic Inflation Bias}
+
+When the central bank targets output above potential ($k > 0$), discretion
+leads to permanently higher inflation with no output gain:
+\begin{equation}
+    \pi_t^k = \pi_t + \frac{\alpha}{\lambda}\,k
+\end{equation}
+
+Rational agents anticipate the central bank's temptation to expand demand
+and price accordingly, eliminating any output benefit. The bias is larger
+when the central bank cares more about output ($\alpha$ high) and when the
+Phillips curve is flatter ($\lambda$ small). Rogoff's (1985) solution ---
+appointing a central banker with a stronger distaste for inflation,
+effectively lowering $\alpha$ --- reduces the bias.
+
+\subsection*{Gains from Commitment even with $k = 0$}
+
+The more novel result is that commitment improves outcomes even when the
+central bank has no output ambitions beyond the natural level. Because
+current inflation depends on expected future output gaps through the
+forward-looking Phillips curve, a central bank that credibly commits to
+fighting inflation in the future immediately reduces current inflation without
+requiring a large current recession. The welfare cost of reducing inflation
+falls --- disinflating requires a smaller output contraction under commitment
+than under discretion. Formally, the optimal committed rule implies an
+effective weight on inflation of (where $\rho$ is the persistence of the cost-push shock):
+\begin{equation}
+    \alpha^c \equiv \alpha(1-\beta\rho) < \alpha
+\end{equation}
+
+The central bank behaves as if it cares more about inflation than it actually
+does. This outcome can be replicated under discretion by appointing a
+sufficiently conservative central banker.
+
+\subsection*{The Unconstrained Optimum}
+
+The globally optimal committed policy satisfies a \textit{difference rule}
+rather than a level rule:
+\begin{equation}
+    x_{t+i} - x_{t+i-1} = -\frac{\lambda}{\alpha}\pi_{t+i},
+    \qquad i \geq 1
+\end{equation}
+
+The central bank adjusts the \textit{change} in the output gap in response
+to inflation, continuing to contract demand even after inflation has begun
+falling. This history dependence is the source of commitment's value but
+makes the rule harder to implement in practice.
+
+% ---------------------------------------------------------------
+\section{Practical Complications}
+
+\subsection*{Imperfect Information}
+
+When the central bank cannot observe the current state of the economy in real
+time --- because data are delayed or key variables like potential output are
+unobservable --- optimal policy rules remain valid in their
+certainty-equivalent form but must be expressed in terms of forecasts:
+\begin{equation}
+    E\{x_t \,|\, \Omega_t\} = -\frac{\lambda}{\alpha}\,E\{\pi_t \,|\, \Omega_t\}
+\end{equation}
+
+Since monetary policy affects inflation with a significant lag --- empirical
+estimates suggest output responds within six to nine months and inflation
+within around eighteen months, though these vary across models and contexts
+--- the central bank should target its inflation forecast rather than current
+inflation. This is the practical case for inflation forecast targeting.
+
+\subsection*{Interest Rate Smoothing}
+
+Central banks adjust rates far more gradually than optimal rules predict. A
+fitted Taylor rule for the US yields smoothing parameters $\rho_i$ around
+0.8--0.9. Two explanations are offered: parameter uncertainty in the Brainard
+(1967) tradition induces caution, and concerns about disrupting financial
+markets may prevent sharp interest rate movements. Neither explanation is
+fully satisfying and CGG flag this as an important unresolved issue.
+
+% ---------------------------------------------------------------
+\section{Endogenous Persistence: The Hybrid Model}
+
+Section~6 extends the baseline to allow for endogenous persistence in output
+and inflation, motivated empirically. The key new result is that with
+inflation inertia, monetary policy affects not just how far inflation deviates
+from target but also \textbf{how quickly it returns}. The efficient policy
+frontier shifts unfavourably: any given degree of inflation persistence
+worsens the output-inflation trade-off.
+
+The important message is the \textbf{robustness} finding: all four main
+results from Section~\ref{sec:discretion} --- the trade-off, gradual
+targeting, the Taylor principle, and the differential response to demand
+versus supply shocks --- survive the extension to the hybrid model. The
+qualitative prescriptions are unchanged even when the model is substantially
+generalised. This is the strongest support CGG offer for their claim that
+there is a science of monetary policy.
+
+% ---------------------------------------------------------------
+\section{Simple Rules for Monetary Policy}
+\label{sec:simple_rules}
+
+\subsection*{The Taylor Rule}
+
+Taylor (1993) proposed:
+\begin{equation}
+    i_t^* = \bar{r} + \pi^* + \gamma_\pi(\pi_t - \pi^*) + \gamma_x x_t
+\end{equation}
+
+with $\gamma_\pi = 1.5$ and $\gamma_x = 0.5$. CGG assess this rule against
+the normative principles established in earlier sections and find it passes
+on all counts: it satisfies the Taylor principle, calls for gradual
+adjustment of inflation, responds to the output gap rather than the level of
+output, and implicitly accommodates supply shocks while offsetting demand
+shocks.
+
+CGG then estimate a forward-looking variant with interest rate smoothing for
+two subsamples of US monetary policy history:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+& $\gamma_\pi$ & $\gamma_x$ & $\rho_i$ \\
+\midrule
+Pre-Volcker (1960--1979)       & 0.83 & 0.27 & 0.68 \\
+                               & (0.07) & (0.08) & (0.05) \\[0.3em]
+Volcker--Greenspan (1979--1996) & 2.15 & 0.93 & 0.79 \\
+                               & (0.40) & (0.42) & (0.04) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The pre-Volcker estimate violates the Taylor principle ($\gamma_\pi < 1$),
+meaning the Fed was accommodating rises in expected inflation rather than
+raising real rates to fight them. CGG argue this directly explains the
+persistent high inflation of the 1970s. The post-1979 estimate is strongly
+above one, consistent with the implicit inflation targeting that characterises
+good policy. The Great Moderation --- the sharp reduction in macroeconomic
+volatility from the mid-1980s onward --- is interpreted as the consequence of
+this regime shift. While alternative explanations exist --- including good
+luck and structural changes in the economy --- the policy regime shift under
+Volcker is widely cited as a leading factor.
+
+\subsection*{Indeterminacy}
+
+When $\gamma_\pi \leq 1$, a rise in inflation expectations lowers the real
+rate, stimulates demand, and raises inflation further --- a self-fulfilling
+spiral. The pre-Volcker rule permitted exactly this. Satisfying the Taylor
+principle is therefore not merely a normative prescription but a condition for
+ruling out destabilising sunspot dynamics.
+
+\subsection*{Further to Consider}
+
+CGG also assess two alternative target rules.
+
+\textbf{Inflation targeting} --- committing to a specific inflation target
+and adjusting policy gradually --- is broadly consistent with the optimal
+policy from earlier sections and provides a clear nominal anchor that
+disciplines discretion.
+
+\textbf{Price level targeting} is found unattractive: any overshoot of the
+price level must be reversed, requiring future deflation to correct past
+inflation mistakes, which introduces unnecessary output volatility.
+Moreover, measurement error in the price level can trigger contractionary
+policy even when none is warranted.
+
+\textbf{Nominal GDP targeting} applies equal weight to inflation and real
+output growth, which is generally not optimal. A supply shock raising
+potential output triggers a contractionary response even though none is
+needed, and permanent real GDP growth means there is no precise nominal
+anchor.
+
+% ---------------------------------------------------------------
+\section{Research Agenda}
+
+CGG close with six open questions: the sources of inflation persistence, open
+economy extensions, the zero lower bound on nominal interest rates, interest
+rate smoothing, the role of financial stability in monetary policy, and
+private sector learning during regime transitions.
+
+In the twenty-five years since publication, each of these has generated an
+enormous literature. The zero lower bound became the central challenge of
+monetary policy after 2008. Financial stability moved to the core of central
+bank mandates after the Global Financial Crisis. Inflation persistence
+returned as a live debate during the post-COVID inflation surge of
+2021--2023. Students interested in monetary economics will encounter this
+literature in a research master or PhD programme. For the purposes of this
+course, the research agenda is a reminder that the CGG framework is a
+deliberately simplified lens --- powerful, but not the final word.
+
+\end{document}

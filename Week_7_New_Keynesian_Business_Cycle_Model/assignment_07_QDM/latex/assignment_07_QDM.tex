@@ -1,0 +1,133 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 07: Sticky Prices and Dynare --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\begin{Exercise}[title={Derive the sticky prices FOC},label=ex_1]%
+	Suppose an intermediate firm wants to maximize its profits by choosing a price and a quantity of goods to sell. Assume that the cost minimization with respect to the input factors capital and labor is already solved. Its FOCs are given by%
+	\begin{align}%
+		r_t \; = & \; \alpha \frac{Y_t(i)}{K_t(i)} mc_t(i),\\%
+		w_t \; = & \; \left(1-\alpha\right) \frac{Y_t(i)}{L_t(i)} mc_t(i),%
+	\end{align}%
+	where $mc_t(i)$ is firm real marginal cost and to be solved for in the following exercise. The Lagrangian for the profit maximization of the intermediate firm is given by%
+	\begin{align*}%
+		\mathcal{L} \; = & \; \max_{Y_t(i), \, P_t(i)} \mathbb{E}_t \sum_{t=1,2} \beta^{t-1} \frac{\mu_t}{\mu_1} \left[ P_t(i) Y_t(i) - W_t L_t(i) - P_t r_t K_t(i) \right] + \mathbb{E}_t \beta^2 \frac{\mu_3}{\mu_1} \mathbb{V}_F\left(P_2,P_3\right)\\%
+		& \; + \sum_{t=1,2} \Phi_t \left[ Y_t(i) - \left(Z_t L_t(i)\right)^{1-\alpha} K_t(i)^\alpha \left(1-\frac{\kappa}{2}\left(\frac{P_t(i)}{P_{t-1}(i)}-1\right)^2\right) \right]\\%
+		& \; + \sum_{t=1,2} \varphi_t \left[ P_t(i) - \left(\frac{Y_t}{Y_t(i)}\right)^{1-\rho} P_t \right],%
+	\end{align*}%
+	where we assume that firms discount the future with the same rate as households, $\beta^{t-1} \frac{\mu_t}{\mu_1}$, where $\mu_t$ is the household budget constraint penalty price. Further, we assume that adjusting prices creates quadratic costs. Production follows a Cobb-Douglas production function and each firm produces one variety of a differentiated good where the demand equation is given as the second constraint.%
+	\medskip\\%
+	\emph{Derive the first-order conditions for $Y_t(i)$ and $P_t(i)$ and solve for a Phillips curve representation. Hint: Be careful, $P_t(i)$ appears not only in the current period!}%
+\end{Exercise}%
+\newpage%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	To begin, the first-order conditions with respect to $Y_t(i)$ and $P_t(i)$ are respectively:%
+	\begin{align}%
+		\mathcal{L}_{Y_t(i)}: \quad & \beta^{t-1} \frac{\mu_t}{\mu_1} P_t(i) + \Phi_t + \varphi_t(1-\rho)\left( \frac{Y_t}{Y_t(i)} \right)^{1-\rho} Y_t(i)^{-1}P_t \; = \; 0\\%
+		\begin{split}%
+			\mathcal{L}_{P_t(i)}: \quad & \beta^{t-1} \frac{\mu_t}{\mu_1} Y_t(i) + \Phi_t \left(Z_t L_t(i)\right)^{1-\alpha} K_t(i)^\alpha \kappa \left( \frac{P_t(i)}{P_{t-1}(i)} - 1 \right)\frac{1}{P_{t-1}(i)} + \varphi_t \\%
+			& - \mathbb{E}_t \Phi_{t+1} \left(Z_{t+1} L_{t+1}(i)\right)^{1-\alpha} K_{t+1}(i)^\alpha \kappa \left( \frac{P_{t+1}(i)}{P_{t}(i)} - 1 \right)\frac{P_{t+1}(i)}{P_t(i)^2} \; = \; 0%
+		\end{split}%
+	\end{align}%
+	Now we isolate $-\varphi_t$ and obtain:%
+	\begin{align} %
+		-\varphi_t \; = & \; \frac{1}{1-\rho}\left( \frac{Y_t(i)}{Y_t} \right)^{1-\rho} Y_t(i) \left[ \beta^{t-1} \frac{\mu_t}{\mu_1} \frac{P_t(i)}{P_t} + \frac{\Phi_t}{P_t} \right] \label{eq:foc_Y}\\
+		\begin{split}%
+			-\varphi_t \; = & \; \beta^{t-1} \frac{\mu_t}{\mu_1} Y_t(i) + \Phi_t \left(Z_t L_t(i)\right)^{1-\alpha} K_t(i)^\alpha \kappa \left( \frac{P_t(i)}{P_{t-1}(i)} - 1 \right)\frac{1}{P_{t-1}(i)}\\%
+			& \; - \mathbb{E}_t \Phi_{t+1}\left(Z_{t+1} L_{t+1}(i)\right)^{1-\alpha} K_{t+1}(i)^\alpha \kappa \left( \frac{P_{t+1}(i)}{P_{t}(i)} - 1 \right)\frac{P_{t+1}(i)}{P_t(i)^2}%
+		\end{split}\label{eq:foc_P}%
+	\end{align}%
+	Now, notice that, since the objective function corresponds to profits, then the penalty price $\Phi_t$ stands for the marginal increase in profits that arise from an increase in output by one unit. When the firm behaves optimally, this must be equal to the marginal cost in nominal terms. To see this, notice that, by the first-order condition with respect to $K_t(i)$ (the first-order condition with respect to $L_t(i)$ could also be used here):%
+	\begin{align*}%
+		\mathcal{L}_{K_t(i)}: \quad \beta^{t-1} \frac{\mu_t}{\mu_1} P_t r_t \; &= \;\left(- \Phi_t\right) \alpha \frac{Y_t(i)}{K_t(i)}\\%
+		\Rightarrow mc_t \; & = \; \frac{-\Phi_t}{P_t} \frac{1}{\beta^{t-1}\frac{\mu_t}{\mu_1}}%
+	\end{align*}
+	Using this result, substituting \eqref{eq:foc_Y} into \eqref{eq:foc_P}, and acknowledging that $\beta \frac{\mu_{t+1}}{\mu_t} = \frac{1}{1+r_{B,t}}$ yields:
+	\begin{small}%
+	\begin{align*}%
+		\begin{split}%
+			& \frac{1}{1-\rho}\left( \frac{Y_t(i)}{Y_t} \right)^{1-\rho} Y_t(i) \left[ \frac{P_t(i)}{P_t} - mc_t(i) \right]\\
+			& = \; Y_t(i) - mc_t(i) P_t \frac{Y_t(i)}{1-\frac{\kappa}{2}\left(\frac{P_t(i)}{P_{t-1}(i)}-1\right)^2} \kappa \left( \frac{P_t(i)}{P_{t-1}(i)} - 1 \right)\frac{1}{P_{t-1}(i)}\\
+			& \; \quad + \mathbb{E}_t \frac{1}{1+r_{B,t}} mc_{t+1}(i) P_{t+1} \frac{Y_{t+1}(i)}{1-\frac{\kappa}{2}\left(\frac{P_{t+1}(i)}{P_{t}(i)}-1\right)^2} \kappa \left( \frac{P_{t+1}(i)}{P_{t}(i)} - 1 \right)\frac{P_{t+1}(i)}{P_t(i)^2}
+		\end{split}%
+	\end{align*}%
+	\end{small}%
+	Dividing both sides by $mc_t(i)P_tY_t(i) / P_t(i)$ and re-writing the equation gives:%
+	\begin{align*}%
+		\begin{split}%
+			\frac{\kappa \left( \frac{P_t(i)}{P_{t-1}(i)} - 1\right) \frac{P_t(i)}{P_{t-1}(i)}}{1-\frac{\kappa}{2}\left(\frac{P_t(i)}{P_{t-1}(i)}-1\right)^2} \; = & \; \frac{1}{1-\rho}\left( \frac{Y_t(i)}{Y_t} \right)^{1-\rho} \frac{P_t(i)}{P_t} \left[ 1 - \left( \frac{P_t(i)}{P_t} \right) \frac{1}{mc_t(i)} \right] + \frac{P_t(i)}{P_t} \frac{1}{mc_t(i)}\\%
+			& \; + \mathbb{E}_t \frac{1}{1+r_{B,t}} \frac{\kappa\left( \frac{P_{t+1}(i)}{P_{t}(i)} - 1 \right) \frac{P_{t+1}(i)}{P_t(i)}}{1-\frac{\kappa}{2}\left(\frac{P_{t+1}(i)}{P_{t}(i)}-1\right)^2} \frac{P_{t+1}}{P_t} \frac{Y_{t+1}(i)}{Y_t(i)} \frac{mc_{t+1}(i)}{mc_t(i)}%
+		\end{split}%
+	\end{align*}%
+	Now, notice that, since $P_t(i) = \left( \frac{Y_t}{Y_t(i)} \right)^{1-\rho}P_t$, then the above equation becomes:%
+	\begin{align*}%
+		\begin{split}%
+			\frac{\kappa \left( \frac{P_t(i)}{P_{t-1}(i)} - 1\right) \frac{P_t(i)}{P_{t-1}(i)}}{1-\frac{\kappa}{2}\left(\frac{P_t(i)}{P_{t-1}(i)}-1\right)^2} \; & = \; \frac{1}{1-\rho} - \frac{\rho}{1-\rho} \frac{1}{mc_t(i)} \frac{P_t(i)}{P_t} \\%
+			& \; \quad + \mathbb{E}_t \frac{1}{1+r_{B,t}} \frac{\kappa\left( \frac{P_{t+1}(i)}{P_{t}(i)} - 1 \right) \frac{P_{t+1}(i)}{P_t(i)}}{1-\frac{\kappa}{2}\left(\frac{P_{t+1}(i)}{P_{t}(i)}-1\right)^2} \frac{P_{t+1}}{P_t} \frac{Y_{t+1}(i)}{Y_t(i)} \frac{mc_{t+1}(i)}{mc_t(i)}%
+		\end{split}%
+	\end{align*}%
+	Finally, notice that, by symmetry, $P_t = P_t(i)$, $mc_t(i) = mc_t$ and $Y_t(i) = Y_t$ for every $i$ and for every $t$. Furthermore, inflation is given by $1+\pi_t = \frac{P_t}{P_{t-1}}$. Plugging these equations into the above equation gives us:%
+	\begin{align*}%
+		\begin{split}%
+			\underbrace{\frac{\kappa \left( \frac{P_t}{P_{t-1}} - 1\right) \frac{P_t}{P_{t-1}}}{1-\frac{\kappa}{2}\left(\frac{P_t}{P_{t-1}}-1\right)^2}}_{\equiv \Omega(\pi_t)} \; &= \; \frac{1}{1-\rho} - \frac{\rho}{1-\rho} \frac{1}{mc_t} \\%
+			& \; \quad + \mathbb{E}_t \frac{1}{1+r_{B,t}} \underbrace{\frac{\kappa\left( \frac{P_{t+1}}{P_{t}} - 1 \right) \frac{P_{t+1}}{P_t}}{1-\frac{\kappa}{2}\left(\frac{P_{t+1}}{P_{t}}-1\right)^2}}_{\equiv \Omega(\pi_{t+1})} \underbrace{\frac{P_{t+1}}{P_t}}_{= 1+\pi_{t+1}} \frac{Y_{t+1}}{Y_t} \frac{mc_{t+1}}{mc_t}%
+		\end{split}%
+	\end{align*}%
+	which becomes:%
+	\begin{align*}%
+		\Gamma'(\pi_t) \; = \; \frac{1-\frac{\rho}{mc_t}}{1-\rho} + \mathbb{E}_t \frac{1 + \pi_{t+1}}{1+r_{B,t}} \frac{Y_{t+1}}{Y_t} \frac{mc_{t+1}}{mc_t} \Gamma'(\pi_{t+1})%
+	\end{align*}%
+	which is the Phillips curve equation.%
+\end{Answer}%
+\bigskip%
+% %--------------------------------------------------------------------------------
+% % Exercise 2)
+% \begin{Exercise}[title={Solving DSGE models with Dynare},label=ex_2]%
+% 	Use the Dynare file ''nk\_model.dyn'' as a starting point. A useful guide is the Dynare manual, which you can find here:	\href{https://www.dynare.org/manual/}{https://www.dynare.org/manual/}\medskip\\%
+% 	\emph{Complete the following exercises using the Dynare file and MATLAB.}%
+% 	\begin{itemize}%
+% 		\item[a) ] Inspect the $''oo\_''$ and $''M\_''$ structures of the Dynare output. Can you describe what is saved in them?%
+% 		\item[b) ] Add a mean-zero cost-push shock described by an AR(1) process to the Phillips curve. The idea is that the shock drives up inflation additional to what the Phillips curve would imply. Give intuition on the impulse response functions.%
+% 		\item[c) ] Change the options of the ''stoch\_simul()'' command to create 1) a simulation of the economy with 20,000 periods, 2) IRFs with only 20 periods, and 3) to not show any output (neither any graphs nor any text in the command window). Consult the Dynare manual.%
+% 		\item[d) ] Write a monetary policy rule that depends only on observables, hence on the growth rate of output, $\frac{Y_{t-1}}{Y_{t-2}}$, and on inflation from the previous period, $\frac{\pi_{t-1}}{\pi_*}$. Show the impact of different coefficients on output growth and inflation for this monetary policy rule on the impulse responses of the economy.%
+% 		\item[e) ] Use MATLAB instead of Dynare to plot some of the impulse response functions. Consult the Dynare manual to learn how to shut-off any figure output from Dynare directly (see also c)). Use the following command in MATLAB to call Dynare:%
+% 		\begin{center}%
+% 			dynare nk\_model.dyn;%
+% 		\end{center}%
+% 		\item[f) ] Write a FOR-loop to analyze the robustness of the model results with respect to the price adjustment cost parameter, $\kappa$, in the interval $[0 \; 60]$. Choose an appropriate grid size. Plot the resulting IRFs and save the standard deviations in an array. Use the following command in MATLAB to call Dynare:%
+% 		\begin{center}%
+% 			dynare nk\_model.dyn noclearall;%
+% 		\end{center}%
+% 		Use the following command in Dynare (instead of setting a parameter value) to set the parameter to a value given in the Matlab workspace:%
+% 		\begin{center}%
+% 			set\_param\_value('kap',MATLAB\_PARAMETER\_NAME);%
+% 		\end{center}%
+% 	\end{itemize}%
+% \end{Exercise}%
+% \bigskip%
+% % SOLUTION Exercise 2)
+% \begin{Answer}%
+% 	See the Dynare and Matlab files in the \texttt{dynare} folder of Lecture~7.%
+% \end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

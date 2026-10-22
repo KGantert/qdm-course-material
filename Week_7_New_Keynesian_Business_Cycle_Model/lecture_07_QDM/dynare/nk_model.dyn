@@ -1,0 +1,365 @@
+%% *****************************************************************************
+% Quantitative Dynamic Macroeconomics
+% Lecture 07: New-Keynesian (NK) Model
+% Konstantin Gantert
+% 06/04/2026
+% *************************************************************************
+% ------------------------------------------------------------------------------
+% I) Define Variables and Parameters
+% ------------------------------------------------------------------------------
+
+var
+    // Observable Variables
+    Y           ${Y}$           (long_name='Real Output')
+    L           ${L}$           (long_name='Total Hours')
+    K           ${K}$           (long_name='Capital Stock')
+    X           ${X}$           (long_name='Capital Investment')
+    C           ${C}$           (long_name='Real Consumption')
+    w           ${w}$           (long_name='Real Wage')
+    rK          ${r_K}$         (long_name='Real Rental Rate')
+    rB          ${r_B}$         (long_name='Nominal Bond Interest Rate')
+    mc          ${mc}$          (long_name='Real Marginal Costs')
+    pii         ${\pi}$         (long_name='Price Inflation')
+    tauu        
+
+    // Penalty Prices
+    muc         ${muc}$         (long_name='Budget constraint penalty price')
+    muu         ${\mu}$         (long_name='Cash-in-advance penalty price')
+    tet         ${\theta}$      (long_name='Capital law of motion penalty price (Tobins Q)')
+    
+    // AR(1) Shock Processes
+    sZ          ${s_Z}$         (long_name='Productivity shock process')
+    sM          ${s_M}$         (long_name='Monetary policy shock process')
+    sP          ${s_P}$         (long_name='Cost-push shock process')
+
+    % Flexible Price Economy (HERE: equiv. to social planner)
+    Y_N         ${Y_N}$         (long_name='Social Planner Real Output')
+    L_N         ${L_N}$         (long_name='Social Planner Total Hours')
+    K_N         ${K_N}$         (long_name='Social Planner Capital Stock')
+    X_N         ${X_N}$         (long_name='Social Planner Capital Investment')
+    C_N         ${C_N}$         (long_name='Social Planner Real Consumption')
+    w_N         ${w_N}$         (long_name='Social Planner Real Wage')
+    rK_N         ${rK_N}$       (long_name='Social Planner Real Rental Rate')
+    rB_N        ${r_{B,N}}$     (long_name='Social Planner Nominal Bond Interest Rate')
+    mc_N        ${mc_N}$        (long_name='Social Planner Real Marginal Costs')
+    muc_N       ${\mu_N}$       (long_name='Social Planner Budget constraint penalty price')
+    muu_N       ${\mu_N}$       (long_name='Social Planner Cash-in-advance penalty price')
+
+    % Output Gap and Welfare
+    Y_Gap       ${Y_{Gap}}$     (long_name='Output Gap')
+    welfare     ${\mathbb{W}}$  (long_name='Welfare')
+    welfare_N   ${\mathbb{W}_N}$(long_name='Social Planner Welfare')
+    lmbd        ${\lambda}$     (long_name='Consumption Equivalents')
+    ;
+
+predetermined_variables     // Here we we set our control variables with time indext "t+1" that are set in "t"!
+    K, K_N, muu, muu_N
+    ;
+
+varexo          // Here we set our exogenous variables. 
+                // Note: AR(1) processes are endogenous to the model, only the shock is exogenous.
+    eZ          ${\varepsilon_A}$   (long_name='Productivity shock')
+    eM          ${\varepsilon_M}$   (long_name='Monetary policy shock')
+    eP          ${\varepsilon_P}$   (long_name='Cost-push shock')
+    ;   
+
+parameters
+    // Deep parameters
+    betta       ${\beta}$           (long_name='Period discount factor')
+    sig         ${\sigma}$          (long_name='Intertemporal elasticity of substitution')
+    gam         ${\gamma}$          (long_name='Inverse Frisch labor supply elasticity')
+    vphi        ${\varphi}$         (long_name='Labor disutility level parameter')
+    alp         ${\alpha}$          (long_name='Private capital elasticity w.r.t. output')
+    delK        ${\delta}$          (long_name='Private capital depreciation rate')
+    rhoo        ${\rho}$            (long_name='Elasticity of substitution between differentiated goods')
+    kap         ${\kappa}$          (long_name='Price adjustment cost parameter')
+    nuu         ${\nu}$             (long_name='Inverse money velocity')
+    phiX        ${\phi_X}$          (long_name='Investment adjustment cost')
+
+    // Fiscal policy and taxes
+    tauL        ${\tau_L}$          (long_name='Labor income tax')
+    tauK        ${\tau_K}$          (long_name='Capital income tax')
+
+    // Monetary policy
+    tetR        ${\theta_{R}}$      (long_name='Interest Rate Smoothing')
+    tetPi       ${\theta_{\pi}}$    (long_name='Taylor Coefficient w.r.t. Inflation')
+    tetY        ${\theta_{Y}}$      (long_name='Taylor Coefficient w.r.t. Real GDP')
+    tetGap      ${\theta_{Gap}}$    (long_name='Taylor Coefficient w.r.t. Output Gap')
+
+    // Shock processes
+    stdZ        ${\sigma_Z}$        (long_name='Standard deviation productivity shock')
+    stdM        ${\sigma_M}$        (long_name='Standard deviation monetary policy shock')
+    stdP        ${\sigma_P}$        (long_name='Standard deviation cost-push shock')
+    rhoZ        ${\rho_Z}$          (long_name='Autocorrelation productivity shock')
+    rhoM        ${\rho_M}$          (long_name='Autocorrelation monetary policy shock')
+    rhoP        ${\rho_P}$          (long_name='Autocorrelation cost-push shock')
+    ;
+    
+% Assigning values from Matlab workspace to the parameters
+% ------------------------------------------------------------------------------
+% Deep parameters
+set_param_value('betta',par.betta);
+set_param_value('sig',par.sig);
+set_param_value('gam',par.gam);
+set_param_value('vphi',par.vphi);
+set_param_value('alp',par.alp);
+set_param_value('delK',par.delK);
+set_param_value('rhoo',par.rhoo);
+set_param_value('kap',par.kap);
+set_param_value('nuu',par.nuu);
+set_param_value('phiX',par.phiX);
+
+% Fiscal policy and taxes
+set_param_value('tauL',par.tauL);
+set_param_value('tauK',par.tauK);
+
+% Monetary policy
+set_param_value('tetR',par.tetR);
+set_param_value('tetPi',par.tetPi);
+set_param_value('tetY',par.tetY);
+set_param_value('tetGap',par.tetGap);
+
+% Shock processes
+set_param_value('stdZ',par.stdZ);
+set_param_value('stdM',par.stdM);
+set_param_value('stdP',par.stdP);
+set_param_value('rhoZ',par.rhoZ);
+set_param_value('rhoM',par.rhoM);
+set_param_value('rhoP',par.rhoP);
+
+@#define sig_welfare = 1    // Please set this 'macro language variable' to one if you have sig=1 (log-utility)
+
+%-------------------------------------------------------------------------------
+% II) Model Block
+%-------------------------------------------------------------------------------
+
+model;
+
+%-------------------------------------------------------------------------------
+% Sticky price economy
+%-------------------------------------------------------------------------------
+
+% Household
+% ---------------------------------
+
+[name='Marginal utility out of consumption']
+muc     = C^(-sig);
+
+1+tauu = (1+pii(+1))*C(+1)/C;
+
+[name='Labor supply']
+w       = (vphi*L^gam) / ((1-tauL)*muu*muc);
+
+[name='Money demand']
+muu*nuu     = betta/(1+pii(+1))*muc(+1)/muc*(1-(1-nuu)*muu(+1));
+
+[name='Euler equation (bond prices)']
+muc     = betta*(1+rB)/(1+pii(+1)) * muu(+1)/muu * muc(+1);
+
+[name='Capital allocation (Tobins Q/Euler equation)']
+tet     = betta*muc(+1)/muc * ( tet(+1)*(1-delK) + muu(+1)*(rK(+1)*(1-tauK)) );
+
+[name='Optimal capital investment']
+muu     = tet * ( 1 - phiX/2*(X/X(-1)-1)^2 - phiX*(X/X(-1)-1)*X/X(-1) ) 
+            + betta*muc(+1)/muc*tet(+1)*phiX*(X(+1)/X-1)*(X(+1)/X)^2;
+
+% Intermediate good firm
+% ---------------------------------
+
+[name='Labor demand']
+w       = (1-alp)*Y/L*mc;
+
+[name='Capital demand']
+rK       = alp*Y/K*mc;
+
+[name='NK Phillips curve']
+kap*pii*(1+pii)/(1-kap/2*pii^2) = (exp(sP)-rhoo/mc)/(1-rhoo) + (1+pii(+1))/(1+rB)*mc(+1)/mc*Y(+1)/Y*kap*pii(+1)*(1+pii(+1))/(1-kap/2*pii(+1)^2);
+
+% Constraints
+% ---------------------------------
+
+[name='Resource constraint']
+Y       = C + X;
+
+[name='Production function']
+Y       = (exp(sZ)*L)^(1-alp)*K^alp * (1-kap/2*pii^2);
+
+[name='Capital law of motion']
+K(+1)   = (1-delK)*K + X;
+
+% Policy rules
+% ---------------------------------
+
+[name='Interest rate rule']
+((1+rB)/(1+steady_state(rB))) = ((1+rB(-1))/(1+steady_state(rB)))^tetR
+                                * ((1+pii)/(1+steady_state(pii)))^((1-tetR)*tetPi)
+                                * (Y/steady_state(Y))^((1-tetR)*tetY)
+                                * ((1+Y_Gap)/(steady_state(1+Y_Gap)))^((1-tetR)*tetGap)
+                                * exp(sM);
+
+%-------------------------------------------------------------------------------
+% Exogenous processes
+%-------------------------------------------------------------------------------
+
+[name='Productivity growth process']
+sZ      = rhoZ*sZ(-1) + eZ;
+
+[name='Monetary policy shock process']
+sM      = rhoM*sM(-1) + eM;
+
+[name='Cost-push shock process']
+sP      = rhoP*sP(-1) + eP;
+
+%-------------------------------------------------------------------------------
+% Social Planner (Flexible Prices!)
+%-------------------------------------------------------------------------------
+
+% Household (Social Planner)
+% ---------------------------------
+
+[name='Marginal utility out of consumption']
+muc_N   = C_N^(-sig);
+
+[name='Labor supply']
+muc_N   = (vphi*L_N^gam) / ((1-tauL)*muu_N*w_N);
+
+[name='Money demand']
+muu_N*nuu   = betta*muc_N(+1)/muc_N*(1-(1-nuu)*muu_N(+1));
+
+[name='Euler equation (bond prices)']
+muc_N   = betta*(1+rB_N) * muu_N(+1)/muu_N * muc_N(+1);
+
+[name='Capital allocation (Tobins Q/Euler equation)']
+muu_N   = betta * muc_N(+1)/muc_N * ( (1-delK) + (rK_N(+1)*(1-tauK)) ) * muu_N(+1);
+
+% Intermediate good firm (Social Planner)
+% ---------------------------------
+
+[name='Labor demand']
+w_N     = (1-alp)*Y_N/L_N*mc_N;
+
+[name='Capital demand']
+rK_N     = alp*Y_N/K_N*mc_N;
+
+[name='NK Phillips curve']
+mc_N    = rhoo;
+
+% Constraints (Social Planner)
+% ---------------------------------
+
+[name='Resource constraint']
+Y_N     = C_N + X_N;
+
+[name='Production function']
+Y_N     = (exp(sZ)*L_N)^(1-alp)*K_N^alp;
+
+[name='Capital law of motion']
+K_N(+1) = (1-delK)*K_N + X_N;
+
+%-------------------------------------------------------------------------------
+% Gap Variables and Welfare
+%-------------------------------------------------------------------------------
+
+[name='Output gap']
+Y_Gap   = Y / Y_N - 1;
+
+@#if sig_welfare == 1
+
+[name='Welfare']
+welfare   = ( log(C) - vphi/(1+gam)*L^(1+gam) ) + betta*welfare(+1);
+
+[name='Social Planner Welfare']
+welfare_N = ( log(C_N) - vphi/(1+gam)*L_N^(1+gam) ) + betta*welfare_N(+1);
+
+@#else
+
+[name='Welfare']
+welfare   = ( (C^(1-sig)-1)/(1-sig) - vphi/(1+gam)*L^(1+gam) ) + betta*welfare(+1);
+
+[name='Social Planner Welfare']
+welfare_N = ( (C_N^(1-sig)-1)/(1-sig) - vphi/(1+gam)*L_N^(1+gam) ) + betta*welfare_N(+1);
+
+@#endif
+
+[name='Consumption Equivalents']
+lmbd   = 1 - exp((1-betta)*(welfare-welfare_N));
+
+end;
+
+%-------------------------------------------------------------------------------
+% III) Steady-State Calculations
+%-------------------------------------------------------------------------------
+
+steady_state_model;
+    sZ      = 0;
+    sM      = 0;
+    sP      = 0;
+    pii     = 0;
+    rB      = 1/betta-1;
+    rB_N    = rB;
+    mc      = rhoo;
+    mc_N    = mc;
+    muu     = 1/(nuu/betta+(1-nuu));
+    muu_N   = muu;
+    LK      = ( (1 - betta*(1-delK))/(betta*mc*alp*(1-tauK)) )^(1/(1-alp));
+    L       = ( mc/vphi*(1-tauL)*muu*(1-alp)*(1/LK)^alp * ( (1/LK)^alp - delK*(1/LK) )^(-sig) )^(1/(sig+gam));
+    L_N     = L;
+    K       = L / LK;
+    K_N     = K;
+    X       = delK*K;
+    X_N     = X;
+    Y       = L^(1-alp)*K^alp;
+    Y_N     = Y;
+    C       = Y - delK*K;
+    C_N     = C;
+    muc     = C^(-sig);
+    muc_N   = muc;
+    tet     = muu;
+    w       = (1-alp)*Y/L*mc;
+    w_N     = w;
+    rK       = alp*Y/K*mc;
+    rK_N     = rK;
+    tauu     = 0;
+    @#if sig_welfare == 1
+        welfare     = ( log(C) - vphi/(1+gam)*L^(1+gam) ) / (1-betta);
+        welfare_N   = welfare;
+    @#else
+        welfare     = ( (C^(1-sig)-1)/(1-sig) - vphi/(1+gam)*L^(1+gam) ) / (1-betta);
+        welfare_N   = welfare;
+    @#endif
+    lmbd        = 0;
+    Y_Gap       = Y/Y_N - 1;
+end;
+
+resid;
+
+%--------------------------------------------------------------------------
+% IV) Shock processes
+%--------------------------------------------------------------------------
+
+shocks;
+    var eZ  = stdZ^2;
+    var eM  = stdM^2;
+    var eP  = stdP^2;
+end;
+
+%--------------------------------------------------------------------------
+% VI) Simulation
+%--------------------------------------------------------------------------
+
+stoch_simul(order=@{approx_order},
+            nodisplay,
+            nograph,
+            pruning,
+            irf=@{irf_periods},
+            periods=@{sim_periods},
+            replic=@{replic_number},
+            simul_replic=@{simul_replic_number},
+            drop=@{drop_number}
+            );
+
+send_endogenous_variables_to_workspace ;
+send_exogenous_variables_to_workspace ;
+send_irfs_to_workspace ;
+
+%----------------------------- End of File --------------------------------

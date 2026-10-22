@@ -1,0 +1,160 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 04: Surprise money losses and aggregate demand --}}%
+\author{\small{Konstantin Gantert}}%
+\date{\small{this version: \today}}%
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+The model in this assignment builds on the model derived in assignment 3. There are two changes: 1) We allow each household to set the price of its own good. 2) We adjust the timing of the realization of the money loss shock, $\delta(s^t)$, which happens after prices are set, but before the household goes to the goods market to buy consumption goods. \textit{Hint: Be careful to take the timing changes into account!}\\%
+\bigskip\\%
+\begin{small}%
+	For the sake of clarity, we present the model setup in detail once more. Assume that each household can set the price of its good. As in assignment 3, it chooses consumption, $C(s^t)$, money holdings, $M(s^t)$, bond holdings, $B(s^t)$, and the price of its good, $P(i,s^t)$, to maximize utility given by%
+	\begin{align*}%
+		\mathbb{U}_t \; = \; \mathbb{E} \sum_{t=1,2} \beta^{t-1} \left[ \log (C(s^t))-\frac{\varphi}{1+\nu} \left(\frac{D \left(\frac{P(i,s^t)}{\bar{P}(s^t)}\right)}{Z(s^t)}\right)^{1+\nu}\right] + \beta^2 \mathbb{E}_t \mathbb{V} \left(M(s^2),B(s^2),s_3\right)%
+	\end{align*}%
+	subject to the cash-in-advance constraint (adjusted for the change in timing)%
+	\begin{align*}%
+		\left(1-\delta(s^t)\right) M(s^{t-1}(s^t)) \; = \; \bar{P}(s^t) C(s^t),%
+	\end{align*}%
+	and the budget constraint%
+	\begin{align*}%
+		& P(i,s^t) D \left(\frac{P(i,s^t)}{\bar{P}(s^t)}\right) + \left(1-\delta (s^t)\right) M(s^{t-1}(s^t)) + B(s^{t-1}(s^t)) + T(s^t)\\%
+		 & = \; \bar{P}(s^t) C(s^t) + M(s^t) + q(s^t) B(s^t),%
+	\end{align*}%
+	where $P(i,s^t)$ is the price set by household $i$ in state $s^t$, $\bar{P}(s^t)$ is the aggregate price level, $0<\beta<1$, and $\varphi, \nu > 0$. Assume that the productivity level is fixed, $Z(s^t)=1$, that the money growth rate is fixed at $\bar{\tau}$, and that the money loss rate, $\delta(s^t)$, follows an AR(1) process given by%
+	\begin{align*}%
+		\delta(s^t) \; = & \; \rho_\delta \delta(s^{t-1}(s^t)) + B_\delta + \sigma_\delta \times \epsilon,%
+	\end{align*}%
+	where $\epsilon \sim \mathcal{N}(0,1)$. The money stock law of motion can then be described by $$\bar{M}(s^t) = (1+\tau)(1-\delta(s^t)) M(s^{t-1}(s^t)).$$%
+	Assume that the optimal purchase allocation for the household regarding different types of goods is already solved. The resulting demand function is given by%
+	\begin{align*}%
+		D \left(\frac{P(i,s^t)}{\bar{P}(s^t)}\right) \; = \; \left[ \# I \frac{P(i,s^t)}{\bar{P}(s^t)} \right]^{\frac{1}{\rho-1}} C(s^t),%
+	\end{align*}%
+	where $\#I$ denotes the amount of different types of goods, and $\rho>0$. Further, in case you are stuck, you can assume that in equilibrium all households are symmetric, hence $P(i,s^t) = P(s^t) = \bar{P}(s^t)$, effectively setting $\#I = 1$.
+\end{small}\\%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\begin{Exercise}[title={Deriving the pricing equation},label=ex_1]%
+	Suppose that an appropriate change-in-variables for the penalty prices of the optimization of the Lagrangian is given by%
+	\begin{align*}%
+		\lambda(s^t) \; = & \; \tilde{\lambda}(s^t) \frac{\beta^{t-1} Pr(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))},\\%
+		\mu(s^t) \; = & \; \tilde{\mu}(s^t) \frac{\beta^{t-1} Pr(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))},%
+	\end{align*}%
+	where $Pr(s^t)$ is the probability of observing history state $s^t$. Set up the Lagrangian and solve for the model first-order conditions. Use the change-in-variables as proposed to summarize the system of equations as far as possible. \textit{Hint: Be careful about the expectations operators as we have changed the timing for the realization of the shock to $\delta(s^t)$, which is only realized within each period now.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	\small%
+	The Lagrangian is given by:%
+	\begin{small}%
+		\begin{align*}%
+			\mathcal{L} \; = & \; \max_{ \left\{ C(s^t), \; P(i,s^t); \; M(s^t), \; B(s^t) \right\}_{t=1,2} } \; \min_{ \left\{\lambda(s^t), \; \mu(s^t)\right\}_{t=1,2} }\\%
+			& \; \mathbb{E} \sum_{t=1,2} \beta^{t-1} \left[log(C_t)-\frac{\varphi}{1+\nu}\left(\frac{1}{Z(s^t)} D \left(\frac{P(i,s^t)}{\bar{P}(s^t)}\right) \right)^{1+\nu}\right] + \beta^2 \mathbb{E} \mathbb{V} \left(M(s^2),B(s^2),s^3\right)\\%
+			& \; + \sum_{t=1,2} \sum_{s^t} \lambda(s^t) \left[ (1-\delta(s^t)) M(s^{t-1}(s^t)) - \bar{P}(s^t) C(s^t) \right]\\%
+			& \; + \sum_{t=1,2} \sum_{s^t} \mu(s^t) \left[ P(i,s^t) D\left(\frac{P(i,s^t)}{\bar{P}(s^t)}\right) + (1-\delta(s^t)) M(s^{t-1}(s^t)) - \bar{P}(s^t) C(s^t) \right.\\%
+			& \; \quad \quad \quad \quad \quad \quad \quad \quad \left. + B(s^{t-1}(s^t)) + T(s^t) - M(s^t) - q(s^t) B(s^t) \right]%
+		\end{align*}%
+	\end{small}%
+	The first-order conditions are given by ($\delta(s^t)$ is unknown only when setting prices):%
+	\begin{align}%
+		\mathcal{L}_{C(s^t)}: & \; \beta^{t-1} \frac{1}{C(s^t)} Pr(s^t) - \lambda(s^t) \bar{P}(s^t) - \mu(s^t) \bar{P}(s^t) \; \overset{!}{=} \; 0\\%
+		\mathcal{L}_{M(s^t)}: & \; (-\mu(s^t)) + \sum_{s^{t+1} \in S^{t+1}(s^t)} \left(1-\delta(s^{t+1}) \right) \left[ \lambda (s^{t+1}) + \mu(s^{t+1}) \right] \; \overset{!}{=} \; 0\\%
+		\mathcal{L}_{B(s^t)}: & \; (-q(s^t)) \mu(s^t) + \sum_{s^{t+1} \in S^{t+1}(s^t)} \mu(s^{t+1}) \; \overset{!}{=} \; 0\\%
+		\begin{split}%
+			\mathcal{L}_{P(i,s^t)}: & \; \sum_{\delta(s^t)} \left\{ \beta^{t-1} (-\varphi) \left(\frac{D(\cdot)}{Z(s^t)}\right)^{1+\nu} \frac{Pr(s^t)}{D(\cdot)} \frac{\partial D(\cdot)}{\partial P(i,s^t)} \right.\\%
+			& \quad \quad \quad \quad \left. + \mu(s^t) \left[ P(i,s^t) \frac{\partial D(\cdot)}{\partial P(i,s^t)} + D(\cdot) \right] \right\} \; \overset{!}{=} \; 0%
+		\end{split}%
+	\end{align}%
+	By using the change-in-variables transformation and the cash-in-advance constraint, the \textbf{FOC for consumption} can be rewritten as follows:%
+	\begin{align}%
+		\beta^{t-1} \frac{Pr(s^t)}{C(s^t)} \; = & \; \bar{P}(s^t) \left[ \lambda(s^t) + \mu(s^t) \right]\notag\\%
+		\Leftrightarrow \quad \beta^{t-1} \frac{\bar{P}(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))} \; = & \; \bar{P}(s^t) \frac{\beta^{t-1}}{(1-\delta(s^t)) M(s^{t-1}(s^t))} \left[ \tilde{\lambda}(s^t) + \tilde{\mu}(s^t) \right]\notag\\%
+		\Leftrightarrow \quad 1 \; = & \; \tilde{\lambda}(s^t) + \tilde{\mu}(s^t)\label{eq:foc_consumption}%
+	\end{align}%
+	Next, we apply the change-in-variables transformation to the \textbf{FOC for money} and rewrite it as follows:%
+	\begin{footnotesize}%
+	\begin{align}%
+		\mu(s^t) \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \left(1-\delta(s^{t+1}) \right) \left[ \mu(s^{t+1}) + \lambda(s^{t+1}) \right]\notag\\%
+		\Leftrightarrow \quad \frac{\beta^{t-1} \tilde{\mu}(s^t) Pr(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))} \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \beta^t \frac{Pr(s^{t+1})(1-\delta(s^{t+1}))}{(1-\delta(s^{t+1}))M(s^t)} \left[\underbrace{\tilde{\lambda}(s^{t+1}) + \tilde{\mu}(s^{t+1})}_{=1}\right]\notag\\%
+		\Leftrightarrow \quad \frac{\tilde{\mu}(s^t) Pr(s^t)}{1-\delta(s^t)} \; = & \; \beta \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{M(s^{t-1}(s^t))}{M(s^t)} Pr(s^{t+1})\notag\\%
+		\Leftrightarrow \quad \frac{\tilde{\mu}(s^t)}{1-\delta(s^t)} Pr(s^t) \; = & \; \beta \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{1}{(1+\tau)(1-\delta(s^t))} Pr(s^{t+1})\notag\\%
+		\Leftrightarrow \quad \frac{\tilde{\mu}(s^t)}{1-\delta(s^t)} \; = & \; \frac{\beta}{(1+\tau)(1-\delta(s^t))} \underbrace{\sum_{s^{t+1} \in S^{t+1}(s^t)} Pr(s^{t+1}|s^t)}_{=1} \notag\\%
+		\Leftrightarrow \quad \tilde{\mu}(s^t) \; = & \; \frac{\beta}{(1+\tau)}\label{eq:foc_money}%
+	\end{align}%
+	\end{footnotesize}%
+	Next, we apply the change-in-variables transformation to the \textbf{FOC for bonds} and rewrite it as follows:%
+	\begin{align}%
+		q(s^t) \mu(s^t) \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \mu(s^{t+1})\notag\\%
+		\Leftrightarrow \quad \frac{\beta^{t-1} Pr(s^t) q(s^t) \tilde{\mu}(s^t)}{(1-\delta(s^t))M(s^{t-1}(s^t))} \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{\beta^t Pr(s^{t+1}) \tilde{\mu}(s^{t+1})}{(1-\delta(s^{t+1}))M(s^t)}\notag\\%
+		\Leftrightarrow \quad q(s^t) \frac{\tilde{\mu}(s^t) Pr(s^t)}{1-\delta(s^t)} \; = & \; \frac{\beta}{(1+\tau)(1-\delta(s^t))} \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{\tilde{\mu}(s^{t+1}) Pr(s^{t+1})}{1-\delta(s^{t+1})}\notag\\%
+		\leftrightarrow \quad q(s^t) \tilde{\mu}(s^t) \; = & \; \frac{\beta}{1+\tau} \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{\tilde{\mu}(s^{t+1}) Pr(s^{t+1}|s^t)}{1-\delta(s^{t+1})}%
+	\end{align}%
+	Lastly, we apply the change-in-variables transformation to the \textbf{FOC for price setting} and rewrite it as follows:%
+	\begin{align}%
+		\sum_{\delta(s^t)} \left\{ \frac{\varphi}{\rho} \bar{L}(i,s^t)^{1+\nu} \frac{\beta^{t-1}}{P(i,s^t)} Pr(s^t) - \mu(s^t) C(i,s^t) \right\} \; = & \; 0\notag\\%
+		\sum_{\delta(s^t)} \left\{ \frac{\varphi}{\rho} \bar{L}(i,s^t)^{1+\nu} \beta^{t-1} Pr(s^t) - \mu(s^t) \underbrace{P(i,s^t) Z}_{= \bar{P}(s^t) \bar{Z}} \bar{L}(i,s^t) \right\} \; = & \; 0\notag\\%
+		\Leftrightarrow \quad \sum_{\delta(s^t)} \left\{ \frac{\varphi}{\rho} \bar{L}(i,s^t)^{1+\nu} \beta^{t-1} Pr(s^t) - \tilde{\mu}(s^t) \frac{\beta^{t-1} Pr(s^t) \bar{P}(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))} C(s^t) \right\} \; = & \; 0\notag\\%
+		\Leftrightarrow \quad \sum_{\delta(s^t)} \left\{ \frac{\varphi}{\rho} \bar{L}(i,s^t)^{1+\nu} Pr(s^t) - \tilde{\mu}(s^t) \frac{C(s^t) Pr(s^t) \bar{P}(s^t)}{(1-\delta(s^t)) M(s^{t-1}(s^t))} \right\} \; = & \; 0\notag\\%
+		\Leftrightarrow \quad \sum_{\delta(s^t)} \left\{ \left[ \frac{\varphi}{\rho} \bar{L}(i,s^t)^{1+\nu} - \tilde{\mu}(s^t) \right] Pr(s^t) \right\} \; = & \; 0\notag%
+	\end{align}%
+	where $\bar{L}(i,s^t) = \bar{L}(s^t)$, $\bar{Z} = \#I Z$ and $C(i,s^t) = C(s^t)$ given $P Z = \bar{P} \bar{Z}$. As all households are the same, it holds that $P(i,s^t) = P(s^t)$, and we assume that the CiA constraint always binds. Further, plug in (\ref{eq:foc_money}), hence we get%
+	\begin{align}%
+		\sum_{\delta(s^t)} \left\{ \frac{\varphi}{\rho} \bar{L}(s^t)^{1+\nu} - \frac{\beta}{1+\tau} \right\} Pr(s^t) \; = & \; 0\notag\\%
+		\bar{L}(s^t) \; = & \; \left( \frac{\rho}{\varphi} \frac{\beta}{1+\tau} \right)^{\frac{1}{1+\nu}}\label{eq:foc_prices}%
+	\end{align}%
+	Now, we have solved by (\ref{eq:foc_consumption})-(\ref{eq:foc_prices}) for the system of equations that determine the expectations about the economy at the beginning of the period when prices are set. Next, we need to derive the variables for the actual realization of the economy.\\%
+	The cash-in-advance constraint binds in any realization of state. Before the money loss shock is realized, prices are already set and the money stock brought over from last period is also known. Hence, it follows that the household expects consumption to be given by the CiA constraint
+	\begin{align*}%
+		\bar{P}(s^t) \sum_{\delta(s^t)} \bar{C}(s^t) Pr(s^t) \; = \; \left(1-\sum_{\delta(s^t)} \delta(s^t) Pr(s^t)\right) M(s^{t-1}(s^t)).%
+	\end{align*}%
+	The actual cash-in-advance constraint is given by:%
+	\begin{align*}%
+		\bar{P}(s^t) C(s^t) \; = & \; \left( 1-\delta_{A,t} \right) M(s^{t-1}(s^t))% 
+	\end{align*}%
+	We can therefore calculate actual consumption determined by expected consumption and the deviation of realized money loss relative to expected money loss by substituting the two equations for the price level:%
+	\begin{align}%
+		\frac{M(s^{t-1}(s^t)) \left(1-\sum_{\delta(s^t)} \delta(s^t) Pr(s^t)\right)}{\sum_{\delta(s^t)} \bar{C}(s^t) Pr(s^t)} \times C(s^t) \; = & \; \left( 1-\delta_{A,t} \right) M(s^{t-1}(s^t))\notag\\%
+		\Leftrightarrow \quad C(s^t) \; = & \; \frac{1-\delta_{A,t}}{\left(1-\sum_{\delta(s^t)} \delta(s^t) Pr(s^t) \right)} \sum_{\delta(s^t)} \bar{C}(s^t) Pr(s^t)%
+	\end{align}%
+	By the resource constraint, we can derive actual labor supply relative to expected labor supply by:%
+	\begin{align}%
+		\frac{Z(s^t) L(s^t)}{Z(s^t)\sum_{\delta(s^t)} \bar{L}(s^t) Pr(s^t)} \; = & \; \frac{C(s^t)}{\sum_{\delta(s^t)} \bar{C}(s^t) Pr(s^t)}\notag\\%
+		\Leftrightarrow \quad L(s^t) \; = & \; \frac{1-\delta_{A,t}}{\left(1-\sum_{\delta(s^t)} \delta(s^t) Pr(s^t)\right)} \sum_{\delta(s^t)} \bar{L}(s^t) Pr(s^t)%
+	\end{align}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2)
+\begin{Exercise}[title={ADDITIONAL: Solving the model with certainty equivalence},label=ex_2]%
+	Solve the model from exercise 1 using the given Matlab file. All parameters and settings are already written down in the Matlab file. Fill the gaps in order to get a fully functioning Matlab file. This contains the following tasks:%
+	\begin{enumerate}%
+		\item Set up shock vectors for 1) a simulation with continuous draws from the shock distribution and for 2) impulse response functions for each shock assuming non-correlated realizations of the random variables across shocks.%
+		\item Write a function that calculates a solution to both the expected/forecasted model as well as the actual model outcome. Assume that certainty equivalence holds. Use a WHILE-loop to calculate the model outcome across time.%
+		\item Make sure that you update all stock variables in between two periods of the model.%
+		\item Use structure-arrays (e.g. ''output.labor'') to summarize all output from the model function and return it back to the main Matlab file.%
+		\item Have a look at the figures created by Matlab and give an economic interpretation of the results.%
+	\end{enumerate}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	See the Matlab solution file in the \texttt{matlab} folder of this assignment.
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

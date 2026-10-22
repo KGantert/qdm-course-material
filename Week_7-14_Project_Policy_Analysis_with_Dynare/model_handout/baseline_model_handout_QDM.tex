@@ -1,0 +1,433 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+% --- Hyperref setup ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+% --- Title ---
+\title{\textbf{Quantitative Dynamic Macroeconomics}\\[0.4em]
+\large Baseline Model Handout}
+\author{Konstantin Gantert}
+\date{this version: April 2026}
+
+% ---------------------------------------------------------------
+\begin{document}
+\maketitle
+
+This handout describes the baseline New Keynesian DSGE model that serves as the
+starting point for all project topics. It presents the optimisation problems,
+constraints, and first-order conditions (FOCs) of each agent, followed by the
+general equilibrium conditions and policy rules. Each project topic extends this
+baseline by modifying or adding exactly one block. The notation here is the
+reference for all five topics.
+
+An important property: \textbf{all topic extensions are designed so that
+the steady state of the extended model is identical to that of the baseline}.
+Only the dynamics of the model change. Students can use this as a verification
+check --- if your extended model produces a different steady state, something
+has gone wrong in the implementation.
+
+% ---------------------------------------------------------------
+\section{Households}
+
+The representative household maximises lifetime utility over consumption $C_t$
+and leisure, subject to a cash-in-advance (CIA) constraint, a budget constraint,
+and a capital accumulation equation with quadratic investment adjustment costs:
+%
+\begin{equation}
+    \max_{\{C_t,\,L_t,\,X_t,\,M_{t+1}\}} \;
+    E_0 \sum_{t=0}^{\infty} \beta^t
+    \left[
+        \frac{C_t^{1-\sigma}-1}{1-\sigma}
+        -
+        \frac{\phi}{1+\gamma} L_t^{1+\gamma}
+    \right]
+\end{equation}
+%
+subject to the \textbf{cash-in-advance constraint:}
+\begin{equation}
+    \frac{M_t}{\nu} \;\geq\; P_t(1+\tau_C)\,C_t
+    \label{eq:CIA}
+\end{equation}
+%
+the \textbf{budget constraint:}
+\begin{equation}
+    (1-\tau_L)W_t L_t
+    + (1-\tau_K)P_t r_t K_t
+    + M_t + D_t - \tau_t
+    \;\geq\;
+    M_{t+1}
+    + P_t(1+\tau_C)\,C_t
+    + P_t X_t
+    \label{eq:budget}
+\end{equation}
+%
+and the \textbf{capital law of motion with investment adjustment costs:}
+\begin{equation}
+    K_{t+1} = (1-\delta)\,K_t
+    + \left(1 - \frac{\varphi}{2}
+      \left(\frac{X_t}{X_{t-1}}-1\right)^{\!2}\right) X_t
+    \label{eq:capital}
+\end{equation}
+%
+where $\varphi \geq 0$ governs the magnitude of investment adjustment costs.
+At $\varphi = 0$ the standard capital law of motion without adjustment costs
+is recovered. At $\varphi > 0$ it is costly to change investment rapidly,
+making the capital stock respond sluggishly to shocks. The lagged investment
+level $X_{t-1}$ is a predetermined state variable in the baseline.
+
+\subsection*{Notation}
+
+$C_t$: consumption; $L_t$: hours worked; $M_t$: money holdings at the beginning
+of period $t$; $P_t$: price level; $W_t$: nominal wage; $r_t$: real rental rate
+of capital services; $K_t$: capital stock at the beginning of period $t$;
+$X_t$: capital investment; $D_t$: dividends; $\beta \in (0,1)$: discount
+factor; $\sigma > 0$: coefficient of relative risk aversion; $\phi > 0$: labor
+disutility weight; $\gamma > 0$: inverse Frisch elasticity of labor supply;
+$\nu > 0$: money-to-consumption ratio (inverse money velocity); $\delta \in (0,1)$: capital depreciation rate;
+$\tau_C,\,\tau_L,\,\tau_K \geq 0$: fixed tax rates on consumption, labor
+income, and capital income respectively.
+
+\subsection*{First-Order Conditions}
+
+Let $\tilde{\mu}_t \geq 0$ denote the Lagrange multiplier on the CIA constraint
+and $\tilde{\lambda}_t \geq 0$ the multiplier on the budget constraint, both in
+stationary form. Let $\tilde{\Theta}_t$ denote the Lagrange multiplier on the
+capital law of motion (\ref{eq:capital}). Let $w_t = W_t/P_t$ be the real wage.
+
+\textbf{CIA and budget multipliers:}
+\begin{equation}
+    1 = \tilde{\mu}_t + \tilde{\lambda}_t
+    \label{eq:mult_split}
+\end{equation}
+
+\textbf{Labor supply:}
+\begin{equation}
+    \tilde{\mu}_t
+    = \frac{(1+\tau_C)\,\phi\,L_t^{\gamma}\,C_t^{\sigma}}{(1-\tau_L)\,w_t}
+    \label{eq:labor_supply}
+\end{equation}
+
+\textbf{Money demand (Euler equation for money):}
+\begin{equation}
+    \tilde{\mu}_t
+    = \beta\,E_t\!\left[
+        \left(\tilde{\mu}_{t+1} + \frac{\tilde{\lambda}_{t+1}}{\nu}\right)
+        \frac{P_t}{P_{t+1}}
+        \left(\frac{C_t}{C_{t+1}}\right)^{\!\sigma}
+    \right]
+    \label{eq:money_euler}
+\end{equation}
+
+\textbf{Bond pricing (Euler equation for bonds):}
+\begin{equation}
+    \frac{1}{1+r_{B,t}}
+    = \beta\,E_t\!\left[
+        \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t}
+        \frac{P_t}{P_{t+1}}
+        \left(\frac{C_t}{C_{t+1}}\right)^{\!\sigma}
+    \right]
+    \label{eq:bond_euler}
+\end{equation}
+
+\textbf{Investment (FOC for $X_t$) --- Tobin's $Q$:}
+\begin{align}
+    \tilde{\mu}_t
+    &= \tilde{\Theta}_t
+       \left(1 - \frac{\varphi}{2}\left(\frac{X_t}{X_{t-1}}-1\right)^{\!2}
+             - \varphi\left(\frac{X_t}{X_{t-1}}-1\right)\frac{X_t}{X_{t-1}}
+       \right) \notag \\
+    &\quad
+    + \beta\,E_t\!\left[
+        \left(\frac{C_t}{C_{t+1}}\right)^{\!\sigma}
+        \tilde{\Theta}_{t+1}\,\varphi
+        \left(\frac{X_{t+1}}{X_t}-1\right)
+        \left(\frac{X_{t+1}}{X_t}\right)^{\!2}
+    \right]
+    \label{eq:investment_foc}
+\end{align}
+
+\textbf{Capital (Euler equation for $K_{t+1}$):}
+\begin{equation}
+    \tilde{\Theta}_t
+    = \beta\,E_t\!\left[
+        \left(\frac{C_t}{C_{t+1}}\right)^{\!\sigma}
+        \left((1-\delta)\tilde{\Theta}_{t+1} + (1-\tau_K)\,r_{t+1}\tilde{\mu}_{t+1}\right)
+    \right]
+    \label{eq:capital_euler}
+\end{equation}
+
+\textbf{Stochastic discount factor:}
+\begin{equation}
+    \beta_{t,t+1} = \frac{1}{1+r_{B,t}}
+    \label{eq:sdf}
+\end{equation}
+
+\subsection*{Tobin's $Q$}
+
+The Lagrange multiplier $\tilde{\Theta}_t$ on the capital law of motion
+(\ref{eq:capital}) is the shadow price of an additional unit of installed
+capital --- this is \textbf{Tobin's $Q$}. It represents the ratio of the market
+value of installed capital to the cost of a new investment good. When
+$\tilde{\Theta}_t > \tilde{\mu}_t$, installed capital is worth more than new
+investment goods, providing an incentive to invest. At steady state
+$\tilde{\Theta} = \tilde{\mu}$, so Tobin's $Q$ equals one and there is no
+incentive to invest beyond replacement of depreciated capital. Investment
+adjustment costs make Tobin's $Q$ a genuine state-like variable --- its response
+to shocks is hump-shaped rather than immediate, because rapid investment changes
+are costly. This is why IRFs for investment under IAC display sluggish, persistent
+dynamics that more closely match empirical business cycle patterns than the
+frictionless model.
+
+% ---------------------------------------------------------------
+\section{Final Goods Firm}
+
+A representative competitive firm aggregates a continuum of differentiated
+intermediate goods into a homogeneous final good via a CES technology:
+%
+\begin{equation}
+    Y_t = \left(\int_0^1 Y_t(i)^{\rho}\,di\right)^{1/\rho}
+\end{equation}
+%
+where $\rho \in (0,1)$ is the inverse of the steady-state gross price markup.
+Profit maximisation yields the \textbf{demand schedule} for variety $i$:
+%
+\begin{equation}
+    \frac{P_t(i)}{P_t}
+    = \left(\frac{Y_t}{Y_t(i)}\right)^{1-\rho}
+    \label{eq:demand}
+\end{equation}
+
+% ---------------------------------------------------------------
+\section{Intermediate Goods Firms}
+
+A continuum of monopolistically competitive firms $i \in [0,1]$ each produce a
+differentiated variety. Firm $i$ maximises the present discounted value of
+profits:
+%
+\begin{equation}
+    \max_{\{Y_t(i),\,L_t(i),\,K_t(i),\,P_t(i)\}}
+    \;E_0\sum_{t=0}^{\infty} \beta_{0,t}
+    \Bigl[P_t(i)\,Y_t(i) - W_t\,L_t(i) - P_t\,r_t\,K_t(i)\Bigr]
+\end{equation}
+%
+subject to the \textbf{production technology with Rotemberg price adjustment
+costs:}
+\begin{equation}
+    Y_t(i) = \bigl(Z_t\,L_t(i)\bigr)^{1-\alpha} K_t(i)^{\alpha}
+    \left[1 - \frac{\kappa}{2}
+    \left(\frac{P_t(i)}{P_{t-1}(i)} - 1\right)^{\!2}\right]
+    \label{eq:production}
+\end{equation}
+%
+and the \textbf{demand constraint:}
+\begin{equation}
+    Y_t(i) = \left(\frac{P_t(i)}{P_t}\right)^{\!\frac{1}{\rho-1}} Y_t
+    \label{eq:demand_constraint}
+\end{equation}
+
+\subsection*{Notation}
+
+$Z_t$: total factor productivity; $\alpha \in (0,1)$: capital elasticity of
+output; $\kappa \geq 0$: price adjustment cost parameter; $mc_t$: real marginal
+cost; $\pi_t$: net inflation rate defined by $1+\pi_t = P_t/P_{t-1}$.
+
+\subsection*{First-Order Conditions}
+
+Imposing symmetry ($P_t(i)=P_t$, $Y_t(i)=Y_t$, $L_t(i)=L_t$, $K_t(i)=K_t$):
+
+\textbf{Labor demand:}
+\begin{equation}
+    w_t = (1-\alpha)\,\frac{Y_t}{L_t}\,mc_t
+    \label{eq:labor_demand}
+\end{equation}
+
+\textbf{Capital demand:}
+\begin{equation}
+    r_t = \alpha\,\frac{Y_t}{K_t}\,mc_t
+    \label{eq:capital_demand}
+\end{equation}
+
+\textbf{New Keynesian Phillips curve (Rotemberg):}
+\begin{equation}
+    \frac{\kappa\,\pi_t\,(1+\pi_t)}{1-\frac{\kappa}{2}\pi_t^2}
+    =
+    \frac{1 - \rho / mc_t}{1-\rho}
+    +
+    E_t\!\left[
+        \beta_{t,t+1}\,(1+\pi_{t+1})\,\frac{Y_{t+1} \, mc_{t+1}}{Y_t \, mc_t}\,
+        \frac{\kappa\,\pi_{t+1}\,(1+\pi_{t+1})}{1-\frac{\kappa}{2}\pi_{t+1}^2}
+    \right]
+    \label{eq:phillips}
+\end{equation}
+
+% ---------------------------------------------------------------
+\section{General Equilibrium}
+
+\textbf{Resource constraint:}
+\begin{equation}
+    C_t + X_t = Y_t
+    \label{eq:resource}
+\end{equation}
+
+\textbf{Fiscal policy} (balanced budget, no government debt):
+\begin{equation}
+    \tau_t = \tau_C C_t + \tau_L w_t L_t + \tau_K r_t K_t
+    \label{eq:fiscal}
+\end{equation}
+
+\textbf{Money market} (CIA constraint binds in equilibrium):
+\begin{equation}
+    \frac{M_t}{\nu} = P_t(1+\tau_C)\,C_t
+    \label{eq:money_market}
+\end{equation}
+
+\textbf{Inflation identity:}
+\begin{equation}
+    1 + \pi_t = \frac{P_t}{P_{t-1}}
+    \label{eq:inflation}
+\end{equation}
+
+% ---------------------------------------------------------------
+\section{Policy Rules and Exogenous Processes}
+
+\textbf{Monetary policy} (Taylor-type interest rate rule):
+\begin{equation}
+    \frac{1+r_{B,t}}{1+\bar{r}_B}
+    =
+    \left(\frac{1+r_{B,t-1}}{1+\bar{r}_B}\right)^{\!\theta_R}
+    \!\left[
+        \left(\frac{1+\pi_t}{1+\pi^*}\right)^{\!\theta_\pi}
+        \left(\frac{Y_t}{\bar{Y}}\right)^{\!\theta_Y}
+    \right]^{1-\theta_R}
+    e^{m_t}
+    \label{eq:taylor}
+\end{equation}
+%
+where $\bar{r}_B$ is the steady-state nominal interest rate, $\pi^*$ is the
+inflation target, $\bar{Y}$ is steady-state output, $\theta_R \in [0,1)$
+governs interest rate smoothing, $\theta_\pi > 1$ satisfies the Taylor
+principle, and $\theta_Y \geq 0$ governs the response to output fluctuations.
+
+\textbf{Technology shock:}
+\begin{equation}
+    \log Z_t = \rho_Z \log Z_{t-1} + \eta_t^Z,
+    \qquad \eta_t^Z \sim \mathcal{N}(0,\,\sigma_Z^2)
+    \label{eq:tfp}
+\end{equation}
+
+\textbf{Monetary policy shock:}
+\begin{equation}
+    m_t = \rho_m\,m_{t-1} + \eta_t^m,
+    \qquad \eta_t^m \sim \mathcal{N}(0,\,\sigma_m^2)
+    \label{eq:mp_shock}
+\end{equation}
+
+% ---------------------------------------------------------------
+\section{Model Summary}
+
+Table~\ref{tab:variables} lists all endogenous variables and the equations that
+determine them. The baseline model has \textbf{16 endogenous variables} and
+\textbf{16 equations}, plus two exogenous shock processes.
+
+\begin{table}[h!]
+\centering
+\caption{Endogenous variables and determining equations}
+\label{tab:variables}
+\begin{tabular}{lll}
+\toprule
+\textbf{Variable} & \textbf{Description} & \textbf{Equation} \\
+\midrule
+$C_t$               & Consumption                       & CIA (\ref{eq:CIA}) \\
+$L_t$               & Hours worked                      & Labor supply (\ref{eq:labor_supply}) \\
+$K_{t+1}$           & Capital stock                     & Capital LOM (\ref{eq:capital}) \\
+$X_t$               & Investment                        & Investment FOC (\ref{eq:investment_foc}) \\
+$M_t$               & Money holdings                    & Money market (\ref{eq:money_market}) \\
+$\tilde{\mu}_t$     & CIA multiplier                    & Multiplier split (\ref{eq:mult_split}) \\
+$\tilde{\lambda}_t$ & Budget multiplier                 & Multiplier split (\ref{eq:mult_split}) \\
+$\tilde{\Theta}_t$  & Shadow price of capital (Tobin's $Q$) & Capital Euler (\ref{eq:capital_euler}) \\
+$w_t$               & Real wage                         & Labor demand (\ref{eq:labor_demand}) \\
+$r_t$               & Real rental rate of capital       & Capital demand (\ref{eq:capital_demand}) \\
+$mc_t$              & Real marginal cost                & Factor demands (\ref{eq:labor_demand})--(\ref{eq:capital_demand}) \\
+$Y_t$               & Output                            & Production (\ref{eq:production}) \\
+$\pi_t$             & Net inflation rate                & Phillips curve (\ref{eq:phillips}) \\
+$r_{B,t}$           & Net nominal interest rate         & Taylor rule (\ref{eq:taylor}) \\
+$\tau_t$            & Lump-sum tax rebate               & Fiscal rule (\ref{eq:fiscal}) \\
+$P_t$               & Price level                       & Inflation identity (\ref{eq:inflation}) \\
+\midrule
+$\beta_{t,t+1}$     & Stochastic discount factor        & SDF (\ref{eq:sdf}) \\
+\midrule
+$Z_t$               & Technology (exogenous)            & TFP process (\ref{eq:tfp}) \\
+$m_t$               & Monetary policy shock (exogenous) & MP shock (\ref{eq:mp_shock}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ---------------------------------------------------------------
+\section{Topic Extensions: What Changes}
+
+Table~\ref{tab:extensions} summarises what each topic extension modifies
+relative to the baseline, what new variables and equations are introduced, and
+which baseline equations are replaced or augmented. Students are responsible for
+re-deriving the affected first-order conditions and updating the model summary
+table in the appendix of their report accordingly.
+
+\begin{table}[h!]
+\centering
+\caption{Model extensions by topic}
+\label{tab:extensions}
+\begin{tabular}{p{1.1cm} p{3.0cm} p{3.8cm} p{2.8cm} p{3.2cm}}
+\toprule
+\textbf{Topic} & \textbf{Extension} & \textbf{What changes} &
+\textbf{New variable(s)} & \textbf{New / modified equation(s)} \\
+\midrule
+1
+  & Variable capital utilization with adjustment costs
+  & Production function; capital LOM (\ref{eq:capital}); capital Euler
+    (\ref{eq:capital_euler}); investment FOC (\ref{eq:investment_foc})
+  & $u_t$; $u_{t-1}$ (predetermined)
+  & Utilization FOC; modified capital Euler; modified
+    capital LOM \\[0.5em]
+2
+  & Consumption habit formation (scaled)
+  & Utility function; money Euler (\ref{eq:money_euler}); labor supply
+    (\ref{eq:labor_supply})
+  & $C_{t-1}$ (predetermined)
+  & Modified money Euler; modified labor supply \\[0.5em]
+3
+  & Labor adjustment costs
+  & Production technology (\ref{eq:production}); labor demand
+    (\ref{eq:labor_demand})
+  & $L_{t-1}$ (predetermined)
+  & Dynamic labor demand equation \\[0.5em]
+4
+  & Durable consumption goods
+  & Utility function; budget constraint (\ref{eq:budget}); resource
+    constraint (\ref{eq:resource})
+  & $D_t$ (predetermined); $X_{D,t}$
+  & Durable LOM; FOC for durable expenditure \\[0.5em]
+5
+  & Price indexation
+  & Production technology (\ref{eq:production}); Phillips curve
+    (\ref{eq:phillips})
+  & $\pi_{t-1}$ (predetermined)
+  & Modified Phillips curve \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

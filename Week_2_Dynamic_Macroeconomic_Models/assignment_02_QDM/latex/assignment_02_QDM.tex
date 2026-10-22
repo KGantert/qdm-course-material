@@ -1,0 +1,171 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+\setlength{\parindent}{0pt}
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 02: A dynamic CiA model --}}
+\author{\small{Konstantin Gantert and Tulio Bouzas}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+Suppose there is an economy with many households that live infinitely many periods. Each household receives utility out of consumption according to $u(C_t) = \frac{C_t^{1-\sigma}-1}{1-\sigma}$ and receives disutility out of labor supply according to $v(L_t) = \frac{\varphi}{1+\nu} L_t^{1+\nu}$. There is a period discount factor $\beta<1$. Households have to hold cash-in-advance to be able to consume goods, $M_t = \kappa P_t C_t$, where $\kappa \leq 1$ is the ratio of cash holdings to spending, i.e.\ the inverse of money velocity, $v = \frac{P_tC_t}{M_t} = \frac{1}{\kappa} \geq 1$. For $\kappa<1$, each unit of cash can be used more than once per period, which eases the cash-in-advance constraint somewhat. The household loses a share $\delta_M$ of its money between any two periods, hence money at the beginning of next period is $\frac{M_{t+1}}{1-\delta_M}$. Alternatively, the household can buy bonds that pay one unit next period at the price of $q_t \leq 1$. Any increase in the money supply is rebated to the household by net transfers, $T_t$, at the end of the period. The intertemporal budget constraint sums up the different elements of income and expenditure mentioned above.\\%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\begin{Exercise}[title={Setting up and solving a dynamic model},label=ex_1]%
+	Set up the intertemporal Lagrangian of the household optimization problem described above and derive its first-order conditions. Apply an appropriate change-in-variables to render the FOCs stationary. \emph{Hint: Check under which conditions marginal utility is constant across time.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	\textbf{Lagrangian:}%
+	\begin{align*}%
+		\mathcal{L} \; = & \; \underset{\{C_t, L_t, M_{t+1}, B_{t+1}\}_{t=1,2}}{\max} \underset{\{\lambda_t, \mu_t\}_{t=1,2}}{\min}\\%
+		& \; \sum_{t=1,2} \beta^{t-1} \left[ \frac{C_t^{1-\sigma}-1}{1-\sigma} - \frac{\varphi}{1+\nu} L_t^{1+\nu} \right] + \beta^2 \mathbb{V} \left(M_3,B_3\right)\\%
+		& \; + \sum_{t=1,2} \lambda_t \left[ M_t - \kappa P_t C_t \right]\\%
+		& \; + \sum_{t=1,2} \mu_t \left[ P_t Z_t L_t + M_t - P_t C_t + B_t + T_t - \frac{M_{t+1}}{1-\delta_M} - q_t B_{t+1} \right]%
+	\end{align*}%
+	\textbf{First-order conditions:}%
+	\begin{align}%
+		\mathcal{L}_{C_t}: \quad & \beta^{t-1} C_t^{-\sigma} - \lambda_t \kappa P_t - \mu_t P_t \; \overset{!}{=} \; 0\label{eq:foc_c}\\%
+		\mathcal{L}_{L_t}: \quad & \beta^{t-1} (-\varphi) L_t^\nu + \mu_t P_t Z_t \; \overset{!}{=} \; 0\label{eq:foc_l}\\%
+		\mathcal{L}_{M_{t+1}}: \quad & \frac{- \mu_t}{1-\delta_M} + \mu_{t+1} + \lambda_{t+1} \; \overset{!}{=} \; 0\label{eq:foc_m}\\%
+		\mathcal{L}_{B_{t+1}}: \quad & \mu_{t+1} - q_t \mu_t \; \overset{!}{=} \; 0\label{eq:foc_b}%
+	\end{align}%
+	\textbf{Change-in-variables:}\\%
+	We perform a change-in-variables to render the FOCs stationary (that is, they do not change across time). Rearranging (\ref{eq:foc_c}), it follows%
+	\begin{align*}%
+		\lambda_t \kappa + \mu_t \; = & \; \frac{\beta^{t-1}}{P_t C_t^\sigma},%
+	\end{align*}%
+	where we define%
+	\begin{align}%
+		\lambda_t \; = & \; \frac{\beta^{t-1}}{P_t C_t^\sigma} \tilde{\lambda}_t,\\%
+		\mu_t \; = & \; \frac{\beta^{t-1}}{P_t C_t^\sigma} \tilde{\mu}_t,%
+	\end{align}%
+	to apply a change-in-variables and render the penalty prices stationary. It follows for the consumption FOC that%
+	\begin{align}%
+		\tilde{\lambda}_t \kappa + \tilde{\mu}_t \; = & \; 1.\label{eq:consumption_civ}%
+	\end{align}%
+	\textbf{Interpretation:}\\%
+	The multiplier $\mu_t$ is the shadow value of one more unit of nominal wealth (it relaxes the budget constraint), $\lambda_t$ the shadow value of one more unit of cash (it relaxes the cash-in-advance constraint). At the optimum, each FOC equates a marginal cost with a marginal benefit: costs carry a minus sign in the Lagrangian, benefits a plus sign. The factor $\frac{\beta^{t-1}}{P_tC_t^\sigma}$ collects three trends: discounting ($\beta^{t-1}$), inflation ($1/P_t$ erodes nominal wealth) and diminishing marginal utility ($C_t^{-\sigma}$: a richer household values one more unit less). The tilde variables are the multipliers net of these trends. According to (\ref{eq:consumption_civ}) they are determined jointly, so read the relation between them as an accounting identity, not as a causal one.%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2)
+\begin{Exercise}[title={Change-in-variables and economic intuition},label=ex_2]%
+	Summarize the FOCs as derived in exercise \ref{ex_1} as far as possible and give a short economic interpretation of the reduced-form equation(s).%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	\textbf{Summarizing the FOCs:}\\%
+	Applying the same change-in-variables to the rest of the FOCs leads to%
+	\begin{align}%
+		\tilde{\mu}_t \; = & \; \varphi \frac{L_t^\nu C_t^\sigma}{Z_t},\label{eq:labor_civ}\\%
+		\tilde{\mu}_t \; = & \; \beta \left(1-\delta_M\right)\frac{P_t}{P_{t+1}} \left(\frac{C_t}{C_{t+1}}\right)^\sigma \left[ \tilde{\lambda}_{t+1} + \tilde{\mu}_{t+1} \right],\label{eq:money_civ}\\%
+		q_t \; = & \; \beta \frac{P_t}{P_{t+1}} \left(\frac{C_t}{C_{t+1}}\right)^\sigma \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t}.\label{eq:bond_civ}%
+	\end{align}%
+	Since $\kappa$ can be lower than one, we cannot substitute as easily for the penalty prices as before. Hence, we use (\ref{eq:labor_civ}) to substitute for $\tilde{\mu}_t$ in (\ref{eq:consumption_civ}) and solve for%
+	\begin{align}%
+		\tilde{\lambda}_t \; = & \; \frac{1}{\kappa} \left[ 1 - \varphi \frac{L_t^\nu C_t^\sigma}{Z_t} \right],\label{eq:consumption_civ_2}%
+	\end{align}%
+	which we can in turn use to substitute for $\tilde{\lambda}_t$ in the rest of the FOCs. Using both (\ref{eq:labor_civ}) and (\ref{eq:consumption_civ_2}) to substitute for the penalty prices in the money and bond FOCs, we get a two-equation system by%
+	\begin{align}%
+		\varphi \frac{L_t^\nu}{Z_t} \; = & \; \beta \frac{1-\delta_M}{\kappa} \frac{P_t}{P_{t+1}} \left[ C_{t+1}^{-\sigma} - \left(1-\kappa\right) \varphi \frac{L_{t+1}^\nu}{Z_{t+1}} \right],\label{eq:labor_solved}\\%
+		q_t \; = & \; \beta \frac{P_t}{P_{t+1}} \frac{Z_t}{Z_{t+1}} \left(\frac{L_{t+1}}{L_t}\right)^\nu.\label{eq:interest_solved}%
+	\end{align}%
+	\textbf{Interpretation:}%
+	\begin{itemize}%
+		\item[(\ref{eq:interest_solved})] A bond costs $q_t$ units of wealth today (worth $\mu_t$ each) and pays one unit tomorrow (worth $\mu_{t+1}$), so $q_t = \mu_{t+1}/\mu_t$ by (\ref{eq:foc_b}); $q_t$ is the inverse gross nominal interest rate, $\frac{1}{q_t} = 1 + r_t$. By the labor FOC (\ref{eq:foc_l}), $\mu_t = \frac{\beta^{t-1}\varphi L_t^\nu}{P_tZ_t}$: working one more hour costs $\varphi L_t^\nu$ and earns $P_tZ_t$, so wealth is valuable when the work needed to earn it is painful or the nominal wage is low. Hence $q_t$ rises with patience ($\beta$), falls when nominal earnings per hour, $P_tZ_t$, grow (saving in nominal bonds becomes less attractive; inflation lowers the bond price), and rises when work tomorrow is more painful than today ($L_{t+1}/L_t$): the household then values future wealth highly and accepts a lower return.%
+		\item[(\ref{eq:labor_solved})] The money FOC (\ref{eq:foc_m}) compares the cost and the benefit of carrying one unit of money into $t+1$. Because a share $\delta_M$ is lost, the household must buy $\frac{1}{1-\delta_M}$ units today (cost, left-hand side of (\ref{eq:foc_m})); tomorrow the unit relaxes both the budget and the cash-in-advance constraint (benefit, $\mu_{t+1}+\lambda_{t+1}$). In (\ref{eq:labor_solved}), the left-hand side is the cost of acquiring money: the disutility, $\varphi L_t^\nu$, of earning one unit of income, divided by productivity. The right-hand side is the value of a unit of money tomorrow, discounted by $\beta$ and eroded by the money loss ($1-\delta_M$) and inflation ($\frac{P_t}{P_{t+1}}$). The bracket equals $\kappa(\tilde\lambda_{t+1}+\tilde\mu_{t+1})/C_{t+1}^\sigma$; the factor $\frac{1}{\kappa}$ reflects that one unit of cash finances $\frac{1}{\kappa}$ units of spending. For $\kappa = 1$ it reduces to the marginal utility $C_{t+1}^{-\sigma}$. For $\kappa<1$, a higher $\tilde\mu_{t+1}$ (future wealth is valuable) lowers $\tilde\lambda_{t+1} = (1-\tilde\mu_{t+1})/\kappa$ and with it the value of money relative to bonds.%
+	\end{itemize}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 3)
+\begin{Exercise}[title={General equilibrium and balanced growth path},label=ex_3]%
+	Suppose that goods markets always clear in general equilibrium, $C_t = Z_t L_t$, and that the cash-in-advance constraint always binds, $M_t = \kappa P_t C_t$. Assume further that the money stock grows according to $\bar{M}_{t+1} = (1+\tau) \left(1-\delta_M\right) \bar{M}_t$, money markets always clear in general equilibrium, $M_t=\bar{M}_t$, and productivity grows according to $Z_{t+1} = (1+g_{t+1}) Z_t$. For labor to be constant across time and the economy being on its \emph{balanced growth path}, we assume $\sigma = 1$ \emph{(take this as given, you do not have to show it!)}. Derive the dynamic general equilibrium equations in labor and the nominal interest rate and solve for their balanced growth path (steady-state) analytically.%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 3)
+\begin{Answer}%
+	\textbf{Dynamic general equilibrium equations:}\\%
+	With $\sigma = 1$, the binding cash-in-advance constraint, $M_t = \kappa P_t C_t$, and money market clearing imply $\frac{P_t}{P_{t+1}}\frac{C_t}{C_{t+1}} = \frac{M_t}{M_{t+1}} = \frac{1}{(1+\tau)(1-\delta_M)}$. Multiplying (\ref{eq:labor_solved}) by $C_t$ and using $C_t/Z_t = L_t$ gives the dynamic equation in labor, in which productivity drops out,%
+	\begin{align}%
+		\varphi L_t^{1+\nu} \; = & \; \frac{\beta}{1+\tau} \frac{1}{\kappa} \left[ 1 - \left(1-\kappa\right) \varphi L_{t+1}^{1+\nu} \right].\label{eq:dyn_labor}%
+	\end{align}%
+	Likewise, (\ref{eq:interest_solved}) together with $\frac{P_t Z_t}{P_{t+1}Z_{t+1}} = \frac{P_tC_t}{P_{t+1}C_{t+1}} \frac{L_{t+1}}{L_t} = \frac{M_t}{M_{t+1}}\frac{L_{t+1}}{L_t}$ gives%
+	\begin{align}%
+		q_t \; = & \; \frac{\beta}{\left(1+\tau\right)\left(1-\delta_M\right)} \left(\frac{L_{t+1}}{L_t}\right)^{1+\nu}.\label{eq:dyn_q}%
+	\end{align}%
+	\textbf{Interpretation:}%
+	\begin{itemize}%
+		\item[(\ref{eq:dyn_q})] In equilibrium, nominal earnings per hour equal the money stock divided by hours worked, $P_tZ_t = \frac{M_t}{\kappa L_t}$. The exponent $1+\nu$ therefore has two sources: more work tomorrow means higher marginal disutility (the exponent $\nu$) \emph{and} lower nominal earnings per hour, because a given money stock is spread over more hours (the exponent $1$). Future wealth is then valuable and the household accepts a lower return, so $q_t$ rises. Money growth, $\tau$, raises nominal earnings, makes saving in bonds less attractive and lowers $q_t$ (a higher nominal rate); a higher loss share, $\delta_M$, slows money growth and works in the opposite direction.%
+		\item[(\ref{eq:dyn_labor})] The loss share $\delta_M$ cancels: it makes holding money costly, but it also slows money growth and thereby inflation by the same amount. The left-hand side is the cost of acquiring money (the disutility of the work needed to earn it). The right-hand side is the value of money tomorrow: discounted ($\beta$), eroded by money growth ($1+\tau$), and lower for higher $\kappa$ since each unit of cash then finances less spending. The bracket is $\kappa(\tilde\lambda_{t+1}+\tilde\mu_{t+1})$: for $\kappa<1$, a higher $\tilde\mu_{t+1}$ (high $L_{t+1}$, hence painful work) lowers the value of money relative to bonds.%
+	\end{itemize}%
+	\textbf{Balanced growth path for labor:}\\%
+	On the balanced growth path, labor is constant, $L_t = L_{t+1} = L$. Solving (\ref{eq:dyn_labor}) for $L$ yields%
+	\begin{align}%
+		\left(\frac{(1+\tau)\kappa}{\beta}+(1-\kappa)\right) \varphi L^{1+\nu} \; = & \; 1,\\%
+		L \; = & \; \left[\frac{1}{\varphi \left(1 + \kappa \left( \frac{1+\tau}{\beta} - 1 \right) \right)}\right]^{\frac{1}{1+\nu}}.\label{eq:labor_bgp}%
+	\end{align}%
+	Consumption then grows with productivity, $C_t = Z_tL$. \textbf{Interpretation:} Since $\frac{1+\tau}{\beta}>1$, labor decreases in the disutility weight $\varphi$, in money growth $\tau$, and in $\kappa$ (a lower money velocity). If the cash-in-advance constraint did not bind ($\kappa = 0$), labor would be determined by the disutility parameters alone, $L = \varphi^{-1/(1+\nu)}$ (marginal labor productivity is linear and does not play a role). Cash-in-advance adds a mark-down to labor supply, because holding money has an opportunity cost and money is the only means of consuming. The effect of $\nu$ is not sign-definite: it enters through the exponent, and for $L<1$ a higher $\nu$ lowers marginal disutility and raises labor.%
+	\medskip\\%
+	\textbf{Balanced growth path for the nominal interest rate:}\\%
+	With constant labor, (\ref{eq:dyn_q}) simplifies to%
+	\begin{align}%
+		q \; = & \; \frac{\beta}{\left(1+\tau\right)\left(1-\delta_M\right)}.%
+	\end{align}%
+	\textbf{Interpretation:} Prices grow at $1+\pi = \frac{M_{t+1}/M_t}{1+g} = \frac{(1+\tau)(1-\delta_M)}{1+g}$, so the real rate is $\frac{1}{q}/(1+\pi) = \frac{1+g}{\beta}$: it is pinned down by the discount factor and growth. Money growth, $\tau$, raises inflation and hence the nominal rate, as households want to be compensated for the loss in the value of money. The share of money lost, $\delta_M$, has the opposite effect.%
+	\medskip\\%
+	\textbf{Rules of thumb for interpreting an equation:}%
+	\begin{enumerate}%
+		\item Read a FOC as cost $=$ benefit; the sign in the Lagrangian tells which is which.
+		\item Use the FOCs to see how each variable moves the multipliers, then ask how the multipliers change the choice between saving in bonds and in money.
+		\item Higher consumption has two effects: it tightens the constraints (higher multiplier) and lowers marginal utility (lower multiplier). The context decides which one is at play.
+		\item Treat relations between multipliers as accounting identities, not as causal statements. Be equally careful when the exogenous money rule enters the derivation.
+		\item Argue \emph{ceteris paribus}: change one variable or parameter at a time and think in marginal terms. Check at which step of the derivation a variable first enters.
+	\end{enumerate}%
+\end{Answer}%
+\bigskip%
+% %--------------------------------------------------------------------------------
+% % Exercise 4)
+\begin{Exercise}[title={Negative Interest Rates and Replacing Lost Money},label=ex_4]%
+	Discuss the impact of the following two statements in light of the model:%
+	\begin{enumerate}%
+		\item Money authorities cannot set interest rates below zero as households would exchange all their bonds for cash.%
+		\item If the money authority replaces the average money lost across households lump-sum back to the households, the economy would converge to the same equilibrium as if no money would be lost.%
+	\end{enumerate}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 4)
+\begin{Answer}%
+	\begin{enumerate}%
+		\item As holding cash carries a cost to the households in the form of money lost, there is an incentive for households to hold their money in bonds where it is insured against loss. It depends on the share of money lost whether and how far the interest rate can go into negative territory. We can interpret the share of money lost as a broad measure of the cost of holding cash and thus have an explanation why some central banks were able to achieve slightly negative policy rates over the past 15 years.%
+		\item As the money authority targets average money lost in its lump-sum payments, it is not taken into account by household decisions on holding money. Households receive a lump-sum payment irrespective of whether they have lost money and how much. Hence, the FOCs of the households remain the same as in exercises 1 and 2. However, the money supply equation is given by $\bar{M}_{t+1} = \left(1+\tau\right) \bar{M}_t$ as any money lost is replaced in aggregate. The impact on general equilibrium flips: the money loss, $\delta_M$, now lowers labor supply (it no longer cancels in (\ref{eq:dyn_labor}), where $\beta$ is replaced by $\beta (1-\delta_M)$), but has no impact on the interest rate (bond price).%
+	\end{enumerate}%
+\end{Answer}%
+% %--------------------------------------------------------------------------------
+% % Exercise 5)
+% \begin{Exercise}[title={Using Matlab to simulate the economy},label=ex_5]%
+% 	Adapt the provided Matlab file to solve for the balanced growth path of the model economy. Analyze how a change in labor supply elasticity, $\frac{1}{\nu}$, and a change in money growth, $\tau$, impacts the balanced growth path allocation. You can analyze the changes in the two parameters separately. Take the following parameters as a default and given by: $$\beta=0.98, \; \sigma=1, \; \nu = 1.5, \; \kappa=0.8, \; \varphi=1, \; \tau=0.02, \; g = 0.02$$%
+% 	Solve for labor, consumption, inflation, and the nominal interest rate and plot the results for an interval of $\nu \in [0.5 \; 4]$ and an interval of $\tau \in [0 \; 0.2]$. Choose an appropriate grid for the intervals. \emph{(Hint: Consumption levels depend on the productivity level, which is constantly growing. Hence, you need to first define a number of periods and calculate the productivity level before being able to calculate the impact of $\nu$ and $\tau$ on consumption levels. Alternatively, assume that productivity is fixed and equal to one, $Z_t = 1 \; \forall t$.)}%
+% \end{Exercise}%
+% \bigskip%
+% % SOLUTION Exercise 5)
+% \begin{Answer}%
+% 	See the solutions in the Matlab file.%
+% \end{Answer}%
+% \bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

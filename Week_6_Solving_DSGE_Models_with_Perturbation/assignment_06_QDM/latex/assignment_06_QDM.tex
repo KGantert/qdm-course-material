@@ -1,0 +1,187 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 06: Solving the RBC Model --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+The model in this assignment is build on the model from assignment 05. The only change is that there are productivity shocks to a productivity process that follows an AR(1)-process given by $Z_t = \rho_Z Z_{t-1} + \epsilon_{Z,t}$, where $0 \leq \rho_Z \leq 1$, and $\epsilon_{Z,t} \sim \mathcal{N} \left(0,\sigma_Z^2\right)$. There is a cash-in-advance constraint and money supply given by%
+\begin{align*}%
+	(1-\delta_M) M_t \; = & \; \bar{P}_t C_t,\\%
+	\bar{M}_{t+1} \; = & \; (1+\tau)(1-\delta_M) \bar{M}_t,%
+\end{align*}%
+where money loss, $\delta_M$, and money growth, $\tau$, are both constant. Production is given by a Cobb-Douglas function
+\begin{align*}%
+	Y_t = \left(Z_t \bar{L}_t\right)^{1-\alpha} \bar{K}_t^{\alpha},%
+\end{align*}%
+where $Z_t > 0$ is the productivity level, $\bar{L}_t$ is aggregate labor traded on the input market, $\bar{K}_t$ is the aggregate capital stock traded on the input market, and $0<\alpha<1$ is a parameter. The capital stock of each household changes over time accroding to the capital law of motion, $K_{t+1} = (1-\delta_K) K_t + X_t$, where $0 \leq\delta_K\leq 1$ is the capital depreciation rate, $K_t$ is the individual capital stock of a household, and $X_t$ are individual investments into the individual capital stock. The reduced-form of the system of model equations is given by (see assignment 05 for detailed derivations)%
+\begin{align}%
+	\varphi L_t^\nu \; = & \; (1-\alpha) Z_t^{1-\alpha} \left(\frac{K_t}{L_t}\right)^\alpha \frac{1}{C_t} \frac{\beta}{1+\tau},\label{eq:labor_equilibrium}\\%
+	\mathbb{E}_t \frac{C_{t+1}}{C_t} \; = & \; \beta \mathbb{E}_t \left[ \alpha Z_{t+1}^{1-\alpha} \left(\frac{L_{t+1}}{K_{t+1}}\right)^{1-\alpha} + (1-\delta_K) \right],\label{eq:capital_equilibrium}\\%
+	\left(Z_t L_t\right)^{1-\alpha} K_t^\alpha \; = & \; C_t + X_t \; = \; C_t + K_{t+1} - (1-\delta_K) K_t.\label{eq:consumption_equilibrium}%
+\end{align}%
+%--------------------------------------------------------------------------------
+\newpage%
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\begin{Exercise}[title={Linearizing the System of Model Equations},label=ex_1]%
+	The system of model equations is a system of non-linear difference equations. As a first step to solve this model and to be able to simulate it across time, we need to linearize it. Use a first-order Taylor approximation for all model equations necessary to solve the model. \textit{Hint: Don't forget to calculate the steady-state first in order to solve for any steady-state variables in the linearized equations.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	\begin{small}%
+		\paragraph{Steady-states:}%
+		\begin{align}%
+			C \; = & \; \frac{1-\alpha}{\varphi} \frac{\beta}{1+\tau} \frac{Z^{1-\alpha} K^\alpha}{L^{\nu+\alpha}}\label{eq:L_stst}\\%
+			1 \; = & \; \beta \left[ \alpha \left(\frac{Z L}{K}\right)^{1-\alpha} + 1 - \delta_K \right]\label{eq:K_stst}\\%
+			C \; = & \; \left(Z L\right)^{1-\alpha} K^\alpha - \delta_K K\label{eq:C_stst}%
+		\end{align}%
+		From (\ref{eq:K_stst}), we can derive the following condition%
+		\begin{align}%
+			\frac{K}{Y} \; = \; \left( \frac{K}{Z L} \right)^{1-\alpha} \; = \; \frac{\beta \alpha}{1-\beta(1-\delta_K)}.%
+		\end{align}%
+		From (\ref{eq:C_stst}), we can derive the following condition%
+		\begin{align}%
+			\frac{C}{Y} \; = \; 1 - \delta_K \frac{K}{Y} \; = \; 1 - \frac{\beta \alpha \delta_K}{1-\beta(1-\delta_K)}.%
+		\end{align}%
+		\paragraph{Linearization:} $\quad$\linebreak%
+		\textbf{Labor supply equation:}%
+		\begin{align}%
+			\left(\nu+\alpha\right) \hat{L}_t + \hat{C}_t \; = & \; \left(1-\alpha \right) \hat{Z}_t + \alpha \hat{K}_t\label{eq:labor_lin}%
+		\end{align}%
+		\textbf{Capital allocation equation:}%
+		\begin{align}%
+			\mathbb{E}_t \hat{C}_{t+1} - \hat{C}_t \; = & \; \beta \alpha \left(\frac{Z L}{K}\right)^{1-\alpha} \left(1-\alpha\right) \mathbb{E}_t \left[ \hat{Z}_{t+1} + \hat{L}_{t+1} - \hat{K}_{t+1} \right]\notag\\%
+			= & \; \left(1-\beta \left(1-\delta_K\right)\right) \left(1-\alpha\right) \mathbb{E}_t \left[ \hat{Z}_{t+1} + \hat{L}_{t+1} - \hat{K}_{t+1} \right]\label{eq:capital_lin}%
+		\end{align}%
+		\textbf{Consumption allocation equation:}%
+		\begin{align}%
+			\left(1-\alpha\right)\left[ \hat{Z}_t + \hat{L}_t \right] + \alpha \hat{K}_t \; = & \; \frac{C}{Y} \hat{C}_t + \frac{K}{Y} \hat{K}_{t+1} - \left(1-\delta_K\right) \frac{K}{Y} \hat{K}_t\notag\\%
+			= & \; \left(1-\frac{\beta \alpha \delta_K}{1-\beta(1-\delta_K)}\right) \hat{C}_t + \frac{\beta \alpha}{1-\beta(1-\delta_K)} \left[ \hat{K}_{t+1} - \left(1-\delta_K\right) \hat{K}_t \right]\label{eq:consumption_lin}%
+		\end{align}%
+		\textbf{Summarizing parameters:}%
+		\begin{align*}%
+			\Sigma_1 \; = & \; \left(1-\beta \left(1-\delta_K\right)\right) \left(1-\alpha\right)\\%
+			\Sigma_2 \; = & \; \frac{\beta \alpha}{1-\beta(1-\delta_K)}%
+		\end{align*}%
+	\end{small}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2)
+\begin{Exercise}[title={ADDITIONAL: Method of Undetermined Coefficients},label=ex_2]%
+	Use the method of undetermined coefficients to solve for the policy functions of the model. Use the following steps to derive a solution to the system of linear difference equations:%
+	\begin{small}%
+		\begin{enumerate}%
+			\item[a) ] Define appropriate guesses for the policy functions of all endogenous variables of the model. \emph{Hint: Remember, a policy function determines a control variable based on all endogenous and exogenous state variables of the model in period $t$.}%
+			\item[b) ] Plug the guesses into the system of linear difference equations and sort the terms appropriately. \emph{Hint: Select all parameters and coefficients for each state variable. There are two blocks of state variables: endogenous states and exogenous states. Sort the coefficients of the state variables accordingly.}%
+			\item[c) ] Solve for the deterministic part of the model. \textit{Hint: Make sure that you select the stable root for the undetermined coefficient of capital.}%
+			\item[d) ] Solve for the stochastic part of the model, using the already solved-for coefficients from c).%
+			\item[e) ] Solve for the policy function of output using the production function of the model and the policy functions you have derived in c) and d).%
+		\end{enumerate}%
+	\end{small}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	\begin{small}%
+		\begin{enumerate}%
+			\item[a) ] Guesses are build for control variables based on endogenous and exogenous states of the model.%
+				\begin{align*}%
+					\hat{C}_t \; = & \; \psi_{C,K} \hat{K}_t + \psi_{C,Z} \hat{Z}_t\\%
+					\hat{L}_t \; = & \; \psi_{L,K} \hat{K}_t + \psi_{L,Z} \hat{Z}_t\\%
+					\hat{K}_{t+1} \; = & \; \psi_{K,K} \hat{K}_t + \psi_{K,Z} \hat{Z}_t%
+				\end{align*}%
+			\item[b) ] Plugging in our guesses for the policy functions solves the labor FOC (\ref{eq:labor_lin}) as follows:%
+				\begin{align}%
+					\left(\nu+\alpha\right) \left[ \psi_{L,K} \hat{K}_t + \psi_{L,Z} \hat{Z}_t \right] + \left[ \psi_{C,K} \hat{K}_t + \psi_{C,Z} \hat{Z}_t \right] - \left(1-\alpha\right) \hat{Z}_t - \alpha \hat{K}_t \; = & \; 0\notag\\%
+					\hat{K}_t \left\{ \left(\nu+\alpha\right) \psi_{L,K} + \psi_{C,K} - \alpha \right\} + \hat{Z}_t \left\{ \left(\nu+\alpha\right) \psi_{L,Z} + \psi_{C,Z} - \left(1-\alpha\right) \right\} \; = & \; 0\label{eq:labor_policy_1}%
+				\end{align}%
+				Plugging in our guesses for the policy functions solves the capital FOC (\ref{eq:capital_lin}) as follows:%
+				\begin{align}%
+					\psi_{C,K} \left[ \psi_{K,K} \hat{K}_t + \psi_{K,Z} \hat{Z}_t \right] + \rho_Z \psi_{C,Z} \hat{Z}_t - \psi_{C,K} \hat{K}_t - \psi_{C,Z} \hat{Z}_t \; \quad &\notag\\%
+					- \Sigma_1 \left[ \rho_Z \hat{Z}_t + \psi_{L,K} \left( \psi_{K,K} \hat{K}_t + \psi_{K,Z} \hat{Z}_t \right) + \rho_Z \psi_{L,Z} \hat{Z}_t - \psi_{K,K} \hat{K}_t - \psi_{K,Z} \hat{Z}_t \right] \; = & \; 0\notag\\%
+					\begin{split}%
+						\Leftrightarrow \quad \hat{K}_t \left\{ \psi_{C,K} \left(\psi_{K,K}-1\right) - \Sigma_1 \left[\psi_{L,K}-1\right] \psi_{K,K} \right\} \; \quad &\\%
+						+ \hat{Z}_t \left\{ \psi_{C,K}\psi_{K,Z} - \psi_{C,Z} \left(1-\rho_Z\right) - \Sigma_1 \left[ \rho_Z + \psi_{L,K} \psi_{K,Z} + \rho_Z \psi_{L,Z} - \psi_{K,Z} \right] \right\} \; = & \; 0%
+					\end{split}\label{eq:capital_policy_1}%
+				\end{align}%
+				Plugging in our guesses for the policy functions solves the resource constraint (\ref{eq:consumption_lin}) as follows:%
+				\begin{align}%
+					\left(1-\alpha\right) \hat{Z}_t + \alpha \hat{K}_t + \left(1-\alpha\right) \left[\psi_{L,K} \hat{K}_t + \psi_{L,Z} \hat{Z}_t\right] \; \quad\notag\\%
+					- \left(1-\delta_K \Sigma_2\right) \left[\psi_{C,K}\hat{K}_t + \psi_{C,Z}\hat{Z}_t\right] + \Sigma_2 \left[ \psi_{K,K}\hat{K}_t + \psi_{K,Z}\hat{Z}_t \right] - \Sigma_2 \left(1-\delta_K\right) \hat{K}_t \; = & \; 0\notag\\%
+					\begin{split}%
+						\hat{K}_t \left\{ \alpha + \left(1-\alpha\right) \psi_{L,K} - \left(1-\delta_K \Sigma_2\right) \psi_{C,K} - \Sigma_2 \psi_{K,K} + \Sigma_2 \left(1-\delta_K\right) \right\} \; \quad &\\%
+						+ \hat{Z}_t \left\{ \left(1-\alpha\right)\left(1+\psi_{L,Z}\right) - \left(1-\delta_K \Sigma_2\right) \psi_{C,Z} - \Sigma_2 \psi_{K,Z} \right\} \; = & \; 0%
+					\end{split}\label{eq:consumption_policy_1}%
+				\end{align}%
+			\item[c) ] The deterministic part of the policy function is completely described by the state of the capital stock. It follows that the coefficients have to be chosen to solve (\ref{eq:labor_policy_1})-(\ref{eq:consumption_policy_1}), given that $\hat{Z}_t = 0 \; \forall t$. The conditions are thus given by%
+				\begin{align}%
+					\left(\nu+\alpha\right) \psi_{L,K} + \psi_{C,K} - \alpha \; = & \; 0,\\%
+					\psi_{C,K} \left(\psi_{K,K}-1\right) - \Sigma_1 \left[\psi_{L,K}-1\right] \psi_{K,K} \; = & \; 0,\\%
+					\alpha + \left(1-\alpha\right) \psi_{L,K} - \left(1-\delta_K \Sigma_2\right) \psi_{C,K} - \Sigma_2 \psi_{K,K} + \Sigma_2 \left(1-\delta_K\right) \; = & \; 0.%
+				\end{align}%
+				We can solve the system of three equation by substitution and get one quadratic equation in $\psi_{K,K}$. The solution is given by%
+				\begin{align}%
+					\psi_{KK,1,2} \quad = & \quad \frac{\left(-1\right)BB \pm \sqrt{BB^2 - 4 AA \cdot CC}}{2 AA},%
+				  \end{align}%
+				  where%
+				  \begin{align*}%
+					AA \; = & \; \left(\Sigma_1+\nu+\alpha\right) \Sigma_2\\%
+					BB \; = & \; \left(-1\right) \left\{ \left(\Sigma_1+\nu+\alpha\right)\Sigma_2\left(\delta_K\alpha+1-\delta_K\right)  + \left(\nu+\alpha\right)\Sigma_2 + \left(1+\nu-\delta_K \Sigma_2 \left(\nu+\alpha\right)\right) \left(\alpha+\Sigma_1\right)\right\}\\%
+					CC \; = & \; \left(\nu+\alpha\right)\Sigma_2 \left(\delta_K \alpha+1-\delta_K\right) + \alpha \left(1+\nu-\delta_K \Sigma_2 \left(\nu+\alpha\right)\right)%
+				  \end{align*}%
+				  We can derive the solutions for $\psi_{L,K}$ and $\psi_{C,K}$ using the stable root of $\psi_{K,K}$ and the equations above.%
+			\item[d) ] The stochastic part of the policy function is completely described by the state of the productivity process. We can solve for its undetermined coefficients by (\ref{eq:labor_policy_1})-(\ref{eq:consumption_policy_1}) and already knowing $\psi_{K,K}$, $\psi_{L,K}$, and $\psi_{C,K}$. The conditions are thus given by%
+				  \begin{align}%
+					\left(\nu+\alpha\right) \psi_{L,Z} + \psi_{C,Z} - \left(1-\alpha\right) \; = & \; 0,\\%
+					\psi_{C,K}\psi_{K,Z} - \psi_{C,Z} \left(1-\rho_Z\right) - \Sigma_1 \left[ \rho_Z + \psi_{L,K} \psi_{K,Z} + \rho_Z \psi_{L,Z} - \psi_{K,Z} \right] \; = & \; 0,\\%
+					\left(1-\alpha\right)\left(1+\psi_{L,Z}\right) - \left(1-\delta_K \Sigma_2\right) \psi_{C,Z} - \Sigma_2 \psi_{K,Z} \; = & \; 0.%
+				  \end{align}%
+				  We can solve the system of three equation by substitution. The solution is given by%
+				  \begin{align}%
+					\psi_{L,Z} \; = & \; \frac{\left(1-\alpha\right)\delta_K\left[\psi_{C,K}-\Sigma_1\left(\psi_{L,K}-1\right)\right]-\left(1-\alpha\right)\left(1-\rho_Z\right)-\rho_Z \Sigma_1}{\rho_Z \Sigma_1 - \left(1-\rho_Z\right)\left(\nu+\alpha\right)-\left[\frac{1+\nu}{\Sigma_2}-\delta_K\left(\nu+\alpha\right)\right] \left[\psi_{C,K}-\Sigma_1 \left(\psi_{L,K}-1\right)\right]}\\%
+					\psi_{K,Z} \; = & \; \psi_{L,Z} \left[\frac{1+\nu}{\Sigma_2}-\delta_K \left(\nu+\alpha\right)\right] + \left(1-\alpha\right) \delta_K\\%
+					\psi_{C,Z} \; = & \; \left(1-\alpha\right) - \left(\nu+\alpha\right) \psi_{L,Z}%
+				  \end{align}%
+				  We have now fully described our policy functions for $\hat{C}_t$, $\hat{L}_t$, and $\hat{K}_{t+1}$.%
+			\item[e) ] We can derive any other policy function for endogenous variables by using the model equations. For example, the policy function for output can be derived as follows:%
+				\begin{align}%
+				\hat{Y}_t \; = & \; \left(1-\alpha\right) \left(\hat{Z}_t + \hat{L}_t\right) + \alpha \hat{K}_t\notag\\%
+				= & \; \left(1-\alpha\right) \left(\hat{Z}_t + \psi_{L,K} \hat{K}_t + \psi_{L,Z} \hat{Z}_t \right) + \alpha \hat{K}_t\notag\\%
+				= & \quad \left[\left(1-\alpha\right) \psi_{L,K} + \alpha \right] \hat{K}_t + \left[ \left(1-\alpha\right) \left(1+\psi_{L,Z}\right) \right] \hat{Z}_t\notag\\%
+				= & \quad \psi_{Y,K} \hat{K}_t + \psi_{Y,Z} \hat{Z}_t%
+				\end{align}%
+				The same process can be done for any of the endogenous variables of the model!%
+		\end{enumerate}%
+	\end{small}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 3)
+\begin{Exercise}[title={Simulating the Model using Dynare},label=ex_3]%
+	Use the Dynare file provided for the model discussed. Try to understand the different building blocks of the code. Simulate the economy and plot impulse response functions. Try out different calibration values and check out the Dynare manual sections 4.1-4.5, 4.8, 4.10, 4.11, 4.13: \href{https://www.dynare.org/manual/}{https://www.dynare.org/manual/} Note that the provided file extends the RBC model by proportional labor and capital income taxes and an AR(1) shock to money growth.%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 3)
+\begin{Answer}%
+	See the Dynare file \texttt{rbc\_model.dyn}.%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

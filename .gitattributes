@@ -1,0 +1,17 @@
+* text=auto
+*.tex   text diff=tex
+*.m     text
+*.dyn   text
+*.py    text
+*.md    text
+*.eps   binary
+*.png   binary
+*.jpg   binary
+*.pdf   binary
+*.xls   binary
+*.xlsx  binary
+*.docx  binary
+*.pptx  binary
+*.mat   binary
+# keep language statistics about the course code, not about notebook output
+*.ipynb linguist-documentation

@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this material in your teaching or research, please cite it as below."
+title: "Quantitative Dynamic Macroeconomics: course material"
+type: dataset
+authors:
+  - family-names: Gantert
+    given-names: Konstantin
+    orcid: "https://orcid.org/0000-0001-9669-4585"
+    website: "https://www.kgantert.de"
+license: CC-BY-NC-SA-4.0
+date-released: 2026-10-21
+keywords:
+  - macroeconomics
+  - DSGE
+  - New Keynesian
+  - Dynare
+  - teaching
+references:
+  - type: book
+    authors:
+      - family-names: Cole
+        given-names: Harold L.
+    title: "Monetary and Fiscal Policy through a DSGE Lens"
+    publisher:
+      name: Oxford University Press
+    year: 2020
+    notes: "The course material is based on this textbook and on teaching material by H. L. Cole."

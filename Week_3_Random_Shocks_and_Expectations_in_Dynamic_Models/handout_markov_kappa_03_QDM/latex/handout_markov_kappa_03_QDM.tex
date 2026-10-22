@@ -1,0 +1,157 @@
+\documentclass[10pt,c,aspectratio=1610,handout]{beamer}
+\usetheme[block=fill,numbering=fraction,progressbar=frametitle]{metropolis}
+%\usecolortheme{beaver}
+\usepackage{textpos}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{appendixnumberbeamer}
+\usepackage{caption}
+
+\setbeamercovered{transparent}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\renewcommand{\baselinestretch}{1.25}
+% Colour theme
+\definecolor{QDMblue}{rgb}{0.00, 0.1882, 0.3608}
+\definecolor{QDMgold}{rgb}{0.9098, 0.6510, 0.0000}
+\definecolor{QDMgreen}{rgb}{0.3098, 0.5490, 0.0510}
+\setbeamercolor{normal text}{ fg= QDMblue , bg= white }
+\setbeamercolor{alerted text}{ fg= QDMgold }
+\setbeamercolor{example text}{ fg= QDMgreen }
+
+\begin{document}
+
+% Personal Info
+\title{Handout: Markov kappa model handout}
+\author[Konstantin Gantert]{\begin{large} Konstantin Gantert \end{large} \\ \textbf{Quantitative Dynamic Macroeconomics}}
+\date{\textit{this version:} \today}
+
+% Eliminates Navigation Bar on every Frame
+\beamertemplatenavigationsymbolsempty
+
+%-------------------------------------------------------------------------
+% 0.1 Titlepage
+%-------------------------------------------------------------------------
+{\setbeamertemplate{footline}{} 
+\frame{\titlepage}}
+ \addtocounter{framenumber}{-1}
+%-------------------------------------------------------------------------
+% Markov Chains: Example $\kappa$ Model (1/5)
+\begin{frame}{Markov Chains: Example $\kappa$ Model (1/5)}%
+  Consider a stochastic version of our $\kappa$ model {\footnotesize(see Cole (2020) chapter 4)}.%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Assume: Money growth and productivity growth follow simple i.i.d. 2-state Markov chains.%
+    \item[$\blacktriangleright$] It follows, $g \in \{g_h,g_l\}$ and $\tau \in \{\tau_h,\tau_l\}$.%
+  \end{itemize}%
+  \pause%
+  The \textbf{Lagrangian} for this problem is similar to what we had before:%
+  \begin{eqnarray*}%
+    \mathcal{L} &\mathcal{=}&\max_{\left\{L(s^{t}),\;C(s^{t}),\;M(s^{t}),\;B(s^{t})\right\}_{t=1}^{T}}\min_{\left\{ \mu(s^{t}),\;\lambda (s^{t})\right\} _{t=1}^{T}} \\%
+    && \mathbb{E} \left\{%
+    \begin{array}{c}%
+      \sum_{t=1}^T \beta ^{t-1}\left[ u(C(s^{t}))-v(L(s^{t}))\right] \\%
+      +\beta ^{T}V(M(s^{T}),\;B(s^{T}),\;s_{T+1})%
+    \end{array}%
+    \right\} \\%
+    &&+\sum_{t=1}^T\sum_{s^{t}}\lambda (s^{t})\left\{%
+    M(s^{t-1}(s^{t}))-\kappa P(s^{t})C(s^{t})\right\} \\%
+    &&+\sum_{t=1}^T\sum_{s^{t}}\mu (s^{t})\left\{%
+    \begin{array}{c}%
+      P(s^{t})Z(s^{t})L(s^{t})+\left[ M(s^{t-1}(s^{t}))-P(s^{t})C(s^{t})\right] \\%
+      +B(s^{t-1}(s^{t}))+T(s^{t})-M(s^{t})-q(s^{t})B(s^{t})%
+    \end{array}%
+    \right\}%
+  \end{eqnarray*}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Markov Chains: Example $\kappa$ Model (2/5)
+\begin{frame}{Markov Chains: Example $\kappa$ Model (2/5)}%
+  The \textbf{FOCs} are the same as before, except for consumption:%
+  \begin{align}%
+    \beta^{t-1}u^{\prime }(C_t(s^{t}))\Pr (s^{t})-\left[\kappa \lambda (s^{t})+\mu(s^{t})\right] P(s^{t}) \; = & \; 0\\%
+    -\beta^{t-1}v^{\prime}(L_t(s^{t}))\Pr(s^{t})+\mu(s^{t})P(s^{t})Z(s^{t}) \; = & \; 0\\%
+    -\mu(s^{t})+\sum_{s^{t+1}\in S^{t+1}(s^{t})}\left[ \lambda (s^{t+1})+\mu(s^{t+1})\right] \; = & \; 0\\%
+    -\mu (s^{t})q(s^{t})+\sum_{s^{t+1}\in S^{t+1}(s^{t})}\mu (s^{t+1}) \; = & \; 0%
+  \end{align}%
+  \pause%
+  Make our \emph{change-in-variables} and impose market clearing and our CiA constraint. Note that: $$ P(s^{t}) = \frac{M(s^{t-1}(s^t))}{\kappa Z(s^t)L(s^t)} $$%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Markov Chains: Example $\kappa$ Model (3/5)
+\begin{frame}{Markov Chains: Example $\kappa$ Model (3/5)}%
+  The \textbf{change-in-variables} yields:%
+  \begin{align}%
+    \kappa \; = & \; \left[\kappa  \tilde{\lambda} (s^{t})+\tilde{\mu} (s^{t})\right]\\%
+    L_t(s^{t})^{1+\gamma} \kappa \; = & \; \tilde{\mu} (s^{t})\\%
+    \tilde{\mu} (s^{t}) \; = & \; \frac{\beta}{1+\tau(s^t)} \sum_{s^{t+1}\in S^{t+1}(s^{t})}\left[ \tilde{\lambda} (s^{t+1})+ \tilde{\mu} (s^{t+1})\right] \Pr (s^{t+1}|s^t)\\%
+    \tilde{\mu} (s^{t})q(s^{t}) \; = & \; \frac{\beta}{1+\tau(s^t)} \sum_{s^{t+1}\in S^{t+1}(s^{t})} \tilde{\mu} (s^{t+1})\Pr (s^{t+1}|s^t)%
+  \end{align}%
+  \pause%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Here we can use our Markov assumption to get the transition probabilities.%
+    \pause%
+    \item[$\blacktriangleright$] There is no obvious history dependence, and it seems natural to guess that we find a solution that only depends upon $s_t$.%
+    \pause%
+    \item[$\blacktriangleright$] So our solution looks like $\tilde{\lambda}(s)$ and $L(s)$. \emph{This is an example of a Markov Equilibrium.}%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Markov Chains: Example $\kappa$ Model (4/5)
+\begin{frame}{Markov Chains: Example $\kappa$ Model (4/5)}%
+  So, guess $\tilde{\mu}(g)$ and $\tilde{\mu}(b)$:%
+  \medskip%
+  \pause%
+  \begin{enumerate}%
+    \item Solve for $\tilde{\lambda}(s)$ with%
+    \begin{align*}%
+      \kappa \; = & \; \left[\kappa  \tilde{\lambda} (s)+\tilde{\mu} (s)\right]%
+    \end{align*}%
+    \pause%
+    \item Determine%
+    \begin{align*}%
+      X(g) \; = & \; \rho [ \tilde{\lambda} (g)+ \tilde{\mu} (g)  ] +  (1-\rho)[ \tilde{\lambda} (b)+ \tilde{\mu} (b)  ] \\%
+      X(b) \; = & \; (1-\rho) [ \tilde{\lambda} (g)+ \tilde{\mu} (g)  ] +  \rho[ \tilde{\lambda} (b)+ \tilde{\mu} (b)  ]%
+    \end{align*}%
+    \pause%
+    \item Check if%
+    \begin{align*}%
+      \tilde{\mu} (s)= \frac{\beta}{1+\tau(s)} X(s).%
+    \end{align*}%
+  \end{enumerate}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% Markov Chains: Example $\kappa$ Model (5/5)
+\begin{frame}{Markov Chains: Example $\kappa$ Model (5/5)}%%
+  \begin{enumerate}%
+    \item[4.] Solve for%
+      \begin{align*}%
+        L(s)^{1+\gamma} \kappa = \tilde{\mu} (s).%
+      \end{align*}%
+      \pause%
+      \item[5.] Finally determine $q(s)$ with%
+      \begin{align*}%
+        \tilde{\mu} (s)q(s)= \frac{\beta}{1+\tau(s)} [\tilde{\mu}(g)Pr[g|s] + \tilde{\mu}(b)Pr[b|s] ]%
+      \end{align*}%
+      \textit{Solution simple because of the magic of Markov Chains!}%
+  \end{enumerate}%
+  \vspace*{0.2in}%
+  \pause%
+  \begin{center}%
+    \textbf{A Matlab sample code for this example is available in the \texttt{matlab} folder!}%
+  \end{center}%
+\end{frame}%
+%-------------------------------------------------------------------------
+% References
+\begin{frame}{References}%
+  \begin{itemize}%
+    \item[$\blacktriangleright$] Cole, Harold L. (2020). Monetary and Fiscal Policy through a DSGE Lens. Oxford University Press.%
+  \end{itemize}%
+\end{frame}%
+%-------------------------------------------------------------------------
+\end{document}%

@@ -1,0 +1,103 @@
+# ---------------------------------------------------------------------------
+# Quantitative Dynamic Macroeconomics - files that should never be committed
+# ---------------------------------------------------------------------------
+
+# --- LaTeX build output (rebuild with latexmk, see README) ------------------
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex
+*.synctex.gz
+*.toc
+*.vrb
+*.lof
+*.lot
+*.idx
+*.ilg
+*.ind
+*.run.xml
+*.bcf
+*-blx.bib
+*.xdv
+*-eps-converted-to.pdf
+%OUTDIR%/
+_minted*/
+latex.out/
+
+# Compiled documents are build products; publish them as release assets.
+*.pdf
+
+# --- Dynare / Matlab generated output ---------------------------------------
+# Dynare writes a +<model>/ package, a <model>/ folder (Output, bytecode,
+# checksum), logs and result files next to every .dyn file.
++*/
+**/+*/
+**/Output/
+**/graphs/
+**/checksum
+**/*.jnl
+**/*.cod
+**/*.bin
+**/*_results.mat
+**/*_simul
+**/*_dynamic.m
+**/*_static.m
+**/*_set_auxiliary_variables.m
+**/*_steadystate2.m
+**/*_dynamic_params_derivs.m
+**/*_static_params_derivs.m
+**/*_mh*_blck*.mat
+# model folders created by Dynare next to the .dyn files (keep hand-written
+# *_steadystate.m files, which are tracked)
+Week_6_Solving_DSGE_Models_with_Perturbation/assignment_06_QDM/dynare/rbc_model/
+Week_7_New_Keynesian_Business_Cycle_Model/lecture_07_QDM/dynare/**/nk_model/
+Week_7-14_Project_Policy_Analysis_with_Dynare/dynare_*/nk_model/
+# Matlab
+*.asv
+*.autosave
+*.m~
+*.mex*
+slprj/
+codegen/
+.matlab/
+
+# --- Python / R / notebooks -------------------------------------------------
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.Rhistory
+.RData
+.Rproj.user/
+
+# --- Operating system, editors, sync clients --------------------------------
+.DS_Store
+._*
+__MACOSX/
+Thumbs.db
+desktop.ini
+~$*
+*.bak
+*.swp
+*~
+.vscode/
+.idea/
+.nextcloudsync*
+.sync_*
+*.sync-conflict-*
+*_conflict-*
+*(conflicted copy)*
+.owncloudsync.log
+.directory
+
+# --- Private working notes (not published) ----------------------------------
+CLEANUP_TODO.md
+
+# raw FRED downloads (merged into data.xlsx)
+Week_1_*/lecture_01_QDM/data/NROU.xlsx
+Week_1_*/lecture_01_QDM/data/BPCCRO1Q156NBEA.xlsx

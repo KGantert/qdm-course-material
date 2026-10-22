@@ -1,0 +1,187 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 05: Capital in the CiA Model  --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+The model in this assignment builds on the model derived in assignment 4. There are four changes: 1) All input factors are traded on competitive markets, hence a household employs labor and capital from the market instead of using only its own supply. 2) Production is given by a Cobb-Douglas function, $Y_t = \left(Z_t \bar{L}_t\right)^{1-\alpha} \bar{K}_t^{\alpha}$, where $Z_t$ is the productivity level, $\bar{L}_t$ is labor traded on the input market, $\bar{K}_t$ is a capital stock traded on the input market, and $0<\alpha<1$ is a parameter. 3) The capital stock of each household changes over time accroding to the capital law of motion, $K_{t+1} = (1-\delta_K) K_t + X_t$, where $0 \leq\delta_K\leq 1$ is the capital depreciation rate, $K_t$ is the individual capital stock, and $X_t$ are investments into the capital stock. 4) There are no random shocks in this model, hence we can solve for the perfect foresight solution.\\%
+Each household chooses consumption today, $C_t$, labor supply today, $L_t$, money holdings next period, $M_{t+1}$, bond holdings next period, $B_{t+1}$, and the capital stock next period, $K_{t+1}$, to maximize utility given by%
+\begin{align*}%
+	\mathbb{U}_t \; = \; \sum_{t=1,2} \beta^{t-1} \left[log(C_t)-\frac{\varphi}{1+\nu} L_t^{1+\nu}\right] + \beta^2 \mathbb{V} \left(M_3,B_3,K_3\right)%
+\end{align*}%
+subject to the cash-in-advance constraint%
+\begin{align*}%
+	\left(1-\delta_M\right) M_t \; = \; \bar{P}_t C_t,%
+\end{align*}%
+and the budget constraint%
+\begin{align*}%
+	\bar{P}_t w_t L_t + \bar{P}_t r_t K_t + \left(1-\delta_M\right) M_t + B_t + T_t \; = \; \bar{P}_t C_t + \bar{P}_t X_t + M_{t+1} + q_t B_{t+1},%
+\end{align*}%
+and capital law of motion and the Cobb-Douglas production function as given above. The rest of the notation is as follows: $\bar{P}_t$ is the aggregate price level, $M_t$ are cash holdings, $B_t$ are one-period bonds, $q_t$ is the cost of one bond, $T_t$ are net government transfers,  and $Z=1$ is the normalized productivity level. $0<\beta<1$ is the period discount rate, and $\varphi, \nu > 0$ are labor parameters. $\delta_M$ is a constant money loss rate, and $\tau$ is a constant money growth rate. The money stock law of motion can then be described by $\bar{M}_{t+1} = (1+\tau)(1-\delta_M) \bar{M}_t$.\\%
+\emph{Assume that both labor and capital are traded on input factor markets and that both markets are competitive, hence the real wage, $w_t$, and real rental rate, $r_t$, are given by their marginal productivities.} In equilibrium, individual and aggregate variables are symmetric.%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 1) An Economy with Money and Capital
+\begin{Exercise}[title={An Economy with Money and Capital},label=ex_1]%
+	\begin{enumerate}%
+		\item[a) ] Set up the Lagrangian and solve for the first-order conditions of the household.%
+		\item[b) ] Derive an appropriate change-in-variables and re-state the FOCs first to render the system of equations stationary. Then, describe how households optimally behave according to the first-order conditions and give economic intuition.%
+		\item[c) ] Summarize them as far as possible. Why is it not possible to find a closed form solution to the model as was the case in the previous versions of this model?%
+	\end{enumerate}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	\begin{small}%
+		\begin{enumerate}%
+			\item[a) ] The Lagrangian is given by:%
+			\begin{align*}%
+				\mathcal{L} \; = & \; \sum_{t=1,2} \beta^{t-1} \left[ log(C_t) - \frac{\varphi}{1+\nu} L_t^{1+\nu} \right] + \beta^2 \mathbb{V} \left( M_3, B_3, K_3 \right)\\%
+				& \; + \lambda_t \left[ (1-\delta_M) M_t - \bar{P}_t C_t \right]\\%
+				& \; + \mu_t \left[ \bar{P}_t (w_t L_t + r_t K_t) + (1-\delta_M) M_t + B_t + T_t \right.\\%
+				& \quad \quad \quad  \left. - \bar{P}_t \left(C_t + K_{t+1} - (1-\delta_K) K_t\right) - M_{t+1} - q_t B_{t+1} \right]%
+			\end{align*}%
+			The first-order conditions are given by:%
+			\begin{align}%
+				\mathcal{L}_{C_t}: \quad & \beta^{t-1} \frac{1}{C_t} - \bar{P}_t \lambda_t - \bar{P}_t \mu_t \; \overset{!}{=} \; 0\label{eq:foc_consumption}\\%
+				\mathcal{L}_{L_t}: \quad & \beta^{t-1} (-\varphi) L_t^\nu + \bar{P}_t w_t \mu_t \; \overset{!}{=} \; 0\label{eq:foc_labor}\\%
+				\mathcal{L}_{M_{t+1}}: \quad & \lambda_{t+1} (1-\delta_M) + \mu_{t+1} (1-\delta_M) - \mu_t \; \overset{!}{=} \; 0\label{eq:foc_money}\\%
+				\mathcal{L}_{B_{t+1}}: \quad & \mu_{t+1} - q_t \mu_t \; \overset{!}{=} \; 0\label{eq:foc_bond}\\%
+				\mathcal{L}_{K_{t+1}}: \quad & \mu_{t+1} \bar{P}_{t+1} r_{t+1} - \mu_t \bar{P}_t + \mu_{t+1} \bar{P}_{t+1} (1-\delta_K) \; \overset{!}{=} \; 0\label{eq:foc_capital}%
+			\end{align}%
+			\item[b) ] From (\ref{eq:foc_consumption}) we can derive our change-in-variables to render marginal utility stationary. It follows%
+			\begin{align}%
+				\lambda_t \; = & \; \frac{\beta^{t-1}}{\bar{P}_t C_t} \tilde{\lambda}_t,\\%
+				\mu_t \; = & \; \frac{\beta^{t-1}}{\bar{P}_t C_t} \tilde{\mu}_t.%
+			\end{align}%
+			Applying the change-in-variables to (\ref{eq:foc_consumption})-(\ref{eq:foc_capital}) leads to%
+			\begin{align}%
+				\tilde{\lambda}_t + \tilde{\mu}_t \; = & \; 1.\label{eq:foc_consumption_2}\\%
+				\varphi L_t^\nu \; = & \; \frac{w_t}{C_t} \tilde{\mu}_t\label{eq:foc_labor_2}\\%
+				\tilde{\mu}_t \; = & \; \beta \left(1-\delta_M\right) \frac{\bar{P}_t C_t}{\bar{P}_{t+1} C_{t+1}} \left[\tilde{\lambda}_{t+1} + \tilde{\mu}_{t+1}\right]\label{eq:foc_money_2}\\%
+				q_t \; = & \; \beta \frac{\bar{P}_t C_t}{\bar{P}_{t+1} C_{t+1}} \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t}\label{eq:foc_bond_2}\\%
+				\frac{1}{r_{t+1} + (1-\delta_K)} \; = & \; \beta \frac{C_t}{C_{t+1}} \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t} \label{eq:foc_capital_2}%
+			\end{align}%
+			\textbf{Interpretation} (of the stationary household FOCs):%
+			\begin{itemize}%
+				\item[$\blacktriangleright$] Consumption FOC (\ref{eq:foc_consumption_2}): The sum of the penalty prices of both the CiA and budget constraint must be equal to one. First, this follows from our change-in-variables as we denote everything in stationary units with consumption as the numeraire good. Hence, the household increases his consumption until the marginal unit creates just as much utility as it creates cost related to both the CiA and budget constraint becoming more binding.%
+				\item[$\blacktriangleright$] Labor FOC (\ref{eq:foc_labor_2}): The disutility created by supplying the marginal unit of labor to the market must be equal to the value it creates, which is measured by the real wage paid on the marginal unit of labor times the subjective penalty of the binding budget constraint and again expressed in consumption as our numeraire. Hence, the disutility created by supplying the marginal unit of labor must be equal to the possible additional utility through an easing of the budget constraint.%
+				\item[$\blacktriangleright$] Money FOC (\ref{eq:foc_money_2}): Saving in cash costs us an increase in the penalty price of the budget constraint today, while it offers services tomorrow in the form of an easing CiA and budget constraint. The value of the service tomorrow is discounted by the household period discount rate, $\beta$, the constant money loss, $\delta_M$, and the change in nominal prices. Again, we take consumption as our numeraire good and thus account for the change in it across time.%
+				\item[$\blacktriangleright$] Bond FOC (\ref{eq:foc_bond_2}): Bonds have the same purpose as cash, with three differences: 1) There is a nominal interest, $\frac{1}{q_t}-1$, paid one each bond, 2) we assume that bonds cannot be lost, and 3) bonds cannot be used as cash t buy goods next period. Other than that it is symmetric to the interpretation for the money FOC before.%
+				\item[$\blacktriangleright$] Capital FOC (\ref{eq:foc_capital_2}): Holding capital is the third asset in our model together with money and bonds. As markets are competitive and we do not constraint asset allocation in any way, we have an arbitrage-free allocation. Hence, capital must create the same payoff as bonds in real terms, this is, in consumption units. The two differences compared to the bond FOC are hence: 1) There is no inflation term as capital is a real instead of a nominal asset, 2) the payoff is defined by the real rental rate, $r_{t+1}$, less the capital depreciation cost, $\delta_K$, compared to the nominal interest, $\frac{1}{q_t}$, paid on bonds. Other than that, a household invests in his capital stock as long as the payoff tomorrow properly discounted is larger than the investment cost today.%
+			\end{itemize}%
+			\item[c) ] The CiA constraint is given by $(1-\delta_M) M_t = \bar{P}_t C_t$. Using the CiA constraint and (\ref{eq:foc_consumption_2}), we can rewrite (\ref{eq:foc_money_2}) as%
+			\begin{align}%
+				\tilde{\mu}_t \; = & \; \beta \left(1-\delta_M\right) \frac{M_t}{M_{t+1}} \left[\tilde{\lambda}_{t+1}+\tilde{\mu}_{t+1}\right] \; = \; \frac{\beta}{1+\tau}.\label{eq:foc_money_3}%
+			\end{align}%
+			Using the CiA constraint and (\ref{eq:foc_money_3}), we can re-write (\ref{eq:foc_labor_2}) as%
+			\begin{align}%
+				\varphi L_t^\nu \; = & \; \frac{w_t}{C_t} \tilde{\mu}_t \; = \; \frac{w_t}{C_t} \frac{\beta}{1+\tau}.\label{eq:foc_labor_3}%
+			\end{align}%
+			Using the CiA constraint and (\ref{eq:foc_money_3}), we can re-write (\ref{eq:foc_bond_2}) as%
+			\begin{align}%
+				q_t \; = \; \frac{\beta}{(1-\delta_M)(1+\tau)} \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t} \; = \; \frac{\beta}{(1-\delta_M)(1+\tau)}.\label{eq:foc_bond_3}%
+			\end{align}%
+			Using (\ref{eq:foc_money_3}), we can re-write (\ref{eq:foc_capital_2}) as%
+			\begin{align}%
+				\frac{C_{t+1}}{C_t} \; = & \; \beta \left[ r_{t+1} + (1-\delta_K) \right],\label{eq:foc_capital_3}%
+			\end{align}%
+			Next, we can derive both the real wage and real rental rate using the Cobb-Douglas production function. It follows%
+			\begin{align*}%
+				w_t \; = & \; (1-\alpha) Z_t^{1-\alpha} \left(\frac{\bar{K}_t}{\bar{L}_t}\right)^\alpha,\\%
+				r_t \; = & \; \alpha Z_t^{1-\alpha} \left(\frac{\bar{L}_t}{\bar{K}_t}\right)^{1-\alpha},%
+			\end{align*}%
+			which we can plug into (\ref{eq:foc_labor_2}) and (\ref{eq:foc_capital_2}) to get%
+			\begin{align}%
+				\varphi L_t^\nu \; = & \; (1-\alpha) Z_t^{1-\alpha} \left(\frac{K_t}{L_t}\right)^\alpha \frac{1}{C_t} \frac{\beta}{1+\tau},\label{eq:labor_equilibrium}\\%
+				\frac{C_{t+1}}{C_t} \; = & \; \beta \left[ \alpha Z_{t+1}^{1-\alpha} \left(\frac{L_{t+1}}{K_{t+1}}\right)^{1-\alpha} + (1-\delta_K) \right],\label{eq:capital_equilibrium}%
+			\end{align}%
+			where we assume that individual variables are equal to aggregate variables, hence $K_t=\bar{K}_t$ and $L_t=\bar{L}_t$. Combining the resource constraint, the capital law of motion, and the Cobb-Douglas production function (we basically derive the market equilibrium) allows us to derive%
+			\begin{align}%
+				\left(Z_t L_t\right)^{1-\alpha} K_t^\alpha \; = & \; C_t + X_t \; = \; C_t + K_{t+1} - (1-\delta_K) K_t.\label{eq:consumption_equilibrium}%
+			\end{align}%
+			Therefore, our system of equations for the model economy is given by (\ref{eq:labor_equilibrium})-(\ref{eq:consumption_equilibrium}). As we have two first-order linear difference equations, we cannot easily simulate this economy (e.g. using Matlab), but must first solve the difference equations. We will do so in the lecture and tutorial in week 6.%
+		\end{enumerate}%
+	\end{small}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2) Capital for Cash Assumption
+\begin{Exercise}[title={Capital for Cash Assumption},label=ex_2]%
+	Suppose that we also need to hold cash-in-advance to buy capital goods. \textit{Hint: The only FOC that changes it the one for capital. However, be careful to use the new cash-in-advance constraint when substituting for it in the FOCs.}%
+	\begin{enumerate}%
+		\item[a) ] Append the model from exercise 1 and derive the differences.%
+		\item[b) ] Describe the change in optimal household behavior according to the first-order conditions compared to exercise \ref{ex_1}.%
+	\end{enumerate}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	\begin{small}%
+		\begin{enumerate}%
+			\item[a) ] The Lagrangian is given by:%
+			\begin{align*}%
+				\mathcal{L} \; = & \; \sum_{t=1,2} \beta^{t-1} \left[ log(C_t) - \frac{\varphi}{1+\nu} L_t^{1+\nu} \right] + \beta^2 \mathbb{V} \left( M_3, B_3, K_3 \right)\\%
+				& \; + \lambda_t \left[ (1-\delta_M) M_t - \bar{P}_t \left( C_t + K_{t+1} - (1-\delta_K) K_t \right) \right]\\%
+				& \; + \mu_t \left[ \bar{P}_t (w_t L_t + r_t K_t) + (1-\delta_M) M_t + B_t + T_t \right.\\%
+				& \quad \quad \quad \left. - \bar{P}_t \left(C_t + K_{t+1} - (1-\delta_K) K_t\right) - M_{t+1} - q_t B_{t+1} \right]%
+			\end{align*}%
+			The new FOC for capital is given by%
+			\begin{align}%
+				\mathcal{L}_{K_{t+1}}: \quad & \mu_{t+1} \bar{P}_{t+1} r_{t+1} - \mu_t \bar{P}_t + \mu_{t+1} \bar{P}_{t+1} (1-\delta_K) - \lambda_t \bar{P}_t + \lambda_{t+1} \bar{P}_{t+1} (1-\delta_K) \; \overset{!}{=} \; 0\label{eq:foc_capital_ex2},%
+			\end{align}%
+			which can be further summarized to%
+			\begin{align*}%
+				\lambda_t + \mu_t \; = & \; \frac{\bar{P}_{t+1}}{\bar{P}_t} \left[ \mu_{t+1} r_{t+1} + \left(1-\delta_K\right) \left(\lambda_{t+1} + \mu_{t+1} \right) \right].%
+			\end{align*}%
+			Using the change-in-variables from above we get%
+			\begin{align}%
+				\frac{\beta^{t-1}}{\bar{P}_t C_t} \left[ \tilde{\lambda}_t + \tilde{\mu}_t \right] \; = & \; \frac{\bar{P}_{t+1}}{\bar{P}_t} \frac{\beta^{t}}{\bar{P}_{t+1} C_{t+1}} \left[ \tilde{\mu}_{t+1} r_{t+1} + \left(1-\delta_K\right) \left(\tilde{\lambda}_{t+1} + \tilde{\mu}_{t+1} \right) \right],\notag\\%
+				\Leftrightarrow \quad \frac{C_{t+1}}{C_t} \; = & \; \beta \left[ \underbrace{\frac{\tilde{\mu}_{t+1}}{\tilde{\lambda}_t + \tilde{\mu}_t}}_{0\leq\tilde{\mu}_{t+1}\leq1} r_{t+1} + \left(1-\delta_K\right) \underbrace{\frac{\tilde{\lambda}_{t+1} + \tilde{\mu}_{t+1}}{\tilde{\lambda}_t + \tilde{\mu}_t}}_{=1} \right]\notag\\%
+				\Leftrightarrow \quad \frac{C_{t+1}}{C_t} \; = & \; \beta \left[ \tilde{\mu}_{t+1} r_{t+1} + (1-\delta_K) \right]\label{eq:foc_new_capital}%
+			\end{align}%
+			Next, be careful to use the \emph{updated cash-in-advance constraint} for the other FOCs (which are symmetric to exercise 1). It is given by%
+			\begin{align*}%
+				(1-\delta_M) M_t \; = & \; \bar{P}_t \left[C_t + K_{t+1} - (1-\delta_K)K_t\right] \; = \; \bar{P}_t Y_t \; = \; \bar{P}_t \left(Z_t L_t\right)^{1-\alpha} K_t^\alpha,%
+			\end{align*}%
+			however, money growth is still exogenous and given by $$\bar{M}_{t+1} = (1-\delta_M)(1+\tau)\bar{M}_t.$$ Therefore, (\ref{eq:foc_money_2}) is given by%
+			\begin{align}%
+				\tilde{\mu}_t \frac{\beta^{t-1}}{\bar{P}_t C_t} \; = & \; \frac{\beta^t}{\bar{P}_{t+1} C_{t+1}} (1-\delta_M) \left[\underbrace{\tilde{\lambda}_{t+1}+\tilde{\mu}_{t+1}}_{=1}\right],\notag\\%
+				\tilde{\mu}_t \; = & \; \beta (1-\delta_M) \frac{C_t}{C_{t+1}} \frac{\bar{P}_t}{\bar{P}_{t+1}} \; = \; \beta (1-\delta_M) \frac{C_t}{C_{t+1}} \frac{M_t}{M_{t+1}} \frac{Y_{t+1}}{Y_t},\notag\\%
+				= & \; \frac{\beta}{1+\tau} \frac{C_{t}}{C_{t+1}} \frac{\left(Z_{t+1} L_{t+1}\right)^{1-\alpha} K_{t+1}^\alpha}{\left(Z_t L_t\right)^{1-\alpha} K_t^\alpha},\notag\\%
+				= & \; \beta \frac{1-\delta_M}{1+\pi_{t+1}} \frac{C_{t}}{C_{t+1}},\label{eq:foc_new_money}%
+			\end{align}%
+			where we use the following definition of inflation in the last line to substitute,
+			\begin{align}%
+				1+\pi_{t+1} \; = \; \frac{\bar{P}_{t+1}}{\bar{P}_t} \; = & \; \frac{M_{t+1}}{M_t}  \frac{Y_{t}}{Y_{t+1}} \; = \; \left(1-\delta_M\right) \left(1+\tau\right) \frac{\left(Z_t L_t\right)^{1-\alpha} K_t^\alpha}{\left(Z_{t+1}L_{t+1}\right)^{1-\alpha}K_{t+1}^\alpha}.%
+			\end{align}%
+			Hence, we see that $\tilde{\mu}_t$ is not constant anymore, but depends on the development of both inflation and consumption. The change in $\tilde{\mu}_t$ has implications for the FOCs of labor (\ref{eq:foc_labor_2}) and bonds (\ref{eq:foc_bond_2}) as given by%
+			\begin{align}%
+				\varphi L_t^\nu \; = & \; \frac{w_t}{C_t} \tilde{\mu}_t,\\%
+				q_t \; = & \; \frac{\beta}{(1-\delta_M)(1+\tau)} \frac{\tilde{\mu}_{t+1}}{\tilde{\mu}_t}.%
+			\end{align}%
+			\item[b)] \textbf{Interpretation} (of the new FOCs):%
+			\begin{itemize}%
+				\item[$\blacktriangleright$] New capital FOC (\ref{eq:foc_new_capital}): The capital FOC is largely unchanged compared to exercise \ref{ex_1}. However, investments can now only be done using cash, hence we have the additional penalty price of the CiA constraint, $\tilde{\mu}_t$. As, in principle, investments can also be negative, invested capital can be used in future periods to ease the CiA constraint. However, this is costly as capital depreciates over time. This service yield given by $\tilde{\lambda}_{t+1}$. Capital returns, $r_{t+1}$, cannot be spend right away and hence only enter the future budget constraint. Overall, as investing in the capital stock is now more expensive due to the CiA penalty price, the same rental rate, $r_{t+1}$, will lead to a lower capital stock, indicated by $\tilde{\mu}_t$ in (\ref{eq:foc_new_capital}).%
+				\item[$\blacktriangleright$] New money FOC (\ref{eq:foc_new_money}): The FOC is largely identical to the money FOC in exercise \ref{ex_1}. The service of money next period is equal to one after the change-in-variables. Hence, we only have to look at the cost defined by the penalty price of the budget constraint, $\tilde{\mu}_t$. They are defined by a period discount rate, the share of money lost, and the change in money spend on consumption between the two periods. So far, this was equal to money supply. However, now money is needed for both consumption and investment in the capital stock - and the shares between the two might vary over time. If the share of money we spend on consumption goods increases over time, the penalty of the budget constraint decreases as sufficient money to spend on consumption is available. If, on the other hand, the share decreases over time, the household budget is tight and he rather uses his money to invest further in his capital stock to increase future income (out of capital) and ease the budget constraint.%
+			\end{itemize}%
+		\end{enumerate}%
+	\end{small}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

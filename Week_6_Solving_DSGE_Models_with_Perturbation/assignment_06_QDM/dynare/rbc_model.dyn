@@ -1,0 +1,193 @@
+%% *****************************************************************************
+% Quantitative Dynamic Macroeconomics
+% Assignment 06: RBC Model (with cash-in-advance constraint)
+% Konstantin Gantert
+% 04/03/2026
+% ******************************************************************************
+% ------------------------------------------------------------------------------
+% BLOCK I) Define Variables and Parameters
+% ------------------------------------------------------------------------------
+
+var
+    // Observable Variables
+    Y           ${Y}$           (long_name='Real Output')
+    L           ${L}$           (long_name='Total Hours')
+    K           ${K}$           (long_name='Capital Stock')
+    X           ${X}$           (long_name='Capital Investment')
+    C           ${C}$           (long_name='Real Consumption')
+    w           ${w}$           (long_name='Real Wage')
+    r           ${r}$           (long_name='Real Rental Rate')
+    q           ${q}$           (long_name='Nominal Bond Price')
+    pii         ${\pi}$         (long_name='Price Inflation')
+    tauu        ${\tau}$        (long_name='Money Growth Rate')
+
+    // Penalty Prices
+    muu         ${\mu}$         (long_name='Budget constraint penalty price')
+    tet         ${\theta}$      (long_name='Capital law of motion penalty price')
+    
+    // AR(1) Shock Processes
+    sZ          ${s_Z}$         (long_name='Productivity shock process')
+    sM          ${s_M}$         (long_name='Monetary policy shock process')
+    ;
+
+predetermined_variables     // We define K as a predetermined variable as we choose K_{t+1} in period t already!
+    K
+    ;
+
+varexo          // Here we set our exogenous variables. 
+                // Note: AR(1) processes are endogenous to the model, only the shock is exogenous.
+    eZ          ${\varepsilon_A}$   (long_name='Productivity shock')
+    eM          ${\varepsilon_M}$   (long_name='Monetary policy shock')
+    ;     
+
+parameters
+    // Deep parameters
+    betta       ${\beta}$           (long_name='Period discount factor')
+    gam         ${\gamma}$          (long_name='Inverse Frisch labor supply elasticity')
+    vphi        ${\varphi}$         (long_name='Labor disutility level parameter')
+    alp         ${\alpha}$          (long_name='Private capital elasticity w.r.t. output')
+    delt        ${\delta}$          (long_name='Private capital depreciation rate')
+
+    // Fiscal policy and taxes
+    tauL        ${\tau_L}$          (long_name='Labor income tax')
+    tauK        ${\tau_K}$          (long_name='Capital income tax')
+    tau_stst    ${\tau_{stst}}$     (long_name='Long-run money growth rate')
+
+    // Shock processes
+    stdZ        ${\sigma_Z}$        (long_name='Standard deviation productivity shock')
+    stdM        ${\sigma_M}$        (long_name='Standard deviation monetary policy shock')
+    rhoZ        ${\rho_Z}$          (long_name='Autocorrelation productivity shock')
+    rhoM        ${\rho_M}$          (long_name='Autocorrelation monetary policy shock')
+    ;
+    
+% Assigning values to the parameters
+% Deep parameters
+betta   = 0.98;
+gam     = 1/0.72;
+vphi    = 0.5;
+alp     = 1/3;
+delt    = 0.03;
+
+% Monetary policy and taxes
+tauL    = 0.2;
+tauK    = 0.1;
+tau_stst= 0.02;
+
+% Shock processes
+stdZ    = 0.01;
+stdM    = 0.1;
+rhoZ    = 0.8;
+rhoM    = 0.5;
+
+%-------------------------------------------------------------------------------
+% BLOCK II) The Model
+%-------------------------------------------------------------------------------
+
+model;
+
+%-------------------------------------------------------------------------------
+% Capital stock and CiA constraint economy
+%-------------------------------------------------------------------------------
+
+% Households
+% ---------------------------------
+
+[name='Marginal utility out of consumption']
+muu     = betta/(1+tauu);
+
+[name='Labor supply']
+muu     = (vphi*L^gam*C) / ((1-tauL)*w);
+
+[name='Euler equation (bond prices)']
+q       = betta/(1+tauu) * muu(+1)/muu;
+
+[name='Capital allocation (Tobins Q/Euler equation)']
+tet     = betta * (C/C(+1)) * ( tet(+1)*(1-delt) + muu(+1)*(r(+1)*(1-tauK)) );
+
+[name='Optimal capital investment']
+muu     = tet;
+
+% Goods producing firms
+% ---------------------------------
+
+[name='Labor demand']
+w       = (1-alp)*Y/L;
+
+[name='Capital demand']
+r       = alp*Y/K;
+
+% Constraints
+% ---------------------------------
+
+[name='Resource constraint']
+Y       = C + X;
+
+[name='Production function']
+Y       = (exp(sZ)*L)^(1-alp)*K^alp;
+
+[name='Capital law of motion']
+K(+1)   = (1-delt)*K + X;
+
+% Money growth and inflation
+% ---------------------------------
+
+[name='Money growth rule']
+tauu    = (1+tau_stst)*exp(sM) - 1;
+
+[name='Inflation']
+pii     = (1+tauu)*Y(-1)/Y - 1;
+
+%-------------------------------------------------------------------------------
+% Exogenous processes
+%-------------------------------------------------------------------------------
+
+[name='Productivity growth process']
+sZ      = rhoZ*sZ(-1) + eZ;
+
+[name='Monetary policy shock process']
+sM      = rhoM*sM(-1) - eM;
+
+end;
+
+%-------------------------------------------------------------------------------
+% BLOCK III) Steady-State Calculations
+%-------------------------------------------------------------------------------
+
+steady_state_model;
+    sZ      = 0;
+    sM      = 0;
+    pii     = tau_stst;
+    tauu    = tau_stst;
+    q       = betta/(1+tauu);
+    LK      = ( (1/betta - (1-delt))/(alp*(1-tauK)) )^(1/(1-alp));
+    L       = ( betta/(1+tauu)*1/vphi*(1-tauL)*(1-alp)*(LK)^(1-alp) / ( (LK)^(1-alp) - delt ) )^(1/(1+gam));
+    K       = L / LK;
+    X       = delt*K;
+    Y       = L^(1-alp)*K^alp;
+    C       = Y - delt*K;
+    muu     = betta/(1+tauu);
+    tet     = muu;
+    w       = (1-alp)*Y/L;
+    r       = alp*Y/K;
+end;
+
+resid;
+
+%--------------------------------------------------------------------------
+% BLOCK IV) Shock processes
+%--------------------------------------------------------------------------
+
+shocks;
+    var eZ  = stdZ^2;
+    var eM  = stdM^2;
+end;
+
+%--------------------------------------------------------------------------
+% BLOCK V) Simulation
+%--------------------------------------------------------------------------
+
+stoch_simul(order=1,
+            periods=3000)
+            Y pii L K C w q;
+
+%----------------------------- End of File --------------------------------

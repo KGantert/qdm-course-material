@@ -1,0 +1,706 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+% --- Hyperref setup ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+% --- Title ---
+\title{\textbf{Quantitative Dynamic Macroeconomics}\\[0.4em]
+\large Project Instructions}
+\author{Konstantin Gantert}
+\date{this version: April 2026}
+
+% ---------------------------------------------------------------
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+% ---------------------------------------------------------------
+\section{Overview}
+
+The final part of your coursework consists of a take-home project completed in
+groups of up to three students. You will extend a baseline New Keynesian DSGE
+model, introduce a new shock, and use the Dynare toolbox to simulate and analyze
+monetary policy.
+
+The project follows a deliberate two-stage logic. In the \textbf{first stage},
+you work with the model as a quantitative object: you implement your extension
+and shock in Dynare, understand the impulse responses, and analyze how different
+configurations of a Taylor-type monetary policy rule affect the economy. In the
+\textbf{second stage}, you connect your model and findings to a real-world
+economic episode, using the model as a lens rather than a data-fitting exercise.
+
+The final deliverable is a \textbf{policy report} of at most 4,000 words
+(approximately 8--10 pages, excluding appendix and references), addressed to a
+central bank audience with an economics background. The word budget should be
+spent primarily on describing and interpreting your simulations and on building
+economic intuition around your results. Model equations are welcome in the main
+text where they directly support the argument, but the report is not a technical
+derivation: detailed algebra belongs in the appendix.
+
+\subsection*{Files Provided}
+
+\begin{itemize}[noitemsep]
+    \item Project Instructions (this document)
+    \item Baseline Model Handout
+    \item Baseline Model Code for Dynare
+    \item Paper Assessment Form
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{The Baseline Model}
+
+Your starting point is a standard closed-economy New Keynesian DSGE model, fully
+described in the Baseline Model Handout. The key features relevant for the
+project are summarised here.
+
+\textbf{Households} maximise lifetime utility over consumption and leisure
+subject to a cash-in-advance (CIA) constraint, a budget constraint, and a
+capital accumulation equation. Labor supply is flexible and wages are fully
+flexible.
+
+\textbf{Capital} is owned by households and accumulates subject to
+\textbf{quadratic investment adjustment costs} (IAC):
+\[
+    K_{t+1} = (1-\delta)K_t
+    + \left(1 - \frac{\varphi}{2}\left(\frac{X_t}{X_{t-1}}-1\right)^2\right)X_t.
+\]
+IAC introduces a wedge between the market value of installed capital and its
+replacement cost. The shadow price of the capital law of motion, $\tilde{\Theta}_t$,
+represents \textbf{Tobin's $Q$} --- the ratio of the market value of an
+additional unit of installed capital to its replacement cost. At steady state
+$\tilde{\Theta} = \tilde{\mu}$, where $\tilde{\mu}$ is the CIA multiplier, so
+Tobin's $Q$ equals one and there is no incentive to invest beyond the
+depreciation replacement level. Away from steady state, $\tilde{\Theta}_t >
+\tilde{\mu}_t$ signals that installed capital is more valuable than new
+investment goods and triggers additional investment. Lagged investment
+$X_{t-1}$ is a predetermined state variable in the baseline.
+
+\textbf{Firms} are split into a competitive final goods sector and a continuum
+of monopolistically competitive intermediate goods firms producing with a
+Cobb-Douglas technology. Nominal price rigidity follows the Rotemberg (1982)
+quadratic price adjustment cost specification.
+
+\textbf{Fiscal policy} is passive and the government budget is balanced period
+by period:
+\[
+    \tau_t = \tau_C C_t + \tau_L w_t L_t + \tau_K r_t K_t \quad \forall\,t,
+\]
+where $\tau_C$, $\tau_L$, $\tau_K$ are fixed tax rates on consumption, labor
+income, and capital income respectively. All tax revenues are redistributed 
+to the households lump-sum. There are no government bonds and no
+debt dynamics. Fiscal policy is not a policy instrument in this project.
+
+\textbf{Monetary policy} follows a Taylor-type interest rate rule, discussed in
+detail in Task~3. This is the exclusive policy instrument.
+
+\textbf{Shocks.} The baseline contains a technology shock $Z_t$ and a monetary
+policy shock $m_t$, both AR(1) processes. Each topic adds one further shock.
+
+\textbf{Steady state.} All five topic extensions are designed so that the
+steady state of the extended model is identical to that of the baseline. Only
+the dynamics change. This simplifies implementation and allows you to verify
+your extension by checking that Dynare's steady-state solver produces the same
+values as the baseline.
+
+% ---------------------------------------------------------------
+\section{Topics}
+
+Each group selects one of the five topics below. Each topic specifies (i) a
+model extension, (ii) a new shock, and (iii) monetary policy questions to
+investigate. Topics~1--4 are the primary topics. Topic~5 is a reserve topic
+available if additional groups register.
+
+The \textbf{real-world episode} is chosen by your group, not assigned. Each
+topic provides a characterisation of the episode type that fits the model and
+shock. Your group identifies a specific historical episode, motivates the
+choice, and uses it as the real-world anchor for the policy analysis. The
+instructor reviews the episode choice at the check-in milestone before you
+proceed to writing the report.
+
+Throughout all topics, \textbf{fiscal policy remains passive and the government
+budget is balanced}. There are no monetary--fiscal interactions. The exclusive
+policy instrument is the Taylor-type interest rate rule.
+
+% ---------------------------------------------------------------
+\subsection{Topic 1 --- Variable Capital Utilization and a Cost-Push Shock}
+
+\textbf{Model extension.} Allow households to choose the utilization rate $u_t$
+of the capital stock they own. The representative household owns the aggregate
+capital stock $K_t$ and rents effective capital $u_t K_t$ to the market at a
+rental rate $r_t$ per unit of effective capital. Each firm $i$ then demands its
+share of effective capital services at the market rate $r_t$; from the firm's
+perspective only the effective capital bundle matters, not its decomposition
+into $u_t$ and $K_t(i)$ separately.
+
+Higher utilization raises output but accelerates capital depreciation. The
+depreciation function is:
+\[
+    \delta(u_t,\,u_{t-1})
+    = \delta_0
+    + \delta_1(u_t-1)
+    + \frac{\delta_2}{2}(u_t-1)^2
+    + \frac{\delta_3}{2}(u_t-u_{t-1})^2,
+\]
+where $\delta_0$ is the baseline depreciation rate, $\delta_1 > 0$ ensures a
+positive marginal depreciation cost at steady state, $\delta_2 > 0$ governs the
+curvature of the utilization cost, and $\delta_3 \geq 0$ introduces
+\textbf{quadratic utilization adjustment costs} --- penalising rapid changes in
+utilization. At $\delta_3 = 0$ the standard frictionless utilization model is
+recovered; as $\delta_3 \to \infty$ utilization is frozen at its steady-state
+value of one, recovering the baseline without utilization. Both are useful
+limiting cases for verifying your implementation.
+
+The capital law of motion becomes:
+\[
+    K_{t+1} = \bigl(1-\delta(u_t,u_{t-1})\bigr)K_t
+    + \left(1-\frac{\varphi}{2}\left(\frac{X_t}{X_{t-1}}-1\right)^2\right)X_t.
+\]
+The effective capital input in the firm's production function is $u_t K_t(i)$:
+\[
+    Y_t(i) = \bigl(Z_t L_t(i)\bigr)^{1-\alpha}
+    \bigl(u_t K_t(i)\bigr)^\alpha
+    \left[1-\frac{\kappa}{2}\left(\frac{P_t(i)}{P_{t-1}(i)}-1\right)^{\!2}\right].
+\]
+The utilization adjustment cost makes $u_{t-1}$ a new predetermined state
+variable. The household's FOC for $u_t$ is a genuine Euler equation linking
+the marginal benefit of utilization today (higher rental income) to its
+intertemporal cost (faster depreciation today and higher adjustment costs
+tomorrow). The steady state is unaffected since $u = 1$ implies
+$\delta(1,1) = \delta_0$ and all adjustment cost terms vanish.
+
+\textbf{Shock.} A \textit{cost-push shock} --- an exogenous, persistent
+increase in the price markup of intermediate goods firms, entering the Phillips
+curve directly. Formally, the elasticity of substitution $\rho_t$ follows an
+AR(1) process around its steady-state value $\bar{\rho}$. This shock raises
+inflation without an accompanying output boom, breaking the divine coincidence
+and creating a genuine trade-off between inflation and output stabilization.
+The interaction with utilization adjustment costs is key: firms cannot
+immediately offset falling output by ramping up capital utilization --- the
+adjustment cost constraint smooths the utilization response, making inflationary
+dynamics more persistent.
+
+\textbf{Monetary policy focus.} How does utilization rigidity ($\delta_3$)
+change the optimal monetary policy response to a cost-push shock? Does a more
+aggressive inflation response ($\theta_\pi$) help when utilization adjusts
+slowly, or does it cause excessive output volatility? How does interest rate
+smoothing ($\theta_R$) interact with the hump-shaped utilization response?
+
+\textbf{Episode type.} A recessionary episode in which inflationary pressure
+from supply-side cost increases played a central role, capacity utilization was
+a visible margin of adjustment, and the central bank faced a clear trade-off
+between fighting inflation and supporting output. Episodes in which a persistent
+cost shock displaced inflation above target for several years are particularly
+suitable.
+
+% ---------------------------------------------------------------
+\subsection{Topic 2 --- Consumption Habit Formation and a Discount Rate Shock}
+
+\textbf{Model extension.} Introduce external habit formation in household
+consumption preferences. The household utility function becomes:
+\[
+    U_t = \frac{(C_t - \varphi_C C_{t-1})^{1-\sigma}-1}
+               {(1-\sigma)(1-\varphi_C)^{1-\sigma}}
+          - \frac{\phi}{1+\gamma}L_t^{1+\gamma},
+\]
+where $\varphi_C \in [0,1)$ governs the strength of habits and $C_{t-1}$ is
+lagged aggregate consumption, taken as given by the individual household. The
+utility function is scaled by $(1-\varphi_C)^{1-\sigma}$ in the denominator so
+that the marginal utility of consumption at steady state equals $\bar{C}^{-\sigma}$
+--- identical to the baseline. The steady state is therefore unchanged; only
+the dynamics differ.
+
+At $\varphi_C = 0$ the scaling factor equals one and the baseline utility
+function is recovered exactly. Habit formation introduces inertia in aggregate
+consumption: households adjust spending slowly because they are anchored to
+past consumption levels, making aggregate demand more persistent following
+shocks. Lagged aggregate consumption $C_{t-1}$ becomes a new predetermined
+state variable.
+
+\textbf{Shock.} A \textit{discount rate shock} --- an exogenous, persistent
+increase in the household discount factor $\beta_t$, following an AR(1) process
+around its steady-state value $\bar{\beta}$. A higher discount factor makes
+households more patient: they save more, defer consumption, and reduce aggregate
+demand. This generates a demand-driven recession with disinflationary pressure.
+The interaction with habit formation makes the contraction more persistent, as
+the falling habit stock continues to depress consumption even after the shock
+itself dissipates.
+
+\textbf{Monetary policy focus.} How should the Taylor rule respond to a
+persistent demand-driven recession? Analyze the role of the output response
+coefficient ($\theta_Y$). Compare a strictly inflation-targeting rule to one
+that also responds to output. How does the inertia introduced by habit formation
+affect the optimal speed and aggressiveness of monetary easing?
+
+\textbf{Episode type.} A recessionary episode driven primarily by a persistent
+contraction in domestic demand, where monetary policy faced the challenge of
+stimulating an economy with deeply entrenched pessimism, precautionary saving,
+or household deleveraging. Episodes with prolonged below-target inflation
+alongside weak output are particularly suitable.
+
+% ---------------------------------------------------------------
+\subsection{Topic 3 --- Labor Adjustment Costs and an Oil Supply Shock}
+
+\textbf{Model extension.} Introduce quadratic labor adjustment costs (LAC) at
+the firm level. Rapidly changing the workforce is costly --- reflecting
+recruitment, training, and severance costs. This is captured as a resource loss
+in the production technology:
+\[
+    Y_t(i) = \bigl(Z_t L_t(i)\bigr)^{1-\alpha-\nu}
+    K_t(i)^\alpha\, O_t^\nu
+    \left[1 - \frac{\kappa}{2}
+    \left(\frac{P_t(i)}{P_{t-1}(i)} - 1\right)^{\!2}
+    -\frac{\varphi_L}{2}
+    \left(\frac{L_t(i)}{L_{t-1}(i)}-1\right)^{\!2}\right],
+\]
+where $\varphi_L \geq 0$ governs the magnitude of adjustment costs. At
+$\varphi_L = 0$ the frictionless baseline labor market is recovered. LAC
+introduces inertia in firms' labor demand: firms adjust employment gradually
+rather than immediately, making hours worked more persistent following shocks.
+Lagged aggregate labor $L_{t-1}$ becomes a new predetermined state variable.
+The steady state is unaffected since adjustment costs are zero whenever
+$L_t = L_{t-1}$.
+
+\textbf{Shock.} An \textit{oil supply shock} --- an exogenous, persistent
+contraction in the supply of oil, which enters as a third factor of production:
+\[
+    Y_t(i) = \bigl(Z_t L_t(i)\bigr)^{1-\alpha-\nu}
+    K_t(i)^\alpha\, O_t^\nu,
+\]
+where $O_t$ is exogenous oil supply following an AR(1) process around its
+steady-state value $\bar{O}$, $\nu > 0$ is the oil share in production, and
+constant returns to scale are maintained ($\alpha+\nu < 1$). A negative oil
+shock raises marginal costs and reduces output, generating stagflationary
+dynamics. The interaction with LAC is key: firms want to shed labor in response
+to higher costs, but adjustment frictions prevent rapid downsizing, keeping
+marginal costs elevated for longer and amplifying the persistence of
+inflationary pressure.
+
+\textbf{Monetary policy focus.} How does labor market inertia change the
+optimal monetary policy response to a stagflationary supply shock? Should the
+central bank respond aggressively to inflationary pressure, or does this deepen
+the output contraction given slow labor market adjustment? How do the oil share
+$\nu$ and the adjustment cost parameter $\varphi_L$ affect the trade-offs
+facing the central bank?
+
+\textbf{Episode type.} A recessionary episode driven by a persistent
+contraction in energy or commodity supply, where labor market rigidities
+amplified the persistence of the downturn and monetary policy faced a prolonged
+stagflationary trade-off. Episodes in which a central bank had to choose
+between fighting inflation and supporting employment in the aftermath of an
+energy shock are particularly suitable.
+
+% ---------------------------------------------------------------
+\subsection{Topic 4 --- Durable Consumption Goods and a Labor Supply Shock}
+
+\textbf{Model extension.} Split household consumption into non-durable
+consumption $C_t$ and a stock of durable goods $D_t$. The household utility
+function becomes:
+\[
+    U_t = \frac{(C_t^\psi D_t^{1-\psi})^{1-\sigma}-1}
+               {(1-\sigma)\,\psi^{1-\sigma}\,\Omega^{(1-\psi)(1-\sigma)}}
+          - \frac{\phi}{1+\gamma}L_t^{1+\gamma},
+\]
+where $\psi \in (0,1)$ governs the expenditure share on non-durables and
+$\Omega$ is a scaling constant defined below. The durable stock evolves
+according to:
+\[
+    D_{t+1} = (1-\delta_D)D_t + X_{D,t},
+\]
+where $X_{D,t}$ is expenditure on new durable goods and $\delta_D \in (0,1]$
+is the durable depreciation rate. At $\delta_D = 1$ durables fully depreciate
+within one period, recovering the standard non-durable model --- a useful
+special case for verifying the implementation. The resource constraint expands
+to:
+\[
+    C_t + X_{D,t} + X_t = Y_t,
+\]
+where $X_t$ remains capital investment. The durable stock $D_t$ becomes a new
+predetermined state variable with a structure directly analogous to capital
+accumulation.
+
+\textit{Hint on the scaling factor.} Without the denominator scaling, the
+marginal utility of non-durable consumption at steady state would depend on
+the steady-state durable-to-consumption ratio $\bar{D}/\bar{C}$, shifting the
+steady state away from the baseline. To preserve steady-state invariance,
+define the scaling constant:
+\[
+    \Omega \equiv \frac{\bar{D}}{\bar{C}}
+    = \frac{1-\psi}{\psi}
+      \cdot\frac{1-\beta(1-\delta_D)}{\delta_D}.
+\]
+This is the steady-state ratio of durable stock to non-durable consumption
+implied by the household's intratemporal optimality condition between $C_t$ and
+$D_t$. With this scaling, the marginal utility of $C_t$ at steady state reduces
+to $\bar{C}^{-\sigma}$, identical to the baseline, so the steady state is
+unchanged. Compute $\Omega$ once from the calibrated parameter values and treat
+it as a fixed constant when implementing the model in Dynare.
+
+\textbf{Shock.} A \textit{labor supply shock} --- an exogenous, persistent
+increase in the disutility of labor, modeled as a shock to $\phi_t$ in the
+household utility function, following an AR(1) process around its steady-state
+value $\bar{\phi}$. This shock reduces households' willingness to supply labor
+at any given wage, pushing up nominal wages, raising firms' marginal costs, and
+reducing output. It operates simultaneously as a supply shock --- generating
+inflationary pressure through higher marginal costs --- and as an income shock
+--- reducing household labor income. The interaction with durable goods is
+central: when labor income falls persistently, households sharply curtail
+durable purchases while attempting to smooth non-durable consumption, generating
+an asymmetric sectoral response that is well-documented empirically.
+
+\textbf{Monetary policy focus.} Durable goods demand is highly sensitive to
+interest rates because durables are investment-like: households compare the user
+cost of the durable stock to the prevailing interest rate. A more aggressive
+inflation response ($\theta_\pi$) stabilizes inflation but causes excessive
+volatility in durable expenditure, potentially deepening the recession in the
+durable sector. How does the presence of durable goods change the optimal Taylor
+rule relative to a model without them? Does responding to output ($\theta_Y >
+0$) help stabilize both sectors simultaneously? How does the durable share
+$\psi$ affect the transmission of monetary policy?
+
+\textbf{Episode type.} A recessionary episode in which a persistent disruption
+to labor supply or household labor income led to a sharp and prolonged
+contraction in durable goods spending, and monetary policy faced the challenge
+of stabilizing both inflation and a highly interest-rate-sensitive component of
+aggregate demand. Episodes with a visible collapse in housing, automobile, or
+consumer durable purchases alongside labor market deterioration are particularly
+suitable.
+
+% ---------------------------------------------------------------
+\subsection{Topic 5 --- Price Indexation and an Investment-Specific Technology
+Shock}
+
+\textbf{Model extension.} Add partial price indexation to past inflation by
+modifying the quadratic price adjustment cost of intermediate goods firms. The
+standard Rotemberg cost penalises deviations of the gross inflation rate from
+one. With indexation, the reference point shifts so that firms are instead
+penalised for deviating from last period's inflation rate:
+\[
+    \frac{\kappa}{2}
+    \left(\frac{P_t(i)}{P_{t-1}(i)(1+\pi_{t-1})^\chi}-1\right)^{\!2} Y_t,
+\]
+where $\chi \in [0,1]$ is the degree of indexation. At $\chi = 0$ the standard
+Rotemberg cost and the baseline Phillips curve are recovered exactly. This
+modification enters the firm's profit maximisation problem directly: re-deriving
+the FOC for $P_t(i)$ with the modified cost yields a hybrid Phillips curve in
+which lagged inflation $\pi_{t-1}$ appears as a structural term with a clear
+microeconomic interpretation --- it governs how strongly firms anchor their
+reference price to past inflation. Lagged inflation $\pi_{t-1}$ becomes a new
+predetermined state variable. The steady state is unaffected since at $\pi_t =
+\pi_{t-1} = \pi^*$ the indexation term vanishes.
+
+Indexation introduces \textbf{inflation persistence}: once inflation moves away
+from target it returns more slowly, and the output cost of disinflation --- the
+sacrifice ratio --- rises with $\chi$.
+
+\textbf{Shock.} An \textit{investment-specific technology (IST) shock} --- an
+exogenous, persistent improvement in the efficiency with which final goods are
+transformed into capital goods. The capital law of motion becomes:
+\[
+    K_{t+1} = (1-\delta)K_t + A_t
+    \left(1-\frac{\varphi}{2}\left(\frac{X_t}{X_{t-1}}-1\right)^{\!2}\right)X_t,
+\]
+where $A_t$ follows an AR(1) process around its steady-state value of one. A
+positive IST shock reduces the effective price of investment, boosting capital
+accumulation and output while putting downward pressure on marginal costs and
+inflation. With price indexation, the resulting disinflationary pressure becomes
+persistent: firms partially index their reference price downward to past low
+inflation, pulling current inflation further below target.
+
+\textbf{Monetary policy focus.} How does the degree of price indexation $\chi$
+affect the central bank's ability to stabilize inflation following a supply-side
+displacement? Analyze how the sacrifice ratio changes with $\chi$. Should the
+central bank respond more or less aggressively to inflation when indexation is
+high? What does this imply for the optimal values of $\theta_\pi$ and $\theta_R$?
+
+\textbf{Episode type.} A recessionary or recovery episode in which supply-side
+dynamics --- particularly investment or productivity developments --- created
+persistent disinflationary or deflationary pressure, and monetary policy faced
+the challenge of preventing inflation from drifting too far below target.
+Episodes in which a central bank underestimated inflation persistence or faced
+a prolonged below-target inflation environment are particularly suitable.
+
+% ---------------------------------------------------------------
+\section{Tasks}
+
+\subsection{Task 1 --- Study and Extend the Baseline Model}
+
+Study the provided Dynare baseline code and the Baseline Model Handout
+carefully. Identify the key equations, state variables, and parameters before
+making any changes. Then implement the model extension specified for your topic.
+You do not need to re-derive the entire model from scratch. Focus on:
+
+\begin{itemize}[noitemsep]
+    \item the additional first-order conditions introduced by your extension,
+    \item any new state variables and the equations governing their evolution,
+    \item a brief plain-language explanation of the economic mechanism your
+          extension adds and why it matters for monetary policy transmission.
+\end{itemize}
+
+\textbf{Model summary table.} Include a table in the appendix of your report
+listing all variables and all equations of your extended model. Completing this
+table serves as a consistency check: a mismatch between the number of equations
+and variables is the most common source of Dynare errors, and the table forces
+you to verify that the model is internally complete before you simulate.
+
+\textbf{Steady-state verification.} Before running stochastic simulations,
+verify that your steady state is correctly implemented. Since all extensions are
+designed to leave the steady state unchanged, Dynare's steady-state solver
+should produce values identical to the baseline. Report the key steady-state
+values in the calibration section of your report.
+
+A working Dynare \texttt{.mod} file with the extension implemented, together
+with a short explanatory note of approximately half a page, are required for the
+instructor check-in (see Section~\ref{sec:milestones}).
+
+\subsection{Task 2 --- Introduce the Shock and Analyze Baseline Dynamics}
+
+Add the shock process specified for your topic to the Dynare model as an AR(1)
+process:
+\[
+    \varepsilon_t = \rho_\varepsilon\,\varepsilon_{t-1} + \eta_t,
+    \qquad \eta_t \sim \mathcal{N}(0,\,\sigma_\varepsilon^2).
+\]
+Calibrate the shock persistence $\rho_\varepsilon$ and standard deviation
+$\sigma_\varepsilon$ to produce a recession of plausible size --- approximately
+a 2--3\% peak decline in output. Analyze the impulse response functions (IRFs)
+of the model and address the following:
+
+\begin{itemize}[noitemsep]
+    \item What are the key transmission channels from the shock to output and
+          inflation?
+    \item What happens to output, inflation, hours worked, investment, and the
+          nominal interest rate?
+    \item Do the IRFs tell a coherent economic story consistent with the
+          mechanism your extension introduces? If not, revisit parameters.
+\end{itemize}
+
+\textbf{Model statistics.} Report a table of model moments: at minimum the
+standard deviations of output, inflation, hours worked, investment, and the
+nominal interest rate, as well as their contemporaneous correlations with
+output. Dynare computes these automatically via the \texttt{stoch\_simul}
+command.
+
+For the moments table, activate \textbf{all three shocks simultaneously} ---
+your topic shock, the baseline technology shock $Z_t$, and the baseline monetary
+policy shock $m_t$. A single shock is typically insufficient to match the full
+covariance structure of the data; combining shocks gives a richer and more
+realistic picture of the model's business cycle properties.
+
+As a benchmark, compare your model moments against the following stylized
+business cycle facts for advanced economies, drawn from Stock, J.H.\ and
+Watson, M.W.\ (1999), ``Business Cycle Fluctuations in U.S.\ Macroeconomic
+Time Series'', in J.B.\ Taylor and M.\ Woodford (eds.), \textit{Handbook of
+Macroeconomics}, Vol.~1A, Elsevier: output volatility around 1.5\%, consumption
+less volatile than output, investment two to three times more volatile than
+output, hours roughly as volatile as output, inflation less volatile than output,
+and positive co-movement of consumption, investment, and hours with output.
+
+Do not merely report the numbers --- discuss what the pattern of volatilities
+and co-movements implies economically. Where does your model match the empirical
+benchmark well, and where does it fall short? How does each shock contribute to
+the overall moments?
+
+\textit{Hint: A useful way to understand each shock's contribution is to
+activate the shocks one at a time first, observe how the moments change, and
+then combine them. This also helps you calibrate the relative magnitudes of the
+shock standard deviations.}
+
+\subsection{Task 3 --- Monetary Policy Analysis}
+
+This is the analytical core of the project. The monetary policy instrument is a
+Taylor-type interest rate rule of the form:
+\[
+    \frac{1+r_{B,t}}{1+\bar{r}_B}
+    =
+    \left(\frac{1+r_{B,t-1}}{1+\bar{r}_B}\right)^{\!\theta_R}
+    \!\left[
+        \left(\frac{1+\pi_t}{1+\pi^*}\right)^{\!\theta_\pi}
+        \left(\frac{Y_t}{\bar{Y}}\right)^{\!\theta_Y}
+    \right]^{1-\theta_R}
+    e^{m_t},
+\]
+where $r_{B,t}$ is the net nominal interest rate, $\pi^*$ is the inflation
+target, $\bar{r}_B$ and $\bar{Y}$ are steady-state values, and $m_t$ is a
+monetary policy shock. The coefficient $\theta_R \in [0,1)$ governs interest
+rate smoothing, $\theta_\pi > 1$ ensures the Taylor principle is satisfied, and
+$\theta_Y \geq 0$ controls the response to output fluctuations.
+
+Conduct systematic policy experiments. At minimum:
+
+\begin{itemize}[noitemsep]
+    \item Vary the inflation response coefficient $\theta_\pi$ across at least
+          three values and compare IRFs.
+    \item Vary the output response coefficient $\theta_Y$ across at least three
+          values.
+    \item Consider at least one alternative rule specification motivated by your
+          topic's monetary policy focus --- for example, targeting output growth
+          instead of the output level, or varying the smoothing coefficient
+          $\theta_R$.
+\end{itemize}
+
+Use Dynare \texttt{for}-loops to generate overlaid IRF plots across policy
+configurations. For each experiment, provide economic interpretation. What
+trade-off does the central bank face? Which rule configuration performs best,
+and by what criterion?
+
+\subsection{Task 4 --- Connect to the Real-World Episode}
+
+Having understood your model's mechanics, identify a real-world economic episode
+that fits the characterisation given for your topic and connect the analysis to
+it. Your episode choice must be approved at the instructor check-in before you
+proceed to writing the report.
+
+This task does not require formal econometric calibration to country data.
+However, as optional enrichment, you are encouraged to use publicly available
+data --- such as the FRED database of the St.\ Louis Fed
+(\url{https://fred.stlouisfed.org}) or Eurostat
+(\url{https://ec.europa.eu/eurostat}) --- to calibrate steady-state targets
+such as the labor share, the investment-to-output ratio, or the average
+inflation rate to the country in your episode. Document any such sources
+clearly.
+
+At minimum, address the following:
+
+\begin{itemize}[noitemsep]
+    \item Describe the episode in one to two paragraphs: what happened, and why
+          does your extension and shock provide a useful lens?
+    \item Identify the monetary policy stance actually taken and map it
+          approximately onto a specific Taylor rule configuration in your model.
+    \item Compare historical policy with the counterfactual experiments from
+          Task~3. Does your model suggest the central bank could have done
+          better? Be honest about the limitations of the mapping between model
+          and episode.
+\end{itemize}
+
+\subsection{Task 5 --- Write the Policy Report}
+
+Write the final report following the template in Section~\ref{sec:template}.
+The report is addressed to a central bank economist with a macroeconomics
+background. Lead with economic intuition; use model output --- IRFs, moments
+tables, and steady-state values --- as supporting evidence, not as ends in
+themselves. The report must include at minimum: one baseline IRF figure, one
+policy experiment figure with overlaid IRFs across at least three rule
+configurations, and one model moments table.
+
+% ---------------------------------------------------------------
+\section{Milestones and Deadlines}
+\label{sec:milestones}
+
+\begin{center}
+\begin{tabular}{p{3.5cm} p{7.5cm} p{2.7cm}}
+\toprule
+\textbf{Milestone} & \textbf{Description} & \textbf{Deadline} \\
+\midrule
+Topic selection
+    & Top two topic preferences and group composition
+    & End of Week 8 \\[0.5em]
+Instructor check-in
+    & Working \texttt{.mod} file with extension, short explanatory
+      note, and proposed real-world episode with brief motivation
+    & End of Week 11 \\[0.5em]
+Peer feedback session
+    & Draft covering Tasks~1--3 for in-class peer review
+    & Start of Week 13 \\[0.5em]
+Final report
+    & Complete policy report and Dynare code
+    & End of Week 14 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\bigskip
+The instructor check-in serves two purposes: verifying that the Dynare
+implementation is correct before work on the report begins, and approving the
+episode choice before it shapes the policy narrative.
+
+% ---------------------------------------------------------------
+\section{Policy Report Template}
+\label{sec:template}
+
+The template below is a guideline, not a rigid prescription. Approximate lengths
+are given for orientation based on a maximum of 4,000 words, excluding appendix
+and references.
+
+\begin{enumerate}
+
+    \item \textbf{Executive Summary} (max half page)
+
+    \item \textbf{Introduction} (approx.\ one page)
+    \begin{enumerate}[label=(\alph*)]
+        \item The economic episode: what happened and why it matters
+        \item What the model captures and what question you are asking
+        \item Brief preview of your main policy finding
+    \end{enumerate}
+
+    \item \textbf{Model Overview} (approx.\ 1.5 pages)
+    \begin{enumerate}[label=(\alph*)]
+        \item Structure of the model in words and/or a diagram
+        \item The model extension: what mechanism it adds and why it matters for
+              your episode
+        \item Calibration: key parameter choices with brief justification (and
+              sources)
+    \end{enumerate}
+
+    \item \textbf{Shock and Baseline Dynamics} (approx.\ 1.5 pages)
+    \begin{enumerate}[label=(\alph*)]
+        \item The shock: what it represents, how it is parameterized, and what
+              the baseline IRFs look like
+        \item Model statistics: a moments table with economic interpretation ---
+              what do the volatilities and co-movements reveal about the model's
+              dynamics given your shock?
+        \item Connection to the real-world episode: do the baseline simulations
+              capture the salient features of the historical recession?
+    \end{enumerate}
+
+    \item \textbf{Monetary Policy Experiments} (approx.\ 2 pages)
+    \begin{enumerate}[label=(\alph*)]
+        \item Systematic variation of the Taylor rule --- what you change and why
+        \item Overlaid IRF comparison across policy configurations
+        \item Economic interpretation of the trade-offs
+    \end{enumerate}
+
+    \item \textbf{Policy Recommendation} (approx.\ one page)
+    \begin{enumerate}[label=(\alph*)]
+        \item What does your analysis suggest the central bank should have done?
+        \item Caveats: where does the model fall short as a guide to the episode?
+        \item One key broader lesson about monetary policy design
+    \end{enumerate}
+
+    \item \textbf{References}
+
+    \item \textbf{Appendix}\\
+    Model variable and equation summary table, Dynare code (\texttt{.mod} file),
+    additional IRF plots, and any derivations.
+
+\end{enumerate}
+
+% ---------------------------------------------------------------
+\section{Rules and Academic Integrity}
+
+\textbf{AI use} follows the course AI policy (Level~2). AI tools may be used
+for grammar, spelling, and coherence checking of completed drafts only. AI may
+not be used to generate content, code, tables, or graphs. All Dynare code must
+be written by the group. Document AI tool use transparently in a technology
+statement appended to the report.
+
+\textbf{Dynare code} is delivered as a separate file and must run without errors.
+
+All standard rules on plagiarism and academic integrity apply in full.
+
+\end{document}

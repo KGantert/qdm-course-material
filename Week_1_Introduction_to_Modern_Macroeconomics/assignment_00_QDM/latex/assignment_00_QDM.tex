@@ -1,0 +1,149 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 00: Intertemporal Approach --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}
+%
+\clearpage\maketitle % Titelseite
+%
+\noindent\fbox{\begin{minipage}{\textwidth}%
+	The contents for this assignment should have been covered in previous macroeconomics courses (1st or 2nd year) in your studies. If not, you can read up on it e.g. in the following books:%
+	\begin{itemize}%
+		\item[$\rightarrow$] Jones, Charles I. (2020). Macroeconomics. Fifth edition. W.W. Norton \& Company. Chapters 16-18.%
+		\item[$\rightarrow$] Burda, Michael \& Charles Wyplosz (2022). Macroeconomics - A European Text. Eighth edition. Oxford University Press. Chapters 6-8.%
+	\end{itemize}%
+\end{minipage}}%
+\vspace*{0.25in}\\%
+The household lives for two periods. Life-time utility is given by the intertemporal utility function
+\begin{align*}%
+	U\left(c_1,c_2\right) \quad = & \quad \left[ \frac{c_1^{1-\sigma}-1}{1-\sigma} - \psi \frac{h_1^{1+\nu}}{1+\nu} \right] + \beta \left[ \frac{c_2^{1-\sigma}-1}{1-\sigma} - \psi \frac{h_2^{1+\nu}}{1+\nu} \right],%
+\end{align*}%
+where $c_1,c_2>0$ is consumption in period 1 and 2, $h_1,h_2>0$ is total hours worked in period 1 and 2, $0<\beta< 1$ is the period discount factor, and $\sigma>0$ describes the intertemporal elasticity of substitution of the household. $\psi>0$ determines labor supply disutility, and $\nu>0$ determines its elasticity. The household savings $s_1$ can be invested for a fixed interest rate $r\geq0$. The income of the household in both periods is governed by a production function, $F(k_t,h_t)$, with capital and total hours worked as its input. In the production function, $z>0$ is a fixed technology parameter, and $0<\alpha<1$ determines the capital elasticity of production. The capital stock, $\bar{k}_1>0$, in period 1 is exogenously given. The capital stock, $k_2$, in period 2 is created by household investments, $i_1$, in period 1. The budget constraints are given as follows%
+\begin{align*}%
+	c_1 + i_1 + s_1 \quad = & \quad F(\bar{k}_1,h_1) \\%
+	c_2 \quad = & \quad \left(1+r\right) s_1 + F(k_2,h_2) \\%
+	F(k_t,h_t) \quad = & \quad z k_t^\alpha h_t^{1-\alpha}\\
+	i_1 \quad = & \quad k_2%
+\end{align*}\\%
+%--------------------------------------------------------------------------------
+% Exercise a)
+\begin{Exercise}%
+	Derive the consolidated budget constraint using all the information available.%
+\end{Exercise}%
+\begin{Answer}%
+	\begin{enumerate}
+		\item Plug $i_1 = k_2$ and $F\left(k_t,h_t\right), t \in \{1,2\}$ into the budget constraints of the first and second period:
+		\begin{align*}
+			c_1 + k_2 + s_1 \quad = & \quad z \bar{k}_1^\alpha h_1^{1-\alpha} \\
+			c_2 \quad = & \quad \left(1+r\right) s_1 + z k_2^\alpha h_2^{1-\alpha}
+		\end{align*}
+		\item Solve one of the period budget constraints for $s_1$ and plug it into the other budget constraint:
+		\begin{align*}
+			c_2 \quad = & \quad \left(1+r\right) \left[ z \bar{k}_1^\alpha h_1^{1-\alpha} - c_1 - k_2 \right] + z k_2^\alpha h_2^{1-\alpha}
+		\end{align*}
+		\item ADDITIONAL: You can calculate the discounted values of period 2 by dividing by $(1+r)$ and summarize expenditure and income terms:
+		\begin{align*}
+			c_1 + \frac{c_2}{1+r} + k_2 \quad = & \quad z \left(\bar{k}_1^\alpha h_1^{1-\alpha} + \frac{k_2^\alpha h_2^{1-\alpha}}{1+r} \right)
+		\end{align*}
+	\end{enumerate}
+\end{Answer}%
+%--------------------------------------------------------------------------------
+% Exercise b)
+\begin{Exercise}%
+	Set up the Lagrangian of the optimization problem. Define the endogenous and exogenous variables of the model.%
+\end{Exercise}%
+\begin{Answer}%
+	We set the Lagrangian with the consolidated budget constraint up. In principle, you can also use the four constraints given in the exercise with four constraints and Lagrange variables. The Lagrangian with the consolidated budget constraint is given by
+	\begin{align*}
+		\mathcal{L} \quad = & \quad \left[\frac{c_1^{1-\sigma}-1}{1-\sigma}-\psi\frac{h_1^{1+\nu}}{1+\nu}\right] + \beta \left[\frac{c_2^{1-\sigma}-1}{1-\sigma}-\psi\frac{h_2^{1+\nu}}{1+\nu}\right]\\
+		& \quad - \lambda \left[ c_1 + \frac{c_2}{1+r} + k_2 - z \left(\bar{k}_1^\alpha h_1^{1-\alpha} + \frac{k_2^\alpha h_2^{1-\alpha}}{1+r} \right) \right]
+	\end{align*}
+	\begin{itemize}
+		\item Endogenous Variables: $c_1$, $c_2$, $h_1$, $h_2$, $k_2$, $s_1$.
+		\item Co-State Variable: $\lambda$.
+		\item Exogenous Variables: $z$, $\bar{k}_1$, $r$.
+		\item Parameters: $\sigma$, $\psi$, $\nu$, $\alpha$.
+	\end{itemize}
+\end{Answer}%
+%--------------------------------------------------------------------------------
+% Exercise c)
+\begin{Exercise}%
+	Derive the first-order conditions (FOCs) of the model. Solve for the consumption, labor, and capital FOCs and give an economic interpretation.
+\end{Exercise}%
+\begin{Answer}%
+	The first-order conditions (FOC's) of all endogenous variables of the model are given by: 
+		\begin{align}
+			\mathcal{L}_{c_1}: & \quad c_1^{-\sigma} - \lambda \quad \overset{!}{=} \quad 0\label{eq_c1_foc}\\
+			\mathcal{L}_{c_2}: & \quad \beta c_2^{-\sigma} - \frac{\lambda}{1+r} \quad \overset{!}{=} \quad 0\label{eq_c2_foc}\\
+			\mathcal{L}_{h_1}: & \quad \left(-\psi\right) h_1^\nu + \lambda \left(1-\alpha\right) z \bar{k}_1^\alpha h_1^{-\alpha} \quad \overset{!}{=} \quad 0\label{eq_h1_foc}\\
+			\mathcal{L}_{h_2}: & \quad \left(-\beta\right) \psi h_2^\nu + \frac{\lambda}{1+r} \left(1-\alpha\right) z k_2^\alpha h_2^{-\alpha} \quad \overset{!}{=} \quad 0\label{eq_h2_foc}\\
+			\mathcal{L}_{k_2}: & \quad \left(-\lambda\right) + \frac{\lambda}{1+r} \alpha z k_2^{\alpha-1} h_2^{1-\alpha} \quad \overset{!}{=} \quad 0\label{eq_k2_foc}\\
+			\mathcal{L}_{\lambda}: & \quad c_1 + \frac{c_2}{1+r} + k_2 - z \left(\bar{k}_1^\alpha h_1^{1-\alpha} + \frac{k_2^\alpha h_2^{1-\alpha}}{1+r} \right) \quad \overset{!}{=} \quad 0
+		\end{align}\label{eq_lambda_foc}
+		We can substitute for $\lambda$ in (\ref{eq_c2_foc}), (\ref{eq_h1_foc}), and (\ref{eq_h2_foc}) with (\ref{eq_c1_foc}):
+		\begin{align}
+			c_2 \quad = & \quad \left[\beta \left(1+r\right)\right]^{\frac{1}{\sigma}} c_1\label{eq_c2_foc_solved}\\
+			h_1 \quad = & \quad \left[\frac{1-\alpha}{\psi} \frac{z}{c_1^\sigma} \bar{k}_1^\alpha\right]^{\frac{1}{\nu+\alpha}}\label{eq_h1_foc_solved}\\
+			h_2 \quad = & \quad \left[\frac{1-\alpha}{\psi} \frac{z}{c_2^\sigma} k_2^\alpha\right]^{\frac{1}{\nu+\alpha}}\label{eq_h2_foc_solved}
+		\end{align}
+		Further, $\lambda$ cancels out in (\ref{eq_k2_foc}) and we can solve for $k_2$ and summarize by:
+		\begin{align}
+			k_2 \quad = & \quad \left(\frac{\alpha z}{1+r}\right)^{\frac{1}{1-\alpha}} h_2\label{eq_k2_foc_solved}
+		\end{align}
+		The FOC with respect to $\lambda$ is the consolidated budget constraint given by:
+		\begin{align}
+			c_1 + \frac{c_2}{1+r} + k_2 = z \left(\bar{k}_1^\alpha h_1^{1-\alpha} + \frac{k_2^\alpha h_2^{1-\alpha}}{1+r} \right)\label{eq_lambda_foc_solved}
+		\end{align}
+		\textsc{Economic Interpretation of the FOC's:}
+		The FOC's show the optimality conditions of the household. As such, they determine a set of equilibrium conditions where marginal utility is equal to marginal costs across several dimensions.
+		\begin{itemize}
+			\item[$\blacktriangleright$] The optimal labor supply today, $h_1$, is given by (\ref{eq_h1_foc_solved}). The household supplies more labor today to its production if 1) productivity, $z$, is high, 2) the pre-determined capital stock, $\bar{k}_1$, is high, 3) marginal consumption utility, $\frac{1}{c_1^\sigma}$, is high, 4) the labor elasticity of production, $\left(1-\alpha\right)$, is high, 5) labor disutility, $\psi$, is low, and 6) the labor supply elasticity, $\nu$, is high. This pattern implies that households supply more labor to production if the resulting consumption creates a lot of utility, marginal labor productivity is high, or working does not create much disutility for them. The same interpretation applies to labor supply tomorrow, $h_2$, with all the endogenous variables shifted by one period.
+			\item[$\blacktriangleright$] The optimal capital stock tomorrow, $k_2$, is given by (\ref{eq_k2_foc_solved}). Investments in the capital stock tomorrow, $k_2$, increase if 1) productivity, $z$, is high, 2) the capital elasticity of production, $\alpha$, is high, 3) interest rates, $r$, are low, and 4) labor supply, $h_2$, is high. This pattern implies that the capital stock tomorrow is large if its marginal productivity is high or its user costs are low. The capital stock today, $\bar{k}_1$, is pre-determined and therefore cannot be decided upon by the household.
+			\item[$\blacktriangleright$] The optimal intertemporal consumption allocation, $\frac{c_2}{c_1}$, depends on the Euler equation (\ref{eq_c2_foc_solved}). Consumption tomorrow relative to today increases if 1) the discount rate, $\beta$, is high, 2) interest rates, $r$, are high, and the intertemporal elasticity of substitution, $\frac{1}{\sigma}$, is high. This pattern implies that households shift consumption towards tomorrow if they are patient, risk-friendly, and if the opportunity cost of consuming today are high. The respective consumption levels are derived from the budget constraint where we plug the Euler equation in.
+		\end{itemize}
+\end{Answer}%
+%--------------------------------------------------------------------------------
+% Exercise d)
+\begin{Exercise}%
+	Solve as far as possible to derive the utility maximizing consumption levels $c_1^*, c_2^*$, the utility maximizing total hours worked $h_1^*,h_2^*$, and the utility maximizing capital stock $k_2^*$. Is it possible to derive an analytical solution?%
+\end{Exercise}%
+\begin{Answer}%
+	In this exercise, our task is to simplify the model by substituting out as many variables (and hence equations) to reduce the dimensionality of the system. First, we use (\ref{eq_k2_foc_solved}) to substitute for $k_2$ in (\ref{eq_h2_foc_solved}):
+		 \begin{align}
+			 h_2 \quad = & \quad \left[\frac{1-\alpha}{\psi}\frac{z}{c_2^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} h_2^\alpha\right]^{\frac{1}{\nu+\alpha}}\nonumber\\
+			 \Leftrightarrow \quad h_2^{1-\frac{\alpha}{\nu+\alpha}} \quad = & \quad \left[\frac{1-\alpha}{\psi}\frac{z}{c_2^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu+\alpha}}\nonumber\\
+			 \Leftrightarrow \quad h_2 \quad = & \quad \left[\frac{1-\alpha}{\psi}\frac{z}{c_2^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu}}\label{eq_h2_foc_star}
+		 \end{align}
+		 Second, we use  (\ref{eq_k2_foc_solved}) to substitute for $k_2$ in (\ref{eq_lambda_foc_solved}):
+		 \begin{align}
+			c_1 + \frac{c_2}{1+r} + \left(\frac{\alpha z}{1+r}\right)^{\frac{1}{1-\alpha}} h_2 = z \left(\bar{k}_1^\alpha h_1^{1-\alpha} + \frac{\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} h_2}{1+r} \right)\label{eq_lambda_foc_solved_2}
+		 \end{align}
+		 Third, we substitute first (\ref{eq_h1_foc_solved}) and (\ref{eq_h2_foc_star}) in (\ref{eq_lambda_foc_solved_2}):
+		 \begin{align}
+			\begin{split}
+				& c_1 + \frac{c_2}{1+r} + \left(\frac{\alpha z}{1+r}\right)^{\frac{1}{1-\alpha}} \left[\frac{1-\alpha}{\psi}\frac{z}{c_2^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu}}\\
+				& \quad = z \left(\bar{k}_1^\alpha \left[\frac{1-\alpha}{\psi} \frac{z}{c_1^\sigma} \bar{k}_1^\alpha\right]^{\frac{1-\alpha}{\nu+\alpha}} + \frac{\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \left[\frac{1-\alpha}{\psi}\frac{z}{c_2^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu}}}{1+r} \right)\label{eq_lambda_foc_solved_3}
+			\end{split}
+		 \end{align}
+		 As a last step, we substitute (\ref{eq_c2_foc_solved}) in (\ref{eq_lambda_foc_solved_3}):
+		 \begin{align}
+			\begin{split}
+				& c_1 + \frac{\left[\beta \left(1+r\right)\right]^{\frac{1}{\sigma}} c_1}{1+r} + \left(\frac{\alpha z}{1+r}\right)^{\frac{1}{1-\alpha}} \left[\frac{1-\alpha}{\psi}\frac{z}{\left[\beta \left(1+r\right)\right] c_1^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu}}\\
+				& \quad = z \left(\bar{k}_1^\alpha \left[\frac{1-\alpha}{\psi} \frac{z}{c_1^\sigma} \bar{k}_1^\alpha\right]^{\frac{1-\alpha}{\nu+\alpha}} + \frac{\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \left[\frac{1-\alpha}{\psi}\frac{z}{\left[\beta \left(1+r\right)\right] c_1^\sigma}\left(\frac{\alpha z}{1+r}\right)^{\frac{\alpha}{1-\alpha}} \right]^{\frac{1}{\nu}}}{1+r} \right)\label{eq_lambda_foc_star}
+			\end{split}
+		 \end{align}
+		 As we can see in (\ref{eq_lambda_foc_star}), we solved the economic model for consumption today, $c_1$, but the equation is non-linear in $c_1$. Therefore, no analytical solution exists. We need to apply a numerical solver in order to solve the model for optimal consumption, $c_1^*$ and the other optimal model variables $c_2^*,h_1^*,h_2^*,k_2^*$.
+\end{Answer}%
+%--------------------------------------------------------------------------------
+\end{document}

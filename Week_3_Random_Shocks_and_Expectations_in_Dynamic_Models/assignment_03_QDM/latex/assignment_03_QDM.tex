@@ -1,0 +1,146 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 03: Adding stochastic elements to our CiA model --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+%--------------------------------------------------------------------------------
+% Introduction
+Suppose there is an economy with many households that live infinitely many periods. The period payoff function of any household in history state $s^t$ is given by%
+\begin{align*}%
+	\mathbb{U}(s^t) \; = \; u(C(s^t)) + v(1-L(s^t)) \; = \; log \left(C(s^t)\right) + \frac{\varphi}{1-\nu} \Bigl[ 1-L(s^t) \Bigr]^{1-\nu},%
+\end{align*}%
+where a full day is normalized to one, leisure utility is any time not spend working, $1-L(s^t)$, $\varphi, \nu>0$ determine the curvature of leisure utility, and $s^t$ is a state vector summarizing the entire history of all state variable up until period $t$. Each household discounts the future by $\beta<1$ per period. Households have to hold cash-in-advance to be able to consume goods, $M(s^{t-1}(s^t)) = P(s^t) C(s^t)$, where $M(s^{t-1}(s^t))$ is the household's money stock at the beginning of the period, $P(s^t)$ is the price for consumption good, $C(s^t)$. Further, each household has a budget constraint given by%
+\begin{align*}%
+	& P(s^t) Z(s^t) L(s^t) + M(s^{t-1}(s^t)) + B(s^{t-1}(s^t)) + T(s^t)\\
+	= \; & P(s^t) C(s^t) + \frac{M(s^t)}{1-\delta(s^t)} + q(s^t) B(s^t),
+\end{align*}%
+where $Z(s^t)$ is the productivity of the household's firm, $B(s^{t-1}(s^t))$ is a one-period bond that pays one unit today, and $q(s^t)$ is the price of buying a bond. Any change in the money stock is rebated to the household at the end of the period by $T(s^t)$. The household looses a share of his money every period defined by $\delta(s^t)$. Hence, the household has to save more money in order to have $M(s^t)$ units available next period.%
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\begin{Exercise}[title={Lagrangian and FOCs of the stochastic model},label=ex_1]%
+	Set up and solve the Lagrangian of our CiA model as given above. Take the state of the economy and expectations about the future appropriately into account. \textit{Hint: $\delta (s^t)$ is an exogenous variable for which you do not have to derive a first-order condition.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	The Lagrangian is given by:%
+	\begin{small}%
+		\begin{align*}%
+			\mathcal{L} \; = & \; \max_{C(s^t),L(s^t),M(s^t),B(s^t)} \; \min_{\lambda(s^t), \mu(s^t)} \mathbb{E} \sum_{t=1,2} \beta^{t-1} \left[log(C(s^t))+\frac{\varphi}{1-\nu} \Bigl[1-L(s^t)\Bigr]^{1-\nu}\right]\\%
+			& \; + \beta^2 \mathbb{E} \mathbb{V} \left(M(s^2),B(s^2),s_3\right)\\%
+			& \; + \sum_{t=1,2} \sum_{s^t} \lambda (s^t) \left[ M(s^{t-1}(s^t)) - P(s^t) C(s^t) \right]\\%
+			& \; + \sum_{t=1,2} \sum_{s^t} \mu(s^t) \left[ P(s^t) Z(s^t) L(s^t) + M(s^{t-1}(s^t)) + B(s^{t-1}(s^t)) + T(s^t) \right.\\%
+			& \; \quad \quad \quad \quad \quad \quad \quad \quad \left. - P(s^t) C(s^t) - \frac{M(s^t)}{1-\delta (s^t)} - q(s^t) B(s^t) \right]%
+		\end{align*}%
+	\end{small}%
+	The first-order conditions are given by:%
+	\begin{align}%
+		\mathcal{L}_{C(s^t)}: \quad & \beta^{t-1} \frac{1}{C(s^t)} Pr(s^t) - \left[\lambda(s^t)+\mu(s^t)\right] P(s^t) \; \overset{!}{=} \; 0\\%
+		\mathcal{L}_{L(s^t)}: \quad & \beta^{t-1} (-\varphi) \Big[1-L(s^t)\Big]^{-\nu} Pr(s^t) + \mu(s^t) P(s^t) Z(s^t) \; \overset{!}{=} \; 0\\%
+		\mathcal{L}_{M(s^t)}: \quad & (-\mu(s^t)) + \left(1-\delta(s^t)\right) \sum_{s^{t+1} \in S^{t+1}(s^t)} \left[\lambda(s^{t+1}) + \mu(s^{t+1}) \right] \; \overset{!}{=} \; 0\\%
+		\mathcal{L}_{B(s^t)}: \quad & \sum_{s^{t+1} \in S^{t+1}(s^t)} \mu(s^{t+1}) - q(s^t) \mu(s^t) \; \overset{!}{=} \; 0%
+	\end{align}%
+	Summarizing terms leads to:%
+	\begin{align}%
+		\beta^{t-1} \frac{Pr(s^t)}{P(s^t) C(s^t)} \; = & \; \lambda(s^t) + \mu(s^t)\\%
+		\mu(s^t) \; = & \; \beta^{t-1} \frac{\varphi }{\Bigl[1-L(s^t)\Bigr]^\nu} \frac{Pr(s^t)}{P(s^t) Z(s^t)} \\%
+		\mu(s^t) \; = & \; \left( 1-\delta(s^t) \right) \sum_{s^{t+1}\in S^{t+1}(s^t)} \left[\lambda(s^{t+1})+\mu(s^{t+1})\right]\\%
+		q(s^t) \mu(s^t) \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \mu(s^{t+1})%
+	\end{align}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2)
+\begin{Exercise}[title={General equilibrium in the stochastic model},label=ex_2]%
+	We need to define our general equilibrium conditions in order to solve the model. The resource constraint is given by $C(s^t) = Z(s^t) L(s^t)$, money supply grows according to $\bar{M}(s^t) = (1+\tau (s^t)) \bar{M}(s^{t-1}(s^t))$, where $\tau (s^t)$ is the money growth rate between the two periods, aggregate money lost is replaced equally lump-sum to all households, and money markets always clear, $M(s^t) = \bar{M}(s^t)$. Further, we assume that the cash-in-advance constraint always binds. \emph{Summarize the model such that labor only depends on parameters and exogenous variables. Hint: Use a change-in-variables to solve the model.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	First, we define the following change-in-variables to get rid of the non-stationary variables:%
+	\begin{align}%
+		\lambda(s^t) \; = & \; \tilde{\lambda}(s^t) \beta^{t-1} \frac{Pr(s^t)}{M(s^{t-1})}\\%
+		\mu(s^t) \; = & \; \tilde{\mu}(s^t) \beta^{t-1} \frac{Pr(s^t)}{M(s^{t-1})}%
+	\end{align}%
+	We substitute with the cash-in-advance constraint and use our change in variables for the consumption FOC to get:%
+	\begin{align}%
+		\lambda(s^t) + \mu(s^t) \; = & \; \beta^{t-1} \frac{Pr(s^t)}{P(s^t) C(s^t)} \; = \; \beta^{t-1} \frac{Pr(s^t)}{M(s^{t-1})}\notag\\%
+		\Leftrightarrow \quad \tilde{\lambda}(s^t) + \tilde{\mu}(s^t) \; = & \; 1%
+	\end{align}%
+	We substitute with the cash-in-advance constraint, then with the production function, and finally apply a change-in-variables to the labor FOC as follows:%
+	\begin{align}%
+		\mu(s^t) \; = & \; \beta^{t-1} \frac{\varphi}{\Bigl[1-L(s^t)\Bigr]^\nu} \frac{Pr(s^t)}{P(s^t)Z(s^t)} \; = \; \beta^{t-1} \frac{\varphi}{\Bigl[1-L(s^t)\Bigr]^\nu} \frac{C(s^t)}{Z(s^t) M(s^{t-1})} Pr(s^t)\notag\\
+		= & \; \beta^{t-1} \frac{\varphi}{\Bigl[1-L(s^t)\Bigr]^\nu} \frac{Z(s^t) L(s^t)}{Z(s^t) M(s^{t-1})} Pr(s^t) \; = \; \beta^{t-1} \frac{\varphi L(s^t)}{\Bigl[1-L(s^t)\Bigr]^\nu} \frac{Pr(s^t)}{M(s^{t-1})}\notag\\%
+		\Leftrightarrow \quad \tilde{\mu}(s^t) \; = & \; \frac{\varphi L(s^t)}{\Bigl[1-L(s^t)\Bigr]^\nu}%
+	\end{align}%
+	We use the definition for change-in-variable for $\mu(s^t)$ and substitute in the money FOC as follows:%
+	\begin{align}%
+		\mu(s^t) \; = & \; \left(1-\delta(s^t)\right) \sum_{s^{t+1}\in S^{t+1}(s^t)} \left[\lambda(s^{t+1}) + \mu(s^{t+1})\right]\notag\\%
+		\Leftrightarrow \quad \tilde{\mu}(s^t) \beta^{t-1} \frac{Pr(s^t)}{M(s^{t-1})} \; = & \; \left(1-\delta(s^t)\right) \sum_{s^{t+1}\in S^{t+1}(s^t)} \underbrace{\left[\tilde{\lambda}(s^{t+1}) + \tilde{\mu}(s^{t+1})\right]}_{=1} \beta^t \frac{Pr(s^{t+1})}{M(s^t)}\notag\\%
+		\Leftrightarrow \quad \tilde{\mu}(s^t) \; = & \; \beta \left(1-\delta(s^t)\right) \frac{M(s^{t-1})}{M(s^t)} \underbrace{\sum_{s^{t+1}\in S^{t+1}(s^t)} \underbrace{\frac{Pr(s^{t+1})}{Pr(s^t)}}_{Pr(s_{t+1}|s_t)}}_{=1}\notag\\%
+		\Leftrightarrow \quad \tilde{\mu}(s^t) \; = & \; \beta \frac{1-\delta(s^t)}{1+\tau(s^t)}%
+	\end{align}%
+	We use again the definition for change-in-variables for $\mu(s^t)$ and substitute in the bond FOC as follows:%
+	\begin{align}%
+		q(s^t) \mu(s^t) \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \mu(s^{t+1})\notag\\%
+		\Leftrightarrow \quad q(s^t) \tilde{\mu}(s^t) \beta^{t-1} \frac{Pr(s^t)}{M(s^{t-1})} \; = & \; \sum_{s^{t+1} \in S^{t+1}(s^t)} \tilde{\mu}(s^{t+1}) \beta^t \frac{Pr(s^{t+1})}{M(s^t)}\notag\\%
+		\Leftrightarrow \quad q(s^t) \; = & \; \beta \frac{M(s^{t-1})}{M(s^t)} \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{\tilde{\mu}(s^{t+1})}{\tilde{\mu}(s^t)} \frac{Pr(s^{t+1})}{Pr(s^t)}\notag\\%
+		= & \; \beta \frac{1}{1+\tau(s^t)} \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{\frac{1-\delta(s^{t+1})}{1+\tau(s^{t+1})}}{\frac{1-\delta(s^t)}{1+\tau(s^t)}} Pr(s_{t+1}|s_t)\notag\\%
+		= & \; \beta \frac{1}{1-\delta(s^t)} \sum_{s^{t+1} \in S^{t+1}(s^t)} \frac{1-\delta(s^{t+1})}{1+\tau(s^{t+1})} Pr(s_{t+1}|s_t)%
+	\end{align}%
+	Lastly, we can combine the labor and money FOCs with the change-in-variables applied to get:%
+	\begin{align}%
+		\frac{\varphi L(s^t)}{\Bigl[1-L(s^t)\Bigr]^\nu} \; = & \; \beta \frac{1-\delta(s^t)}{1+\tau(s^t)}%
+	\end{align}%
+	We need a numerical solver to solve for equilibrium labor supply. All other variables derive from the model equations once we have solved for $L(s^t)$.% 
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 3)
+\begin{Exercise}[title={ADDITIONAL: Solving the stochastic model with Matlab},label=ex_3]%
+	Assume that productivity grows according to $Z(s^{t+1}) = (1+g(s^t)) Z(s^t)$. Further, both productivity growth, $g(s^t)$, and money stock growth, $\tau(s^t)$, as well as the share of money lost per period, $\delta(s^t)$, are defined by AR(1) processes given by%
+	\begin{align*}%
+		g(s^t) \; = & \; \rho_g \times g(s^{t-1}) + B_g + \sigma_g \times \epsilon_{g,t},\\%
+		\tau (s^t) \; = & \; \rho_\tau \times \tau(s^{t-1}) + B_\tau + \sigma_\tau \times \epsilon_{\tau,t},\\%
+		\delta (s^t) \; = & \; \rho_\delta \times \delta (s^{t-1}) + B_\delta + \sigma_\delta \times \epsilon_{\delta,t},%
+	\end{align*}%
+	where the shock persistence is $0 \leq \rho_g,\rho_\tau,\rho_\delta < 1$, the shock standard deviation is $\sigma_g,\sigma_\tau, \sigma_\delta >0$, and the mean-zero normal distribution is $$\epsilon_{g,t}, \epsilon_{\tau,t}, \epsilon_{\delta,t} \sim \mathcal{N}(0,1).$$\\%
+	Solve the model using Matlab. Use the template \texttt{assignment\_03\_student.m} in the \texttt{matlab} folder of this assignment, where part of the code is already written. Fill the gaps to simulate the stochastic CiA model. \textit{Hints: Create the shocks and AR(1) processes first for $T$ periods (in the model function). Next, calculate labor and all other variables that do not contain expectations. Last, calculate $q(s^t)$ using an approximation to the integral of possible future states as described in the lecture.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 3)
+\begin{Answer}%
+	See the Matlab code in the \texttt{matlab} folder of this assignment.%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 3)
+\begin{Exercise}[title={ADDITIONAL: Stochastic inflation and welfare},label=ex_4]%
+	Append your existing Matlab code and write a function handle to calculate the welfare loss of the model compared to the social planner, which is given by the following two equations:%
+	\begin{align*}%
+		\varphi L(s^t) \; = & \; \Bigl[1-L(s^t)\Bigr]^{\nu}\\%
+		C(s^t) \; = & \; Z(s^t) L(s^t)%
+	\end{align*}%
+	The first equation is implicit in $L(s^t)$ and needs a numerical solver. First calculate the realizations of labor and consumption for the social planner given the same shock series. Then calculate the difference between the two utilities using the method of consumption equivalents and show the welfare cost in percent of consumption lost for each period.%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	See the Matlab code in the \texttt{matlab} folder of this assignment.%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%

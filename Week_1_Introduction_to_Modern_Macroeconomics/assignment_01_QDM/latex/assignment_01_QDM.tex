@@ -1,0 +1,152 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % Mathepaket, Symbole und Schriftart
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{times}
+\usepackage{exercise}
+%\usepackage[noanswer]{exercise}
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.15} 
+
+
+\title{Quantitative Dynamic Macroeconomics \vspace{0.1in} \\ \large{-- Assignment 01: A Three-Period CiA Model --}}
+\author{\small{Konstantin Gantert}}
+\date{\small{this version: \today}}
+
+\begin{document}%
+% Title page
+\clearpage\maketitle%
+% Introduction
+Suppose there is an economy that exists for three periods, $t=1,2,3$. Each producer-consumer household derives utility from consuming goods, $c_t$, and disutility from working, $\ell_t$, in its own firm. Production is linear in labor, $y_{t,j} = Z_t \ell_{t,j}$, where $Z_t$ is an exogenous productivity level. For simplicity, we assume that all goods have to be bought on the market, even the goods a household produces itself. Prices, $p_t$, are the same for all goods within a period. There is a cash-in-advance constraint, hence households have to hold money, $M_t$, at the beginning of a period to be able to buy goods. Alternatively, household can also buy one-period bonds, $B_t$, at a price $q_t$. The Lagrangian of the utility optimization problem of the household is as follows:%
+% Lagrangian of intertemporal optimization problem
+\begin{align}%
+	\mathcal{L} \; = & \; \left\{ \max_{c_t,\ell_t,M_{t+1},B_{t+1}}\right\}_{t=1,2,3} \left\{\min_{\lambda_t}\right\}_{t=1,2,3} \sum_{t=1}^3 \beta^{t-1} \left[ \frac{c_t^{1-\sigma}-1}{1-\sigma} - \phi \ell_t^\nu \right]\\%
+	\begin{split}%
+		& \; \quad \quad \quad + \lambda_1 \left[ M_1 - p_{1} c_{1} \right] \; + \; \mu_1 \left[ p_{1,j} Z_1 \ell_1 + M_1 - p_{1} c_{1} + B_1 - q_1 B_2 - M_2\right]\\%
+		& \; \quad \quad \quad + \lambda_2 \left[ M_2 - p_{2} c_{2} \right] \; + \; \mu_2 \left[ p_{2,j} Z_2 \ell_2 + M_2 - p_{2} c_{2} + B_2 - q_2 B_3 - M_3\right] \\%
+		& \; \quad \quad \quad + \lambda_3 \left[ M_3 - p_{3} c_{3} \right] \; + \; \mu_3 \left[p_{3,j} Z_3 \ell_3 + M_3 - p_{3} c_{3} + B_3\right]%
+	\end{split}%
+\end{align}%
+% Description of intertemporal optimization problem
+The first set of equations numbered (1) is our objective function, and the second set of equations numbered (2) are our constraints. Some variables, like consumption and labor, only show up at one point in time. But other variables, like money and bonds, show up in two adjacent periods. So for these later variables, we have to be careful when we take the derivatives. Also, the time $t$ and time $t+1$ versions of our multipliers need not, and in general will not, be equal to each other.%
+%--------------------------------------------------------------------------------
+% Exercise 1)
+\newpage%
+\begin{Exercise}[title={First-order conditions},label=ex_1]%
+	Derive the first-order conditions for all relevant variables. Can you spot a pattern across time in the first-order conditions?%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 1)
+\begin{Answer}%
+	The first-order conditions are as follows:%
+	\begin{small}%
+	\begin{align}%
+		\mathcal{L}_{c_1}: & \; c_1^{-\sigma} - \lambda_1 p_1 - \mu_1 p_1 \; = \; 0\\%
+		\mathcal{L}_{c_2}: & \; \beta c_2^{-\sigma} - \lambda_2 p_2 - \mu_2 p_2 \; = \; 0\\%
+		\mathcal{L}_{c_3}: & \; \beta^2 c_3^{-\sigma} - \lambda_3 p_3 - \mu_3 p_3 \; = \; 0\\%
+		\mathcal{L}_{\ell_1}: & \; (-1) \phi \nu \ell_1^{\nu-1} + \mu_1 p_{1,j} Z_1 \; = \; 0\\%
+		\mathcal{L}_{\ell_2}: & \;(-\beta) \phi \nu \ell_2^{\nu-1} + \mu_2 p_{2,j} Z_2 \; = \; 0\\%
+		\mathcal{L}_{\ell_3}: & \; (-\beta^2) \phi \nu \ell_3^{\nu-1} + \mu_3 p_{3,j} Z_3 \; = \; 0\\%
+		\mathcal{L}_{M_2}: & \; (-\mu_1) + \lambda_2 + \mu_2 \; = \; 0\\%
+		\mathcal{L}_{M_3}: & \; (-\mu_2) + \lambda_3 + \mu_3 \; = \; 0\\%
+		\mathcal{L}_{B_2}: & \; (-\mu_1) q_1 + \mu_2 \; = \; 0\\%
+		\mathcal{L}_{B_3}: & \; (-\mu_2) q_2 + \mu_3 \; = \; 0%
+	\end{align}%
+	Assuming that all constraints bind, the complementary slackness conditions are as follows:%
+	\begin{align}%
+		\mathcal{L}_{\lambda_1}: & \; M_1 - p_1 c_1 \; = \; 0\\%
+		\mathcal{L}_{\lambda_2}: & \; M_2 - p_2 c_2 \; = \; 0\\%
+		\mathcal{L}_{\lambda_3}: & \; M_3 - p_3 c_3 \; = \; 0\\%
+		\mathcal{L}_{\mu_1}: & \; p_{1,j} Z_1 \ell_1 + M_1 - p_1 c_1 + B_1 -q_1 B_2 - M_2 \; = \; 0\\%
+		\mathcal{L}_{\mu_2}: & \; p_{2,j} Z_2 \ell_2 + M_2 - p_2 c_2 + B_2 -q_2 B_3 - M_3 \; = \; 0\\%
+		\mathcal{L}_{\mu_3}: & \; p_{3,j} Z_3 \ell_3 + M_3 -p_3 c_3 +B_3 \; = \; 0%
+	\end{align}%
+	We can summarize all consumption FOCs by%
+	\begin{align}%
+		\beta^{t-1} c_t^{-\sigma} \; = \; p_t \left[ \lambda_t + \mu_t \right], \quad t = 1,2,3.%
+	\end{align}%
+	We can summarize all labor FOCs by%
+	\begin{align}%
+		\beta^{t-1} \phi \nu \ell_t^{\nu-1} \; = \; \mu_t p_{t,j} Z_t, \quad t = 1,2,3.%
+	\end{align}%
+	We can summarize all money FOCs by%
+	\begin{align}%
+		\mu_t \; = \; \lambda_{t+1} + \mu_{t+1}, \quad t = 1,2.\label{eq:money}%
+	\end{align}%
+	We can summarize all bond FOCs by%
+	\begin{align}%
+		q_t \; = \; \frac{\mu_{t+1}}{\mu_t}, \quad t = 1,2.\label{eq:bond}%
+	\end{align}%
+	We can summarize the slackness conditions by%
+	\begin{align}%
+		M_t \; = & \; p_t c_t, \quad t = 1,2,3\\%
+		M_{t+1} \; = & \; p_{t,j} Z_t \ell_t + M_t - p_t c_t + B_t - q_t B_{t+1}, \quad t = 1,2.%
+	\end{align}%
+	However, as the world ends after period three, the last budget constraint is given by%
+	\begin{align}%
+		p_{t,j} Z_t \ell_t + M_t -p_t c_t + B_t \; = \; 0, \quad t=3.%
+	\end{align}%
+	\end{small}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 2)
+\begin{Exercise}[title={Variables and economic interpretation},label=ex_2]%
+	State the endogenous variables, exogenous variables, and penalty prices (Lagrange multipliers) of the model. How can we distinguish between endogenous and exogenous variables? How can we distinguish within the class of endogenous variables between control and non-control variables?%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 2)
+\begin{Answer}%
+	Endogenous variables are determined within the model, while exogenous variables are determined outside of the model. Parameters are fixed over time. Penalty prices (Lagrange multipliers) are auxiliary (co-state) variables that show how much the constraint is binding.%
+	\begin{itemize}%
+		\item Control variables: $c_1$, $c_2$, $c_3$, $\ell_1$, $\ell_2$, $\ell_3$, $M_2$, $M_3$, $B_2$, $B_3$.%
+		\item Further endogenous variables: $p_1$, $p_2$, $p_3$, $p_{1,j} \; \forall j$, $p_{2,j} \; \forall j$, $p_{3,j} \; \forall j$, $q_1$, $q_2$.%
+		\item Penalty prices (Lagrange multipliers): $\lambda_1$, $\lambda_2$, $\lambda_3$, $\mu_1$, $\mu_2$, $\mu_3$.%
+		\item Exogenous variables: $M_1$, $B_1$, $\bar{M_1}$, $\bar{M}_2$, $\bar{M}_3$, $Z_1$, $Z_2$, $Z_3$.%
+		\item Parameters: $\sigma$, $\phi$, $\nu$, $\beta$.%
+	\end{itemize}%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+% Exercise 3)
+\begin{Exercise}[title={Analytical solution of the model},label=ex_3]%
+	Derive a solution to the three-period CiA model from above using the first-order conditions and the constraints. Assume that money supply growths by $\tau_t$ between two periods and that individual variables are equal to aggregate variables (representative household). Give a short interpretation of your results. \textit{Hint: Work your way through the equations by backwards induction. This is, start in the last period and try to find a solution you can then plug in the period before.}%
+\end{Exercise}%
+\bigskip%
+% SOLUTION Exercise 3)
+\begin{Answer}%
+	The marginal utility equation for period 1 is given by%
+	\begin{align}%
+		c_1^{-\sigma} \; = & \; p_1 \left( \lambda_1 + \mu_1 \right),%
+	\end{align}%
+	where we use the symmetric equations for period 2 and 3 to substitute in the money demand equations (\ref{eq:money}) to get%
+	\begin{align}%
+		\mu_1 \; = & \; \lambda_2 + \mu_2 \; = \; \frac{\beta}{p_2 c_2^\sigma},\label{eq:mu_1}\\%
+		\mu_2 \; = & \; \lambda_3 + \mu_3 \; = \; \frac{\beta^2}{p_3 c_3^\sigma}.%
+	\end{align}%
+	We use (\ref{eq:bond}) to substitute with $\mu_1$, $\mu_2$ to receive%
+	\begin{align}%
+		q_1 \; = & \; \frac{\mu_2}{\mu_1} \; = \; \beta \frac{p_2}{p_3} \left(\frac{c_2}{c_3}\right)^\sigma,\label{eq:bond_1}\\%
+		q_2 \; = & \; \frac{\mu_3}{\mu_2} \; = \; \frac{\mu_3 p_3 c_3^\sigma}{\beta^2},\label{eq:bond_2}%
+	\end{align}%
+	where $\mu_3$ cannot be substituted as there is no use in saving money in period 3 for period 4 as the world ends after period 3. Lastly, we use the labor supply FOCs to substitute for $p_{t,j}$ in the budget constraing to get%
+	\begin{align}%
+		\phi \nu \frac{\ell_1^\nu}{\mu_1} \; = & \; p_1 c_1 + \bar{M}_2 - \bar{M}_1 \; = \; p_1 c_1 + \tau_1 \bar{M}_1 \; = \; \left(1+\tau_1\right) p_1 c_1,\label{eq:labor_1}\\%
+		\beta \phi \nu \frac{\ell_2^\nu}{\mu_2} \; = & \; p_2 c_2 + \bar{M}_3 - \bar{M}_2 \; = \; p_2 c_2 + \tau_2 \bar{M}_2 \; = \; \left(1+\tau_2\right) p_2 c_2,\label{eq:labor_2}\\%
+		\beta^2 \phi \nu \frac{\ell_3^\nu}{\mu_3} \; = & \; p_3 c_3 - \bar{M}_3 \; = \; p_3 c_3 - p_3 c_3 \; = \; 0 \boldsymbol{\Rightarrow l_3 \; = \; L_3 \; = \; 0},\label{eq:labor_3}%
+	\end{align}%
+	where $\tau_1$ is the growth rate of the money stock between period 1 and 2, and $\tau_2$ is the growth rate of the money stock between period 2 and 3. Using the market clearing condition $C_3 = Z_3 L_3$, it follows from (\ref{eq:labor_3}) that $C_3 = 0$, and hence money demand $M_3 = P_3 C_3 = 0$.\\%
+	Using our results $L_3 = C_3 = M_3 = 0$ and the cash-in-advance constraint $M_2 = P_2 C_2$ in (\ref{eq:labor_2}) it follows that%
+	\begin{align}%
+		\beta \phi \nu \frac{\ell_2^\nu}{\mu_2} \; = \; M_3 + P_2 C_2 - M_2 \; = \; M_3 \; = \; 0 \; \Rightarrow \; \ell_2 \; = \; L_2 \; = \; 0,%
+	\end{align}%
+	from which it follows again that $C_2 = Z_2 L_2 = 0$, and $M_2 = P_2 C_2 = 0$.\\%
+	Using our results $L_2 = C_2 = M_2 = 0$ and the cash-in-advance constraint $M_1 = P_1 C_1$ in (\ref{eq:labor_1}) it follows that%
+	\begin{align}%
+		\phi \nu \frac{\ell_1^\nu}{\mu_1} \; = \; M_2 + P_1 C_1 - M_1 \; = \; M_2 \; = \; 0 \; \Rightarrow \; \ell_1 \; = \; L_1 \; = \; 0 \; \Rightarrow \; C_1 \; = \; M_1 \; = \; 0.%
+	\end{align}%
+	\textbf{Interpretation:} The model has a cash-in-advance constraint, which means that households have to hold their income in cash one period before they can use it to buy and consume goods. If we solve the model by backwards induction, we see that noone will work in the last period, as they cannot consume the income from the last period anymore. It follows, that there is no production in the last period, hence money from period 2 is worthless, hence nobody will work in period two. The same pattern repeats in period 1. Hence, in a finite world with perfect foresight and a cash-in-advance constraint, production and trade break down.%
+\end{Answer}%
+\bigskip%
+%--------------------------------------------------------------------------------
+\end{document}%
