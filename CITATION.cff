@@ -5,6 +5,7 @@ type: dataset
 authors:
   - family-names: Gantert
     given-names: Konstantin
+    email: "kgantert@mail.de"
     orcid: "https://orcid.org/0000-0001-9669-4585"
     website: "https://www.kgantert.de"
 license: CC-BY-NC-SA-4.0

@@ -155,4 +155,4 @@ See [`CITATION.cff`](CITATION.cff).
 
 Konstantin Gantert
 
-ORCID: [0000-0001-9669-4585](https://orcid.org/0000-0001-9669-4585) | Website: [www.kgantert.de](https://www.kgantert.de)
+Email: [kgantert@mail.de](mailto:kgantert@mail.de) | ORCID: [0000-0001-9669-4585](https://orcid.org/0000-0001-9669-4585) | Website: [www.kgantert.de](https://www.kgantert.de)
